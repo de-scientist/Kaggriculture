@@ -1,0 +1,227 @@
+# Kaggriculture AI Platform
+
+This is a production-ready autonomous AI agent for the Kaggriculture Kaggle Competition.
+
+## Overview
+
+This platform provides a modular, extensible architecture for building competitive AI agents for Kaggriculture, starting with deterministic baseline strategies and enabling integration of advanced techniques (Monte Carlo Tree Search, Reinforcement Learning, Evolutionary Algorithms) without breaking compatibility.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           USER / KAGGLE                                    │
+└──────────────────────────┬─────────────────────────────────┘
+                           │ raw observation / action dict
+┌──────────────────────────▼─────────────────────────────────┐
+│            ADAPTERS (ONLY KAGGLE-SPECIFIC CODE)             │
+│  ├─ ObservationAdapter: raw→domain                           │
+│  └─ ActionAdapter: domain→raw                               │
+└──────────────────────────┬─────────────────────────────────┘
+                           │ rich domain objects
+┌──────────────────────────▼─────────────────────────────────┐
+│                 DOMAIN MODEL                               │
+│  ├─ GameState, Farm, Tile, Crop, Animal, Inventory...       │
+│  ├─ Market, Town, Quadrant, Worker, Action                  │
+│  └─ Business rules (invariants)                             │
+└──────────────────────────┬─────────────────────────────────┘
+                           │ validated domain objects
+┌──────────────────────────▼─────────────────────────────────┐
+│                 DECISION ENGINE                            │
+│  ├─ Strategies: deterministic, heuristic, economic        │
+│  ├─ Planners: crop, animal, market, worker                 │
+│  ├─ Validators (engine-safe)                               │
+│  ├─ Rankers (utility, risk, ROI)                           │
+│  └─ Action composer (per unit)                             │
+└──────────────────────────┬─────────────────────────────────┘
+                           │ candidate actions
+┌──────────────────────────▼─────────────────────────────────┐
+│                 SERVICES (pure logic)                     │
+│  ├─ CropService: lifecycle, harvest, planting             │
+│  ├─ AnimalService: feeding, care, production               │
+│  ├─ InventoryService: storage, capacity, transfers         │
+│  ├─ MarketService: price prediction, order building       │
+│  └─ WorkerService: assignment, movement, scheduling        │
+└──────────────────────────┬─────────────────────────────────┘
+                           │ evaluated / scored actions
+┌──────────────────────────▼─────────────────────────────────┐
+│                 CONFIG & UTILS                           │
+│  ├─ Settings: YAML config, defaults                        │
+│  ├─ Logging: structured, performance, debugging          │
+│  └─ Testing: unit, integration, parity                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Design Principles
+
+1. **Clean Architecture**: Business logic never depends on Kaggle infrastructure.
+2. **Domain-Driven Design**: Domain entities carry their rules; adapters isolate from protocol.
+3. **Interface-Driven**: All external contracts are protocols; implementations replaceable.
+4. **Composition Over Inheritance**: Delegates for cross-cutting concerns.
+5. **Immutable Models**: Domain state treated as immutable for correctness and replayability.
+6. **Explicit Dependencies**: No hidden coupling; DI-friendly for testing.
+
+## Files Structure
+
+```
+kaggriculture_ai/
+├── interfaces/
+│   ├── decision.py        # DecisionEngine protocol
+│   ├── strategy.py        # Strategy protocol
+│   ├── simulation.py      # Simulation interface
+│   ├── optimizer.py       # MCTS / RL / Evolution interfaces
+│   └── price_model.py     # MarketPriceModel protocol
+├── adapters/
+│   ├── observation.py     # ObsAdapter (kaggle→domain)
+│   └── action.py          # ActionAdapter (domain→kaggle)
+├── domain/
+│   ├── models.py          # GameState, Farm, Tile, Inventory, Market, Town
+│   ├── enums.py           # Constants, resources, crops, animals, quadrants
+│   └── rules/              # Pure rule modules (plant, water, feed, harvest...)
+├── services/
+│   ├── crop.py            # CropService (lifecycle, harvest, fertilizer)
+│   ├── animal.py          # AnimalService (feeding, care, production)
+│   ├── inventory.py       # InventoryService (storage, capacity, transfers)
+│   ├── market.py          # MarketService (price prediction, orders)
+│   └── worker.py          # WorkerService (assignment, movement)
+├── strategies/
+│   ├── baseline.py        # Deterministic baseline (Stage 1)
+│   ├── heuristic.py       # Rule-based heuristics (Stage 2)
+│   ├── economic.py        # ROI/price-based decisions (Stage 3)
+│   └── utility.py         # Utility scoring + lookahead (Stage 4)
+├── decisions/
+│   ├── engine.py          # DecisionEngine orchestrates pipeline
+│   ├── planners/           # crop, animal, market, worker planners
+│   └── validators/         # action validation
+├── config/
+│   ├── settings.yaml      # user config (strategy, logs, debug, seed)
+│   └── defaults.yaml      # platform defaults
+├── logging/
+│   └── structured.py      # structured logging
+├── utilities/
+│   ├── math.py           # price functions, inventory calc
+│   └── pathfinding.py    # farm navigation
+└── tests/                # comprehensive test suite
+```
+
+## Production Pipeline
+
+1. **Ingestion** → ObservationAdapter
+2. **Transformation** → Domain objects (immutable)
+3. **Generation** → Planners produce CandidateActions
+4. **Validation** → Validators ensure safety
+5. **Evaluation** → Strategy scorer (utility, ROI, risk)
+6. **Ranking** → ActionRanker picks best per unit
+7. **Conversion** → ActionAdapter produces official action dict
+8. **Return** → Kaggle framework
+
+All stages are replaceable via protocol implementation.
+
+## Key Features
+
+### Deterministic Baseline (Stage 1)
+- Rules-based decisions
+- Harvest mature crops first
+- Water crops in optimal windows
+- Feed animals when necessary
+- Sell inventory deterministically
+- Avoid illegal/unproductive actions
+
+### Extensible Architecture
+- Strategy plug‑ins (register via config)
+- Simulation backend (pure‑python or engine)
+- Advanced planners (MCTS, MCTS‑lite, Beam, Genetic, RL)
+- Price prediction (analytic, time‑series, LSTM)
+- Explainability logging
+
+### Reliability
+- Full parity with official Kaggle engine (replay tests)
+- Comprehensive unit/integration/replay test suite
+- Budget/compliance enforcement
+- Deterministic runs via seeded RNG
+- Exception hierarchy for failures
+
+### Performance
+- Cached price calculations
+- Efficient inventory operations (capacity enforced)
+- Lazy evaluation (on‑demand action generation)
+- Step‑budget enforcement for real‑time
+- Optimized data structures (arrays, dicts)
+
+## Getting Started
+
+```bash
+# Create virtual env and install
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Run the built‑in baseline agent
+python -m kaggriculture_ai.run
+
+# Test locally with Kaggle environment
+python -c "from kaggle_environments import make; env = make('kaggriculture'); env.run(['kaggriculture_ai/main.py', 'random'])"
+```
+
+## Submission
+
+The submission package is `kaggriculture_ai/` with a thin entry point `main.py`:
+
+```python
+# kaggriculture_ai/main.py
+from .run import agent
+
+__all__ = ['agent']
+```
+
+The `agent` callable is the production entry point for Kaggle. It uses all internal subsystems via dependency injection configured from `config/settings.yaml`.
+
+## Testing
+
+Comprehensive test suite includes:
+- Unit tests for every domain component
+- Integration tests with Kaggle engine
+- Parity replay tests (against official engine snapshots)
+- Performance and stress tests
+- Deterministic seed tests
+- End‑to‑end acceptance tests
+
+Run tests:
+```bash
+pytest tests/
+```
+
+## Development Roadmap (Stages 1‑9)
+
+| Stage | Strategy | Implementation timeline |
+|-------|----------|--------------------------|
+| 1     | Deterministic baseline (rules) | Now (core)
+| 2     | Heuristic (myopic optimization) | Q1 Q2
+| 3     | Economic (ROI + market) | Q2 Q3
+| 4     | Utility scoring + 1‑step lookahead | Q3 Q4
+| 5     | Monte Carlo Tree Search | Q4 Q5
+| 6     | Beam Search (deterministic search) | Q5 Q6
+| 7     | Genetic Algorithms | Q6 Q7
+| 8     | Reinforcement Learning | Q7 Q8
+| 9     | Hybrid AI (RL+model+search) | Q8 Q9+
+
+Each stage only plugs new components; existing ones remain unchanged.
+
+## Quality Gates
+
+- CI: Lint (ruff), Type (mypy), Tests, Performance budget, No illegal actions
+- Reproducible: Deterministic seed per run
+- Compatible: Works with any official Kaggle release (pin version)
+- Observable: Structured logging + explainability
+
+## Future Research Areas
+
+- Multi‑agent coordination (cooperative/defective hands)
+- Market manipulation detection
+- Dynamic configuration via meta‑learning
+- GPU‑accelerated simulation (PyTorch JIT)
+- Human‑in‑the‑loop explainability
+
+---
+
+Kaggriculture AI Platform is the foundation for competition‑grade autonomous agents, designed for reliability, scalability, and continuous improvement.
