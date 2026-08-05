@@ -1,7 +1,23 @@
-from agent.decision import decision_context
-from agent.strategies import strategy
+from __future__ import annotations
+
+from agent.decision.candidate_actions import CandidateAction
+from agent.decision.decision_context import DecisionContext
+from agent.strategies.priorities import get_priority
+from agent.strategies.scoring import score_action
+from agent.strategies.strategy import ScoredAction, Strategy
 
 
-class BaselineStrategy(strategy.Strategy):
-    def rank(self, candidates: list, context: decision_context.DecisionContext) -> list:
-        return candidates
+class BaselineStrategy(Strategy):
+    def evaluate(
+        self,
+        context: DecisionContext,
+        actions: list[CandidateAction],
+    ) -> list[ScoredAction]:
+        scored: list[ScoredAction] = []
+        for action in actions:
+            score, explanation = score_action(action)
+            priority = get_priority(action.action_type)
+            explanation = f"priority={priority}, {explanation}"
+            scored.append(ScoredAction(action, score, explanation))
+        scored.sort(key=lambda s: (-s.score, get_priority(s.action.action_type), s.action.id))
+        return scored
