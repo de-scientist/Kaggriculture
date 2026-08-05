@@ -10,6 +10,7 @@ class DecisionTrace:
     step: int = 0
     day: int = 0
     turn: int = 0
+    strategy_name: str = "baseline"
     candidate_count: int = 0
     validation_results: list[Any] = field(default_factory=list)
     strategy_scores: dict = field(default_factory=dict)
