@@ -1,6 +1,7 @@
 import yaml
 from pathlib import Path
 from agent.config import settings
+from agent.exceptions.configuration import ConfigurationError
 
 
 DEFAULT_CONFIG_DIR = Path(__file__).parent.parent.parent / "configs"
