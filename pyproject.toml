@@ -1,0 +1,68 @@
+[project]
+name = "kaggriculture-ai"
+version = "0.1.0"
+description = "Kaggriculture AI agent platform — Stage 1"
+requires-python = ">=3.11"
+dependencies = [
+    "kaggle-environments>=0.1.0",
+    "pyyaml>=6.0",
+    "ruff>=0.7.0",
+    "black>=24.0",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.7.0",
+    "black>=24.0",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pre-commit>=3.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "RUF"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "unit: unit tests",
+    "integration: integration tests",
+    "performance: performance benchmarks",
+]
+
+[tool.coverage.run]
+source = ["agent", "tests"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80

@@ -1,0 +1,34 @@
+strategy:
+  name: baseline
+  version: "1.0.0"
+
+decision:
+  max_candidates: 50
+  evaluation_timeout_ms: 50
+
+planning:
+  horizon_days: 5
+  max_tasks_per_day: 20
+
+crops:
+  prioritize_high_value: true
+  watering_bonus_window: true
+  fertilizer_threshold: 0.3
+
+animals:
+  feed_priority: high
+  care_bonus: true
+  collect_fertilizer: true
+
+market:
+  sell_threshold: 0.8
+  buy_threshold: 0.2
+  price_lookback: 10
+
+economy:
+  min_cash_reserve: 500
+  land_buy_order: ["NW", "NE", "SW", "SE"]
+  land_costs:
+    NE: 1000
+    SW: 2000
+    SE: 4000
