@@ -38,5 +38,4 @@ class Strategy(ABC):
         self,
         context: DecisionContext,
         actions: list[CandidateAction],
-    ) -> list[ScoredAction]:
-        ...
+    ) -> list[ScoredAction]: ...
