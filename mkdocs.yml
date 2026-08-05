@@ -1,0 +1,29 @@
+site_name: Kaggriculture AI
+site_url: https://github.com/kaggriculture/ai
+repo_url: https://github.com/kaggriculture/ai
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: amber
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Decision Engine: decision_engine.md
+  - Strategy Engine: strategy_engine.md
+  - Market Service: market_service.md
+  - Inventory Service: inventory_service.md
+  - Worker Service: worker_service.md
+  - Crop Service: crop_service.md
+  - Animal Service: animal_service.md
+  - Observation Adapter: observation_adapter.md
+  - Action Adapter: action_adapter.md
+  - Testing: testing.md
+  - Deployment: deployment.md
+  - API Reference: api.md
+plugins:
+  - search
+markdown_extensions:
+  - fenced_code
+  - admonition
+  - codehilite
