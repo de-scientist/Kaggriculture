@@ -10,6 +10,7 @@ from agent.decision import decision_context
 from agent.decision import decision_trace
 from agent.decision import fallback
 from agent.decision import utility_score
+from agent.decision.candidate_actions import CandidateAction
 from agent.strategies import strategy_manager
 
 
