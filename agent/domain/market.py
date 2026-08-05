@@ -49,9 +49,7 @@ class Market:
             new_inv[product] = 0
         return Market(inventory=new_inv, prices=self._prices)
 
-    def estimate_roi(
-        self, product: str, cost: float, expected_sale_price: float
-    ) -> float:
+    def estimate_roi(self, product: str, cost: float, expected_sale_price: float) -> float:
         if cost <= 0:
             return 0.0
         return (expected_sale_price - cost) / cost

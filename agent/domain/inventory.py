@@ -41,9 +41,7 @@ class Inventory:
             raise ValueError("Quantity must be positive")
         current = self._items.get(item, 0)
         if current < quantity:
-            raise ValueError(
-                f"Insufficient {item}: need {quantity}, have {current}"
-            )
+            raise ValueError(f"Insufficient {item}: need {quantity}, have {current}")
         new_items = dict(self._items)
         new_items[item] = current - quantity
         if new_items[item] == 0:

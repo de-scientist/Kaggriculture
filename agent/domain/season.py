@@ -74,7 +74,4 @@ class Season:
         )
 
     def __repr__(self) -> str:
-        return (
-            f"Season(day={self._day}, turn={self._turn}, "
-            f"remaining_turns={self.remaining_turns})"
-        )
+        return f"Season(day={self._day}, turn={self._turn}, remaining_turns={self.remaining_turns})"

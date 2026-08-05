@@ -14,7 +14,5 @@ def update_inventory(market: Market, product: str, delta: int) -> Market:
     return market.update_inventory(product, delta)
 
 
-def estimate_roi(
-    market: Market, product: str, cost: float, expected_price: float
-) -> float:
+def estimate_roi(market: Market, product: str, cost: float, expected_price: float) -> float:
     return market.estimate_roi(product, cost, expected_price)
