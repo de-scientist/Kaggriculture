@@ -1,18 +1,21 @@
-def build_coop() -> dict:
-    return {"kind": "BUILD_COOP"}
+from agent.domain.animal import Animal
 
 
-def build_pasture() -> dict:
-    return {"kind": "BUILD_PASTURE"}
+def feed(animal: Animal) -> Animal:
+    return animal.feed()
 
 
-def feed() -> dict:
-    return {"kind": "FEED"}
+def skip_feed(animal: Animal) -> Animal:
+    return animal.skip_feed()
 
 
-def collect_fertilizer() -> dict:
-    return {"kind": "COLLECT_FERTILIZER"}
+def care(animal: Animal) -> Animal:
+    return animal.care()
 
 
-def care() -> dict:
-    return {"kind": "CARE"}
+def produce(animal: Animal) -> tuple[Animal, int]:
+    return animal.produce()
+
+
+def collect_fertilizer(animal: Animal) -> tuple[Animal, int]:
+    return animal.collect_fertilizer()

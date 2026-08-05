@@ -1,19 +1,13 @@
-def validate_position(position: list, board_size: int) -> bool:
-    x, y = position
-    return 0 <= x < board_size and 0 <= y < board_size
+from agent.domain.position import Position
 
 
-def validate_tile(tile: dict) -> bool:
-    if tile is None:
-        return True
-    if isinstance(tile, dict):
-        return True
-    return False
+def validate_position(position: Position, board_size: int) -> bool:
+    return 0 <= position.x < board_size and 0 <= position.y < board_size
+
+
+def validate_tile(tile: object) -> bool:
+    return tile is None or isinstance(tile, object)
 
 
 def validate_market_order(order: list) -> bool:
-    if not isinstance(order, list):
-        return False
-    if len(order) < 1:
-        return False
-    return True
+    return isinstance(order, list) and len(order) >= 1

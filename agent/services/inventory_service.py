@@ -1,26 +1,25 @@
-SHEED_CAPACITY = 100
+from agent.domain.inventory import Inventory
 
 
-def add_item(inventory: dict, item: str, count: int) -> bool:
-    current = inventory.get(item, 0)
-    if current + count > SHEED_CAPACITY:
-        return False
-    inventory[item] = current + count
-    return True
+def add_item(inventory: Inventory, item: str, quantity: int) -> Inventory:
+    return inventory.add(item, quantity)
 
 
-def remove_item(inventory: dict, item: str, count: int) -> bool:
-    current = inventory.get(item, 0)
-    if current < count:
-        return False
-    inventory[item] = current - count
-    return True
+def remove_item(inventory: Inventory, item: str, quantity: int) -> Inventory:
+    return inventory.remove(item, quantity)
 
 
-def available(inventory: dict, item: str) -> int:
-    return inventory.get(item, 0)
+def reserve_item(inventory: Inventory, item: str, quantity: int) -> Inventory:
+    return inventory.reserve(item, quantity)
 
 
-def space_remaining(inventory: dict) -> int:
-    total = sum(inventory.values())
-    return max(0, SHEED_CAPACITY - total)
+def available(inventory: Inventory, item: str) -> int:
+    return inventory.count(item)
+
+
+def has_item(inventory: Inventory, item: str, quantity: int) -> bool:
+    return inventory.has(item, quantity)
+
+
+def space_remaining(inventory: Inventory) -> int:
+    return inventory.space_remaining()

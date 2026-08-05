@@ -1,18 +1,26 @@
-def plant(tile: dict, crop: str) -> dict:
-    return {"kind": "PLANT", "crop": crop}
+from agent.domain.crop import Crop
 
 
-def water(tile: dict) -> dict:
-    return {"kind": "WATER"}
+def plant(tile: object, crop_type: str, day: int) -> tuple[object, Crop]:
+    crop = Crop(crop_type=crop_type, planted_day=day)
+    return tile, crop
 
 
-def harvest(tile: dict) -> dict:
-    return {"kind": "HARVEST"}
+def water(crop: Crop) -> Crop:
+    return crop.water()
 
 
-def fertilize(tile: dict) -> dict:
-    return {"kind": "FERTILIZE"}
+def fertilize(crop: Crop, day: int) -> Crop:
+    return crop.fertilize(day)
 
 
-def dig(tile: dict) -> dict:
-    return {"kind": "DIG"}
+def grow(crop: Crop, day: int) -> Crop:
+    return crop.grow(day)
+
+
+def harvest(crop: Crop) -> Crop:
+    return crop.harvest()
+
+
+def skip_water(crop: Crop) -> Crop:
+    return crop.skip_water()

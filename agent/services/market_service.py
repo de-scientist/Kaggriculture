@@ -1,12 +1,20 @@
-def process_orders(orders: list, player_id: int) -> list:
-    return []
+from agent.domain.market import Market
+from agent.domain.prices import Price
 
 
-def get_price(market: dict, product: str) -> int:
-    return market.get("prices", {}).get(product, 1)
+def get_price(market: Market, product: str) -> Price:
+    return market.current_price(product)
 
 
-def update_inventory(market: dict, product: str, delta: int) -> None:
-    inv = market.get("inventory", {})
-    inv[product] = inv.get(product, 0) + delta
-    market["inventory"] = inv
+def update_price(market: Market, product: str, new_price: int) -> Market:
+    return market.update_price(product, new_price)
+
+
+def update_inventory(market: Market, product: str, delta: int) -> Market:
+    return market.update_inventory(product, delta)
+
+
+def estimate_roi(
+    market: Market, product: str, cost: float, expected_price: float
+) -> float:
+    return market.estimate_roi(product, cost, expected_price)

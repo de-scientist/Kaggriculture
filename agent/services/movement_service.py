@@ -1,15 +1,24 @@
+from agent.domain.position import Position
+
+
 DIRECTIONS = {
-    "NORTH": (0, -1),
-    "SOUTH": (0, 1),
-    "EAST": (1, 0),
-    "WEST": (-1, 0),
+    "NORTH": Position(0, -1),
+    "SOUTH": Position(0, 1),
+    "EAST": Position(1, 0),
+    "WEST": Position(-1, 0),
 }
 
 
-def move(position: list, direction: str) -> list:
-    dx, dy = DIRECTIONS.get(direction, (0, 0))
-    return [position[0] + dx, position[1] + dy]
+def move(position: Position, direction: str) -> Position:
+    delta = DIRECTIONS.get(direction)
+    if delta is None:
+        return position
+    return Position(position.x + delta.x, position.y + delta.y)
 
 
-def is_adjacent(pos1: list, pos2: list) -> bool:
-    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1]) == 1
+def distance(pos1: Position, pos2: Position) -> int:
+    return pos1.distance_to(pos2)
+
+
+def neighbors(position: Position) -> list[Position]:
+    return position.neighbors()
