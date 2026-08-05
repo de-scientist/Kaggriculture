@@ -1,5 +1,5 @@
-from agent.domain.position import Position
 from agent.domain import worker as worker_domain
+from agent.domain.position import Position
 
 
 def test_worker_defaults():

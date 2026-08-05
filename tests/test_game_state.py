@@ -1,5 +1,4 @@
 from agent.domain import game_state as gs_domain
-from agent.domain.season import Season
 
 
 def test_game_state_defaults():
