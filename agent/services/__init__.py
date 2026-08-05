@@ -97,6 +97,8 @@ __all__ = [
     "needs_water",
     "neighboring_quadrants",
     "next_task",
+    "move_cost",
+    "path",
     "payback_period",
     "plant",
     "prioritize",
