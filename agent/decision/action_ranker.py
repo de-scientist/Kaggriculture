@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.utility_score import compute_utility
 
