@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 PRIORITY_HARVEST = 1
 PRIORITY_COLLECT = 2
 PRIORITY_FEED = 3

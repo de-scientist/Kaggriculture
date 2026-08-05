@@ -5,7 +5,6 @@ from agent.decision.decision_context import DecisionContext
 from agent.strategies.baseline_strategy import BaselineStrategy
 from agent.strategies.strategy import ScoredAction, Strategy
 
-
 _STRATEGIES: dict[str, type[Strategy]] = {
     "baseline": BaselineStrategy,
 }

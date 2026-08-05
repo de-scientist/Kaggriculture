@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from agent.decision.candidate_actions import CandidateAction
-from agent.strategies.strategy import ScoredAction
-
 
 WEIGHTS = {
     "profit": 1.0,

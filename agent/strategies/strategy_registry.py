@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from agent.strategies.strategy import Strategy
 
-
 _REGISTRY: dict[str, type[Strategy]] = {}
 
 

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 
 
 class ScoredAction:
-    __slots__ = ("action", "score", "explanation")
+    __slots__ = ("action", "explanation", "score")
 
     def __init__(
         self,

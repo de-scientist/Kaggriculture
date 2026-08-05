@@ -3,11 +3,11 @@ from __future__ import annotations
 
 class StrategyMetrics:
     __slots__ = (
+        "_buy_count",
         "_decision_count",
         "_harvest_count",
-        "_sell_count",
-        "_buy_count",
         "_idle_count",
+        "_sell_count",
         "_total_score",
     )
 
