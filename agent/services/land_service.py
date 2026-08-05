@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from agent.domain.quadrant import Quadrant
-
 QUADRANT_COSTS = {
     "NE": 1000,
     "SW": 2000,

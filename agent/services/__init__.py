@@ -28,12 +28,8 @@ from agent.services.economy_service import (
     roi,
 )
 from agent.services.inventory_service import (
-    add,
-    available,
-    capacity_remaining,
     contains,
     remove,
-    release,
     reserve,
 )
 from agent.services.land_service import (
@@ -47,14 +43,9 @@ from agent.services.market_service import (
     best_buy_option,
     best_sell_option,
     buy_price,
-    current_prices,
-    price_history,
     sell_price,
-    MarketSnapshot,
 )
 from agent.services.movement_service import (
-    adjacent,
-    distance,
     move_cost,
     path,
     reachable,
@@ -71,12 +62,9 @@ from agent.services.validation_service import (
     validate_state,
 )
 from agent.services.worker_service import (
-    assign,
     available_workers,
     busy_workers,
-    current_tasks,
     idle_workers,
-    release,
 )
 
 __all__ = [
@@ -84,8 +72,8 @@ __all__ = [
     "available_workers",
     "best_buy_option",
     "best_sell_option",
-    "buy_price",
     "busy_workers",
+    "buy_price",
     "can_collect",
     "can_feed",
     "can_harvest",
@@ -95,19 +83,19 @@ __all__ = [
     "cost",
     "daily_plan",
     "empty_tiles",
+    "expandable",
     "expected_land_value",
+    "expected_output",
     "expected_profit",
     "expected_return",
-    "expected_output",
-    "expandable",
     "feed",
     "fertilize",
     "growth_progress",
     "highest_roi_crop",
     "idle_workers",
-    "neighboring_quadrants",
     "needs_fertilizer",
     "needs_water",
+    "neighboring_quadrants",
     "next_task",
     "payback_period",
     "plant",
@@ -117,7 +105,6 @@ __all__ = [
     "purchase_cost",
     "reachable",
     "ready_for_harvest",
-    "release",
     "remove",
     "reserve",
     "roi",

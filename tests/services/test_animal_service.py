@@ -22,7 +22,7 @@ def test_feed_already_fed_animal():
 def test_collect_from_fed_animal():
     animal = Animal(animal_type="GOOSE")
     fed = animal_service.feed(animal)
-    result_animal, bonus = animal_service.collect(fed)
+    result_animal, _ = animal_service.collect(fed)
     assert isinstance(result_animal, Animal)
 
 
@@ -30,7 +30,7 @@ def test_collect_from_unfed_animal_raises():
     animal = Animal(animal_type="GOOSE")
     try:
         animal_service.collect(animal)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 

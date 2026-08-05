@@ -1,6 +1,6 @@
 from agent.domain import crop as crop_domain
-from agent.domain.tile import Tile
 from agent.domain.position import Position
+from agent.domain.tile import Tile
 from agent.services import crop_service
 
 
@@ -18,7 +18,7 @@ def test_plant_on_occupied_tile_raises():
     tile = Tile(position=pos).with_crop(existing_crop)
     try:
         crop_service.plant(tile, "CARROT", day=0)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 
@@ -38,7 +38,7 @@ def test_water_harvested_crop_raises():
     harvested = crop_service.harvest(planted)
     try:
         crop_service.water(harvested)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 
@@ -66,7 +66,7 @@ def test_harvest_immature_crop_raises():
     planted = crop_service.plant(tile, "WHEAT", day=0)
     try:
         crop_service.harvest(planted)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 

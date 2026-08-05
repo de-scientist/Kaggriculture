@@ -20,7 +20,7 @@ def test_remove_item_insufficient_raises():
     with_inv = inventory_service.add(inv, "WHEAT", 2)
     try:
         inventory_service.remove(with_inv, "WHEAT", 5)
-        assert False, "Should have raised ValueError"
+        raise AssertionError("Should have raised ValueError")
     except ValueError:
         pass
 

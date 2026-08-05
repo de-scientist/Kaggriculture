@@ -1,5 +1,4 @@
 from agent.domain.market import Market
-from agent.domain.prices import Price
 from agent.services import market_service
 
 

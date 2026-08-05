@@ -78,7 +78,12 @@ def empty_tiles(tiles: list[Tile]) -> list[Tile]:
     return [t for t in tiles if t.crop is None]
 
 
-def highest_roi_crop(tiles: list[Tile], day: int, prices: dict[str, float], costs: dict[str, float]) -> str | None:
+def highest_roi_crop(
+    tiles: list[Tile],
+    day: int,
+    prices: dict[str, float],
+    costs: dict[str, float],
+) -> str | None:
     best = None
     best_roi = -1.0
     for t in tiles:

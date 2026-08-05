@@ -1,5 +1,5 @@
-from agent.domain.worker import Worker
 from agent.domain.position import Position
+from agent.domain.worker import Worker
 from agent.services import worker_service
 
 
