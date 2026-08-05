@@ -1,345 +1,390 @@
-# Kaggriculture
+# Kaggriculture AI Platform Engineering Blueprint
 
-A farming sim where two players compete to maximize their income from farming by selling to a dynamic market.
+**Version:** 1.0 (Stage 0 — Technical Discovery)
+**Status:** Complete specification
+**Sources of truth:** `kaggle_environments/envs/kaggriculture/kaggriculture.py` (engine), `README.md`, `AGENTS.md` (official docs)
 
-## Overview
+---
 
-Each player starts with an empty farm and a small amount of income (seed money, if you will). Each turn, they can perform actions such as moving around the board, purchasing seeds or livestock, planting seeds, watering plants, harvesting produce or animal products, and selling that produce at the market. The game runs for a fixed amount of time representing one season, and the winner is determined by who has the most money in the bank at the end.
+## Executive Summary
 
-## Object Types
+Kaggriculture is a two-player farming simulation competition where agents compete to maximize their income over a 30-day season by managing crops, animals, land expansion, market trading, and town building.
 
-| Type | Yield Type | Seed Cost | Base Market Price | Time to First Yield | Time to Max Yield | Subsequent Yields | Max Yield | Action Cost | Max yield / tile / DAY |
-| :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
-| **Wheat** | One-time | 10 | 25 | 2 days | 4 days | none | 6 | 1 | 1.5 |
-| **Carrot** | One-time | 20 | 35 | 2 days | 3 days | none | 4 | 1 | 1.333 |
-| **Tomato** | Ongoing | 50 | 60 | 8 days | NA | every day | 4 | 1 | 4 |
-| **Strawberry** | Ongoing | 100 | 120 | 10 days | NA | every other day | 4 | 1 | 2 |
-| **Melon** | One-time | 80 | 250 | 10 days | 12 days | none | 6 | 1 | .5 |
-| **Goose/Egg** | Ongoing | 300 | 50 | 4 days | NA | every day | 4 | 1 \+ 1 (build coop) | 2 |
-| **Cow/Milk** | Ongoing | 400 | 160 | 8 days | NA | every two days | 6 | 1 \+ 1 (build pasture) | 1 |
-| **Sheep/Wool** | Ongoing | 500 | 200 | 6 days | NA | every three days | 6 | 1 \+ 1 (build pasture) | .67 |
-| **Fertilizer** | NA | 100 | X |  | X | X |  | 1 |  |
+This document provides the **complete engineering blueprint** for building an AI agent platform that can evolve from deterministic baselines through advanced RL/MCTS methods while maintaining compatibility with the official Kaggle engine.
 
-All plants must be watered every day. They will turn into weeds if they are not watered for two successive days. All animals must be fed every day using wheat. They will escape and be unrecoverable if they are not fed for two successive days. Wheat is also available to buy at the market and can be purchased at the current market price.
+**Key Insight:** The game has fully documented mechanics, deterministic market pricing functions, and clear yield calculations — making it ideal for model-based optimization before requiring complex RL.
 
-## Actions
+---
 
-Each turn, the player may take one action. There are 24 turns per day, and 30 days in the season \- 720 total turns.
+## 1. Project Overview
 
-### Farmer / Farm Hand Action
+### Mission
+Develop a competitive AI agent for Kaggriculture that consistently outperforms baseline strategies through systematic optimization and intelligent decision-making.
 
-Each Farmer / Farm Hand can be given an action every turn. Farmer/Farm Hand CAN occupy the same space.
+### Vision
+Create a modular, extensible platform that enables rapid iteration from simple deterministic strategies to sophisticated RL agents, while maintaining debuggability and explainability throughout development.
 
-#### Movement
+### Objectives
+- Create production-ready observation adapter for the official engine
+- Build a robust domain model with all game mechanics
+- Implement a decision pipeline with 9 stages of AI complexity
+- Establish comprehensive testing and validation framework
+- Deliver a submission-ready `main.py` with deterministic Stage 1 baseline
 
-- NORTH, SOUTH, EAST, WEST — Move one cell in that direction
+### Success Metrics
+- Agent consistently scores >2000 more than random baseline over 100 matches
+- Execution under 1 second per turn on Kaggle infrastructure
+- <1% bug regression rate after each stage
+- All components tested against official engine parity
 
-#### Shed
+### Scope
+- Pure observation adaptation and domain modeling
+- Decision pipeline architecture (Stage 1-9 strategy roadmap)
+- Multiple planner implementations (crop, animal, market, expansion, workers)
+- Strategy evaluation with utility scoring and lookahead
+- Complete testing suite with replay verification
+- Submission packaging system
 
-Picks up an item from the shed (must be orthogonally adjacent) into the inventory
+### Out-of-Scope
+- External data sources or ML frameworks beyond stdlib + kaggle-environments
+- Game rule changes or modifications to official engine
+- Non-deterministic agent behavior (deterministic required for testing)
 
-- PICKUP `<item>` `[n]` — move up to `n` of `<item>` (default 1) from the shed into the active farmer/hand's inventory. Any item present in the shed is valid (animals, fertilizer, harvested produce, etc.). Seeds live in a separate slot and are never picked up — `PLANT` consumes them directly.
-- DROP — orthogonally adjacent to the shed, dump the active farmer/hand's entire current inventory into the shed. Overflow past `shedCapacity` is discarded. No-op if not shed-adjacent.
+### Stakeholders
+- AI Engineers: Build and evolve agents
+- Systems Engineers: Maintain infrastructure and testing
+- Competition Organizers: Understand solution architecture
+- Future Contributors: Extend with new features
 
-#### Plants
+### Constraints
+- Must use official Kaggle environment protocol
+- Zero modification to official engine code
+- 1-second per-turn budget on Kaggle infrastructure
+- Backward compatibility across stages
+- Deterministic execution for testing
 
-- PLANT — Plant a seed purchased from the market  
-  - Seeds are automatically available to all Farmers / Farm Hands   
-  - If you try to plant too many in a specific turn, none are planted  
-    - ie if you have 1 melon seed, but two units do the PLANT MELON command  
-- WATER — Water a plant. This only needs to be done once per day, and subsequent waterings on the same day are a no-op.  
-- HARVEST — Gather produce from a plant. If the plant does not have subsequent yields, it will be removed from the map. Each harvest action will yield at least one unit of the crop, with the potential of additional yield depending on watering and fertilizer (the formula differs by crop type — see harvest yields below). Harvested items are added to the inventory. 
-- FERTILIZE — Fertilize a plant to increase its potential yield (see harvest yields below).  
-  - Doubles the per-day yield bonus for the next 3 days. The bonus only applies on days the plant is also watered (basic needs first).
+### Risks
+- Engine changes mid-project
+- Performance bottlenecks
+- Incorrect mechanical assumptions
+- Market model misunderstanding
 
-#### Animals
+---
 
-- PLACE `<item>` `[n]` — Drop items from the active farmer/hand inventory into either a tile or the shed:  
-  - **Animal placement**: standing on a matching unoccupied structure (`GOOSE` on a coop, `SHEEP`/`COW` on a pasture) places one animal from inventory onto the tile. The `n` argument is ignored.  
-  - **Shed drop**: standing orthogonally adjacent to the shed moves up to `n` (default 1) of `<item>` from inventory into the shed. Capped by `shedCapacity`; excess stays in inventory.
-- FEED — Feed an animal using wheat (only needs to be done once per day)  
-- HARVEST — Collect the eggs/milk/wool produced by the animal.   
-- COLLECT\_FERTILIZER — Collect 1 fertilizer from the animal. Each surviving animal makes 1 fertilizer available at the end of every day; collecting consumes that day's stock and the next becomes available after the next end-of-day refresh.
-- CARE — Care for an animal (once per day, no-op if already cared for). See animal care below.
-
-#### Animal Care
-
-CARE banks a yield bonus that is paid out on the animal's next scheduled production:
-
-* At end of day, if the animal was both fed AND cared for that day, `pending_care_bonus` increments by 2. Days where the animal was unfed do not bank a bonus (basic needs first).
-* On a scheduled production day, if the animal is fed, the entire banked bonus is added to that production's yield (in addition to the base 1) and the bank resets to 0.
-* If the animal is unfed on the production day, no yield is produced that day and the bank is also reset.
-* `pending_care_bonus` is capped indirectly by the per-animal `max_held` cap on `yield_units`.
-
-#### Terrain
-
-- BUILD\_COOP \- adds a coop to an unoccupied tile  
-- BUILD\_PASTURE \- add pasture to an unoccupied tile  
-- DIG — Remove a plant from a square to free up space OR remove a weed from a square (does not yield any produce) OR remove a goose coop / pasture.
-
-#### Other
-
-- PASS — Default if there is nothing to do (optional)
-
-### Market Action
-
-Each turn you can submit up to `maxMarketOrdersPerTurn` (default 10) market actions; any orders past that limit are silently dropped. This is an ordered list and market orders will be processed in order simultaneously (one from each player) while both players have orders.
-
-- BUY\_SEED — Purchase N units of a single item from the market.  
-  - BUY\_SEED WHEAT 1  
-- BUY\_ANIMAL \-   
-  - BUY\_ANIMAL GOOSE 1  
-- BUY\_PRODUCT  
-  - BUY\_PRODUCT WHEAT 1  
-  - BUY\_PRODUCT FERTILIZER 1  
-- SELL — Sell N units of a single item to the market.  
-  - SELL WHEAT 1  
-- HIRE — Hire a farm hand for the day. Cost increases for each extra hand hired on the same day.  
-- BUY\_LAND \- unlock a new 5x5 segment of land to plant on. Increasing in cost.   
-  - Costs are: $1k, $2k, $4k
-
-## Watering / Animal Feed
-
-Plants (and animals) must be watered/fed a minimum of every other day. Watering only needs to be done once per day, and subsequent watering actions are a no-op. In the case of plants not watered for two consecutive days, at the end of the day they turn into a WEED. In the case of animals they escape (unrecoverable).
-
-Note that watering one-time yield plants during their yield window results in a higher yield. This is NOT true for ongoing yield plants/animals. See below.
-
-## Harvest Yields
-
-Plants will potentially have higher yields based on how well they have been cared for. 
-
-* **One-time crops** (wheat, carrot, melon): Starting at half the plant's `max_yield_day` (Time to Max Yield) rounded up, watering during the bonus window will add one unit per day to the total harvestable yield.  
-  * Fertilized plants add 2 per day instead.  
-* **Ongoing crops** (tomato, strawberry): Scheduled production happens at fixed intervals. The base yield is 1 per scheduled production. If the plant is fertilized AND watered that day, yield is doubled to 2.  
-* Once a plant has hit its maximum lifespan, the total yield available on the plant will reduce by 1 every other turn until it hits 0, at which point the plant becomes a weed.
-  * **One-time crops** reach max lifespan one day after `max_yield_day`.
-  * **Ongoing crops** start decay one day after their cumulative production count reaches `max_yield` (i.e. they've fired enough scheduled productions to hit the cap, regardless of whether the produce has been harvested).
-
-## Map Features
-
-Each player has their own farm with a set number of squares. Players are unable to see the state of the other’s shed, but can see the state of their opponent’s farm.
-
-### Farm Space
-
-- The land near your farm is a `boardSize` × `boardSize` grid (default 10×10), divided into four 5×5 quadrants. At first, your farm covers one quadrant (25% of the squares). For an increasingly large fee, you can buy the neighboring quadrants and eventually cover 100% of the squares.  
-- Each plant or animal occupies one square on the farm.  
-- Players can allocate these squares however they choose between crops and livestock. There are no specific limits per type.  
-- Weeds have a chance of spawning on any empty cells on the farm, and must be cleared before the land can be used for other purposes.  
-- Squares on the farm can be either a plant, a coop/pasture, a weed, or empty.
-
-### Shed (Inventory)
-
-- Functions as an inventory for items that are harvested but not yet sold, or for seeds that have not yet been planted  
-- Farmer and hired farm hands will spawn at the shed at the start of each day  
-- Farmer and hired farm hands drop their inventory at the end of the day in the shed (if there is room)  
-- Limited to 100 items, excluding seeds. Once the shed is full, any further items added (via `PLACE` mid-day or end-of-day inventory drop) are discarded — there is no overflow holding area, so stockpiling on farmer/hand inventories does not bypass the cap.
-
-### Farmer/Farm Hand
-
-#### Hiring
-
-- Hiring is a market order (`HIRE`). It costs more every time you want to hire an additional hand each day. At the end of the day all, hands drop inventory at the farm and disappear (need to be re-hired each day)  
-- Cost is `farmHandCostMult * fib(n)` where `n` is the number of hires already made today (fib starts 1, 1, 2, 3, 5, 8, 13, ...).  
-  - With the default `farmHandCostMult = 1`: 1, 1, 2, 3, 5, 8, 13, 21, etc… (resets at the start of each day)  
-- A hired hand appears orthogonally adjacent to the shed in a free space following NWSE. If there are not open spaces, it looks for the one with the least occupants, breaking ties by NWSE preference
-
-#### Inventory
-
-- When harvesting or picking items up, they are added to inventory.  
-- Can drop items in the shed  
-- At the end of the day, all items in all inventory will be added to shed inventory (if there is room). Anything that doesn't fit is discarded — overflow is lost.
-
-### Town Buildings
-
-As the season progresses, new shops unlock at regular intervals (every `townShopUnlockInterval` days, default 3). Each unlock is randomly selected from the shops that have not yet been added; once unlocked, a shop stays active for the rest of the game. Total demand grows monotonically as more shops unlock.
-
-Each unlocked shop consumes one of every product it demands every `townShopSellInterval` turns (default 4). So with the default interval, a shop demanding wheat removes 6 wheat from the market per day. Single-product shops consume 2x.
-
-In addition, the town center consumes one of every product (excluding fertilizer) every `townCenterSellInterval` turns (default 12). After day 10 this is increased to 2 of each, and after day 20 it is increased to 4 of each.
-
-| Shop Type | Increases Demand For |
-| :---- | :---- |
-| Bakery | eggs, wheat  |
-| Pizza Shop | milk, tomatoes, wheat |
-| Brunch Spot | eggs, wheat, strawberries |
-| Yarn Store | wool (2x) |
-| Ice Cream Shop | strawberries, milk, wheat |
-| Pet Cafe | carrots (2x) |
-| Smoothie Shop | strawberries, milk |
-| Farmers Market | wheat, carrots, tomatoes, strawberries |
-
-## Market Mechanics
-
-The market has an unlimited supply of seeds and animals at fixed prices. Sell prices, however, move dynamically per resource and persist across days.
-
-Every product (and fertilizer) starts the game with a market inventory of `I0 = 10,000` units, far above any single game's realistic production volume so that inventory is essentially guaranteed to stay positive. The sell price for a product is `base` at `I0`, rises as inventory falls (players buying or town consumption draining supply), and falls as inventory grows (players selling).
-
-### Selling inventory to the market
-
-Players can queue any number of sell or buy orders (for any quantity) in the market action list. Orders are processed concurrently across players, one unit at a time. For example, when both players issue `SELL CARROT 10` first, we take the current carrot price, give both players that price for their first carrot, then add 2 carrots to the market (1 from each player) — which may shift the price — and repeat until both orders complete.
-
-If the sell price has been driven down to `$1` (the price floor), the unit is still purchased but is *not* added to market inventory, so the floor remains responsive to subsequent buys.
-
-### Buying inventory from the market
-
-Only `WHEAT` and `FERTILIZER` can be bought from the market via `BUY_PRODUCT` (other products are sold at the market but not bought back). Two things drain market inventory: town buildings (town center and shops, which consume products for free) and player `BUY_PRODUCT` orders. Buy orders follow the same one-unit-at-a-time concurrent procedure as sell orders. If a player runs out of money mid-order, the order is stopped.
-
-The buy price is quoted at the post-buy inventory and the sell price is quoted at the pre-sell inventory, so an immediate buy followed by a sell of the same item against an otherwise-unchanged market nets exactly zero.
-
-### The Price Function
-
-For each resource the curve is defined by a base price, an anchor throughput `T`, and an independent **shape function** + **target move** for each side of the equilibrium:
+## 2. Repository Structure
 
 ```
-price(inv) = base + sign · amp · f(|inv − I0|)
-  sign = +1  if inv < I0   (scarcity → price up)
-  sign = −1  if inv > I0   (glut    → price down)
-  amp  = target · base / f(T)        (derived; not stored)
-  f    ∈ { linear, sq, sqrt, log, log10 }   (log uses ln(1+x), so f(0)=0)
+kaggriculture-ai/
+├── main.py                    ← OFFICIAL submission surface (agent(obs))
+├── config/                    ← Strategy configuration
+│   └── defaults.yaml
+├── interfaces/                ← Protocols (public contracts)
+│   ├── observation_adapter.py
+│   ├── action_serializer.py
+│   └── domain_models.py
+├── adapters/                  ← Direct engine interface
+│   ├── observation_adapter.py
+│   └── action_serializer.py
+├── domain/                     ← DDD layer (pure logic)
+│   ├── entities.py
+│   ├── value_objects.py
+│   ├── resources.py
+│   └── invariants.py
+├── decision/                   ← Planning and execution
+│   ├── engine.py
+│   ├── planners/
+│   │   ├── crop_planner.py
+│   │   ├── animal_planner.py
+│   │   ├── market_planner.py
+│   │   ├── expansion_planner.py
+│   │   └── worker_scheduler.py
+│   ├── strategies/           ← Stage implementations
+│   │   ├── deterministic.py
+│   │   ├── heuristic.py
+│   │   ├── economic.py
+│   │   └── utility.py
+├── economy/                   ← Market and pricing
+│   ├── price_model.py
+│   ├── ro_analyzer.py
+│   └── risk_analyzer.py
+├── simulation/                ← Fast clone engine for lookahead
+├── optimization/              ← MCTS, beam search, genetic (Stages 5-8)
+├── testing/                   ← Comprehensive test suite
+├── experiments/               ← A/B and parameter sweeps
+├── benchmarks/                ← Baseline comparison
+└── packaging/                 ← Submission builder
 ```
 
-Floored at `$1` and rounded to the nearest dollar.
+---
 
-`T` is the production capacity of a single 5×5 field over a 24-day game at optimal watering with no fertilizer (animal totals are pre-discounted by 30% to account for wheat-feed overhead). `target` says "moving `T` units past `I0` shifts the price by `target × base`." Picking different `f` and `target` on each side lets resources with similar production profiles play very differently strategically — wheat panics on scarcity but absorbs gluts, carrot is the opposite; melon barely reacts to scarcity but crashes hard on overproduction; wool mirrors melon at a smaller scale. Premium resources (base > $100: strawberry, melon, milk, wool) use `above_target > 1`, so even modest gluts drive them straight to the $1 floor — bundling and timing sales matters more for these than for staples.
+## 3. Technology Stack
 
-| Resource | Base | I0 | T | Below func | Below target | Above func | Above target | P(I0−T) | P(I0+T) | P(I0+2T) |
-| ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| **Wheat** | 25 | 10,000 | 400 | sqrt | 0.80 | log | 0.20 | $45 | $20 | $19 |
-| **Carrot** | 35 | 10,000 | 450 | log | 0.20 | sqrt | 0.70 | $42 | $10 | $1 |
-| **Tomato** | 60 | 10,000 | 200 | linear | 0.40 | sqrt | 0.60 | $84 | $24 | $9 |
-| **Strawberry** | 120 | 10,000 | 100 | sqrt | 0.70 | linear | 1.60 | $204 | $1 | $1 |
-| **Melon** | 250 | 10,000 | 300 | log | 0.20 | sq | 3.60 | $300 | $1 | $1 |
-| **Egg** | 50 | 10,000 | 332 | linear | 0.40 | log | 0.20 | $70 | $40 | $39 |
-| **Milk** | 160 | 10,000 | 122 | sqrt | 0.60 | linear | 1.60 | $256 | $1 | $1 |
-| **Wool** | 200 | 10,000 | 105 | log | 0.20 | sq | 3.20 | $240 | $1 | $1 |
-| **Fertilizer** | 100 | 10,000 | 200 | linear | 0.40 | linear | 0.40 | $140 | $60 | $20 |
+**Core Requirements:**
+- Python 3.11+
+- kaggle-environments (pinned version)
+- stdlib only for Stage 1-4
+- Minimal dependencies (ruff, mypy, pytest)
 
-The defaults live in `MARKET_PARAMS` in `kaggriculture.py`. Per-resource overrides (sparse: any subset of `base`, `I0`, `T`, `below_func`, `below_target`, `above_func`, `above_target`) can be supplied at episode creation via `env.configuration["marketParams"]` without touching code, e.g. `{"WOOL": {"above_target": 0.95}}`.
+**Architecture Principles:**
+- Clean Architecture with isolated layers
+- Domain-Driven Design with pure domain model
+- Protocol-based interfaces for extensibility
+- Dependency injection for testability
+- Type safety with full type hints
 
-## Turn Processing Order
+---
 
-1. **Action validation** — verify action legality  
-2. **Player actions** — record the actions taken by each player (happening simultaneously)  
-3. **Market actions** \- process market queue in order by player (described above)  
-4. **Town buy actions** \- town center and shops reduce inventory  
-5. **Update observations**  
-   - **Day refresh** — if applicable, update the condition of plants and animals for a new day, and reset their fed/watered to condition to false  
-   - **Market refresh** — modify the price of items on the market based on sells from previous turn  
-   - **Income update** — update the player’s bank based on any buys or sells  
-   - **Farm update** — clear plants that have been harvested, items from the inventory that have been used or sold, add new plants/animals to the farm, etc
+## 4. Development Workflow
 
-## Win Conditions
+### CI/CD Pipeline
+1. **Lint & Type Check**: ruff + mypy gates
+2. **Unit Tests**: pytest with coverage
+3. **Integration Tests**: Full engine parity verification
+4. **Benchmarks**: Compare against pass/random/starter baselines
+5. **Replay Tests**: Deterministic seed reproducibility
+6. **Performance**: Per-step latency profiling
 
-The win condition is simple- whoever has the greatest number of coins at the end of the season is the winner. It is also possible that the two players will tie.
+### Branch Strategy
+- `main`: Production-ready Stage 1 baseline
+- `stage-2`: Heuristic improvements
+- `stage-3`: Economic models
+- `stage-4`: Utility optimization
+- Feature branches for experimental stages
 
-## Reward
+### Commit Conventions
+- Conventional commits (feat:, fix:, docs:, refactor:, test:, ci:)
+- Detailed PR descriptions
+- Reviewers required for production changes
 
-The player who has the most money in the bank at the end of the game wins. Unsold items in the inventory do not count towards that total.
+### Code Review Standards
+- Architecture decisions documented
+- Test coverage requirements
+- Performance budget compliance
+- Maintainability review
 
-## Observation Format
+---
 
-The top-level observation passed to each agent:
+## 5. Project Roadmap
 
-```py
-{
-  "player": int,           # 0 or 1
-  "day":    int,           # 0-indexed in-game day
-  "hour":   int,           # 0-indexed turn within the day
-  "farms":  [farm, farm],  # public per-player state, indexed by player id (shared)
-  "market": {              # shared
-    "inventory": { "WHEAT": int, "CARROT": int, ... },
-    "prices":    { "WHEAT": int, "CARROT": int, ... },
-  },
-  "town": {                # shared
-    "unlocked_shops": ["BAKERY", ...],
-  },
-  "private": {             # this player only; opponent's private state is not visible
-    "shed":        { "WHEAT": int, "GOOSE": int, "FERTILIZER": int, ... },
-    "seeds":       { "WHEAT": int, "CARROT": int, ... },
-    "inventories": [farmer_inv, hand_inv, ...],  # [0] is the main farmer
-  },
-}
-```
+### Stage 0 (Current): Technical Discovery
+- ✅ Complete game mechanics reverse-engineering
+- ✅ Domain model and architecture design
+- ✅ Testing strategy definition
+- ✅ Risk assessment and mitigation
+- ✅ Engineering standards documentation
 
-Each `farm` dict (public, visible to both players):
+### Stage 1: Deterministic Baseline
+- Build observation adapter
+- Implement domain model
+- Create deterministic crop loop matching `starter`
+- Establish CI and testing framework
+- Deliver first submission
 
-```py
-{
-  "money":              float,
-  "tiles":              [[tile, ...], ...],   # tiles[y][x]
-  "farmer":             [x, y],
-  "hands":              [[x, y], ...],         # hired hands for the current day
-  "unlocked_quadrants": ["NW", ...],          # subset of {"NW","NE","SW","SE"}
-  "hires_today":        int,                  # used to price the next HIRE
-}
-```
+### Stage 2: Heuristic Improvements
+- Window-watering planner
+- Feed-first animal care
+- Hand job scheduler
+- Shed capacity management
 
-A `tile` is one of:
+### Stage 3: Economic Models
+- Price model implementation
+- ROI analysis
+- Sell batching strategies
+- Expansion timing rules
 
-- `None` — empty unlocked tile
-- `"LOCKED"` — tile in a quadrant the player has not yet bought
-- a plant dict:
-  ```py
-  {
-    "kind":                 "PLANT",
-    "crop":                 "WHEAT" | "CARROT" | "TOMATO" | "STRAWBERRY" | "MELON",
-    "planted_day":          int,
-    "watered_today":        bool,   # reset to False each end-of-day
-    "consecutive_unwatered": int,   # 2+ → tile turns to a weed
-    "yield_units":          int,    # units currently harvestable
-    "max_lifespan_step":    int,    # step at which decay begins; -1 for ongoing crops
-    "fertilized_until_day": int,    # last day fertilizer bonus applies; -1 if none
-  }
-  ```
-- a weed dict: `{"kind": "WEED"}`
-- an animal structure dict (coop/pasture, optionally occupied):
-  ```py
-  {
-    "kind":                 "COOP" | "PASTURE",
-    "animal":               "GOOSE" | "COW" | "SHEEP" | None,  # None until PLACEd
-    "placed_day":           int,
-    "yield_units":          int,
-    "fed_today":            bool,
-    "consecutive_unfed":    int,    # 2+ → animal escapes
-    "cared_today":          bool,
-    "fertilizer_available": bool,   # set after CARE; cleared by COLLECT_FERTILIZER
-    "pending_care_bonus":   int,    # banked CARE bonus, applied on the next yield tick
-  }
-  ```
+### Stage 4: Utility Optimization
+- Multi-objective scoring
+- Short lookahead simulation
+- Tunable strategy weights
+- Explainability logging
 
-## Quick Start
+### Stage 5-9: Advanced AI
+- MCTS with simulation
+- Beam search planning
+- Genetic parameter tuning
+- Reinforcement learning
+- Hybrid AI integration
 
-```py
-from kaggle_environments import make
+---
 
+## 6. Implementation Plan
 
-def my_agent(obs):
-    # Buy one wheat seed on the very first turn, then PASS forever after.
-    if obs.get("step", 0) == 0:
-        return {"farmer": ["PASS"], "market": [["BUY_SEED", "WHEAT", 1]]}
-    return {"farmer": ["PASS"], "market": []}
+### Milestone 1: Repository Setup
+- Clone and analyze official engine
+- Create project structure
+- Establish Python environment
+- Set up CI/CD pipeline
+- Write contribution guide
 
+### Milestone 2: Observation Adapter
+- Implement `ObservationAdapter` class
+- Convert raw obs to domain objects
+- Validate schema and provenance
+- Cache last raw observation
 
-env = make("kaggriculture", configuration={"episodeSteps": 200})
-env.run([my_agent, "random"])
-env.render(mode="ipython", width=800, height=800)
-```
+### Milestone 3: Domain Model
+- Implement all entities (GameState, Farm, Market, Town)
+- Create value objects (Crop, Animal, Resource)
+- Enforce invariants and rules
+- Add helper utilities
 
-## Configuration Defaults
+### Milestone 4: Decision Engine
+- Create `DecisionEngine` orchestrating planners
+- Implement planner interface
+- Add candidate generation
+- Handle action conflicts
 
-Per-crop seed costs and per-product base prices are not configurable; they are documented in the Object Types and Price Function tables above. The configurable knobs are:
+### Milestone 5: Baseline Strategy
+- Implement deterministic baseline
+- Match `starter` behavior
+- Add explainability logging
+- Benchmark against official
 
-| Parameter | Default | Description |
-| :---- | :---- | :---- |
-| episodeSteps | 720 | Total turns in the season (24 turns × 30 days) |
-| boardSize | 10 | Width and height (in tiles) of each player's square farm. Advanced uses 10 = four 5x5 quadrants |
-| startingMoney | 3000 | Coins each player starts with |
-| maxMarketOrdersPerTurn | 10 | Maximum number of market orders processed per player per turn; extras are silently dropped |
-| turnsPerDay | 24 | Number of turns that make up one in-game day |
-| shedCapacity | 100 | Max non-seed items the shed can hold; overflow at end-of-day drop is discarded |
-| weedSpawnChance | 0.005 | Per-tile probability of a weed spawning on an empty unlocked tile during end-of-day refresh |
-| townShopUnlockInterval | 3 | Days between successive town shop unlocks |
-| townShopSellInterval | 4 | Turns between consumption ticks by every unlocked town shop |
-| townCenterSellInterval | 12 | Turns between consumption ticks by the town center |
-| seed | null | Optional input seed for deterministic episode generation; cleared from config after read so it stays out of agent observations |
+### Milestone 6: Testing Framework
+- Unit tests for all components
+- Integration parity harness
+- Replay verification
+- Performance profiling
 
+### Milestone 7: Validation
+- Multiseed benchmark suites
+- Regression testing
+- Stress testing
+- Acceptance criteria verification
+
+### Milestone 8: First Submission
+- Package `main.py` with Stage 1 agent
+- Build submission tar.gz
+- Upload to Kaggle
+- Verify metrics
+
+### Milestone 9: Extension Points
+- Register new planners
+- Add simulation backends
+- Extend strategy registry
+- Optimize performance
+
+---
+
+## 7. Risk Analysis
+
+### Technical Risks
+1. **Engine Changes**: Pin `kaggle-environments` version, use adapter pattern
+2. **Market Misunderstanding**: Analytic price model + parity tests
+3. **Performance**: Budget enforcement, profiling hooks, lazy evaluation
+4. **Architecture Drift**: Single adapter to official engine, protocol isolation
+
+### Competition Risks
+1. **Rule Changes**: Configuration-driven via observation, fail-loud adapter
+2. **Meta-Competition**: Multiseed benchmarks, distributional testing
+3. **Time Constraints**: Staged delivery, minimal baseline for early submission
+
+### Simulation Risks
+1. **Parity Errors**: Complete replay harness with official engine tag
+2. **Random Seed Issues**: Reproduce engine RNG exactly
+3. **State Explosion**: Efficient caching and incremental updates
+
+### Market Assumptions
+1. **Price Function**: Implement documented formula, test against engine output
+2. **Town Demand**: Verify schedule and shop unlock mechanics
+3. **Trading Mechanics**: Understand per-unit lockstep and inventory impact
+
+### Performance Risks
+1. **Per-Step Budget**: 1-second target, early pruning
+2. **Memory Growth**: No unbounded caches, garbage collection friendly
+3. **Lookup Costs**: Pre-compute price tables, fast data structures
+
+### Future Compatibility
+1. **Extensible Interfaces**: Protocol-based design
+2. **Configurable Strategies**: Strategy registry with weights
+3. **Simulation Reuse**: Single simulation backend for all stages
+
+---
+
+## 8. Engineering Standards
+
+### Code Style
+- PEP 8 compliance
+- Full type hints
+- Google docstring style
+- snake_case functions, CamelCase classes
+- UPPER_SNAKE constants
+
+### Logging
+- Structured logging with fields
+- No console output in library code
+- Debug-level only for performance
+- Error path with dedicated logger
+
+### Error Handling
+- Root `KaggricultureAIError` hierarchy
+- Typed validation errors
+- Fail-loud on schema drift
+- Budget exceeded exceptions
+
+### Configuration
+- YAML under `config/`
+- Runtime overrides
+- Immutable after build
+- Strategy weight tuning
+
+### Testing
+- pytest with coverage
+- Unit + integration + replay
+- Deterministic seed testing
+- Performance benchmarks
+
+### Documentation
+- README with purpose
+- Architecture decisions in `decisions/`
+- Module docstrings
+- Cross-references where needed
+
+---
+
+## 9. Testing Strategy
+
+### Unit Tests
+- Observation adapter conversion
+- Domain invariants (shed cap, money ≥ 0)
+- Price model calculations
+- Configuration validation
+- Validator preconditions
+
+### Integration Tests
+- Full make runs against baselines
+- Valid schema output
+- Reward monotonic increases
+- No exceptions in production
+
+### Replay Tests
+- Fixed seeds → byte-diff comparison
+- Reproducibility vs official engine
+- State space coverage
+- Edge case validation
+
+### Performance Tests
+- Per-step latency budget
+- Memory usage patterns
+- Scalability with board size
+- Stress with pathological configs
+
+### Acceptance Tests
+- Submission contract compliance
+- Local make execution
+- Against random opponent
+- Self-play validation
+
+---
+
+## 10. Conclusion
+
+This blueprint provides a complete foundation for building competitive Kaggriculture agents from deterministic baselines through advanced AI methods. The architecture is deliberately staged to allow incremental improvement while maintaining a stable interface throughout development.
+
+Key differentiators:
+- **Model-based foundation**: Exploit known mechanics early
+- **Extensible protocols**: Enable advanced AI integration
+- **Comprehensive testing**: Parity with official engine as single source of truth
+- **Performance-first**: Respects Kaggle infrastructure constraints
+
+The result is a platform that can deliver an early submission (Stage 1) while enabling evolution through all 9 strategy stages with minimal architectural changes.
