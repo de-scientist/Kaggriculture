@@ -9,8 +9,6 @@ def adapt(obs: dict) -> game_state.GameState:
 
     return game_state.GameState(
         player=player,
-        day=obs["day"],
-        hour=obs["hour"],
         step=obs["step"],
         farms=obs["farms"],
         private=private,

@@ -23,4 +23,4 @@ def test_adapt_returns_game_state():
     }
     state = observation_adapter.adapt(obs)
     assert state.player == 0
-    assert state.day == 0
+    assert state.current_day() == 0
