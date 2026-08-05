@@ -8,8 +8,8 @@ from agent.decision.utility_score import compute_utility
 __all__ = [
     "CandidateAction",
     "DecisionContext",
-    "decide",
     "DecisionTrace",
-    "get_fallback",
     "compute_utility",
+    "decide",
+    "get_fallback",
 ]

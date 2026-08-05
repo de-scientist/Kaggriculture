@@ -23,11 +23,7 @@ def filter_by_ownership(
     actions: list[CandidateAction],
     owned_tiles: set[tuple[int, int]],
 ) -> list[CandidateAction]:
-    return [
-        a
-        for a in actions
-        if a.target_position is None or a.target_position in owned_tiles
-    ]
+    return [a for a in actions if a.target_position is None or a.target_position in owned_tiles]
 
 
 def filter_pre_validation(
