@@ -1,5 +1,6 @@
 def bonus_window_start(max_yield_day: int) -> int:
     import math
+
     return math.ceil(max_yield_day / 2)
 
 

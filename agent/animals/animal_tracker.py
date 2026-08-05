@@ -1,6 +1,3 @@
-from agent.domain import animal as animal_domain
-
-
 def track(tile: dict) -> dict:
     if tile is None or not isinstance(tile, dict):
         return {}

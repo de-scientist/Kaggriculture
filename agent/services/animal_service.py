@@ -1,6 +1,3 @@
-from agent.domain import animal as animal_domain
-
-
 def build_coop() -> dict:
     return {"kind": "BUILD_COOP"}
 

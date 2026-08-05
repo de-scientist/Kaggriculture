@@ -1,6 +1,3 @@
-from agent.domain import worker as worker_domain
-
-
 def hire_hand() -> dict:
     return {"kind": "HIRE"}
 

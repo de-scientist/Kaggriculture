@@ -1,6 +1,3 @@
-from agent.domain import inventory as inventory_domain
-
-
 SHEED_CAPACITY = 100
 
 

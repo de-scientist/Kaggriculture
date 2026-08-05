@@ -1,11 +1,8 @@
-from agent.domain import action as action_domain
-
-
-def to_kaggle_format(action: action_domain.Action) -> dict:
+def to_kaggle_format(action: dict) -> dict:
     result: dict = {
-        "farmer": action.farmer_op,
-        "hands": action.hand_ops,
-        "market": action.market_ops,
+        "farmer": action.get("farmer", ["PASS"]),
+        "hands": action.get("hands", []),
+        "market": action.get("market", []),
     }
     return result
 

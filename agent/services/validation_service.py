@@ -1,6 +1,3 @@
-from agent.domain import game_state as gs_domain
-
-
 def validate_position(position: list, board_size: int) -> bool:
     x, y = position
     return 0 <= x < board_size and 0 <= y < board_size

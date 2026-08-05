@@ -1,5 +1,4 @@
-from agent.strategies import baseline_strategy
-from agent.strategies import strategy
+from agent.strategies import baseline_strategy, strategy
 
 
 def test_baseline_is_strategy():

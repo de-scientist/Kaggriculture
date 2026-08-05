@@ -1,4 +1,5 @@
 import json
+
 from agent.domain import game_state
 
 

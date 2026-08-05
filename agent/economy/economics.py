@@ -1,5 +1,4 @@
-from agent.economy import roi
-from agent.economy import pricing
+from agent.economy import pricing, roi
 
 
 def evaluate_investment(cost: float, expected_return: float, risk: float = 0.0) -> float:

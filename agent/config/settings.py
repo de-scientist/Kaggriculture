@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Dict, Any
+from typing import Any
 
 
 @dataclass
 class Settings:
     environment: str = "development"
-    game: Dict[str, Any] = field(default_factory=dict)
-    market: Dict[str, Any] = field(default_factory=dict)
-    town: Dict[str, Any] = field(default_factory=dict)
-    logging: Dict[str, Any] = field(default_factory=dict)
-    strategy: Dict[str, Any] = field(default_factory=dict)
+    game: dict[str, Any] = field(default_factory=dict)
+    market: dict[str, Any] = field(default_factory=dict)
+    town: dict[str, Any] = field(default_factory=dict)
+    logging: dict[str, Any] = field(default_factory=dict)
+    strategy: dict[str, Any] = field(default_factory=dict)

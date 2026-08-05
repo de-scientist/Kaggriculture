@@ -1,5 +1,5 @@
-from agent.strategies import strategy
 from agent.decision import decision_context
+from agent.strategies import strategy
 
 
 class BaselineStrategy(strategy.Strategy):

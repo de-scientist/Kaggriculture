@@ -1,6 +1,3 @@
-from agent.domain import crop as crop_domain
-
-
 def plant(tile: dict, crop: str) -> dict:
     return {"kind": "PLANT", "crop": crop}
 

@@ -1,6 +1,4 @@
-from agent.planning import task_planner
-from agent.planning import priority_queue
-from agent.planning import scheduler
+from agent.planning import priority_queue, scheduler, task_planner
 
 
 def plan(context: dict) -> list:

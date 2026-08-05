@@ -1,4 +1,3 @@
-from agent.inventory import capacity
 from agent.inventory import reservation
 
 

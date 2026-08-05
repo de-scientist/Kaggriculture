@@ -1,5 +1,4 @@
-from agent.decision import action_validator
-from agent.decision import decision_context
+from agent.decision import action_validator, decision_context
 
 
 def test_validate_returns_true_for_valid_action():

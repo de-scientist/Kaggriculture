@@ -1,6 +1,3 @@
-from agent.market import market_snapshot
-
-
 def analyze_trend(snapshots: list) -> dict:
     return {}
 

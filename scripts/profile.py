@@ -1,5 +1,6 @@
 import cProfile
 import pstats
+
 from agent.agent import agent
 
 
@@ -9,7 +10,16 @@ def profile_agent():
         "step": 0,
         "day": 0,
         "hour": 0,
-        "farms": [{"money": 3000, "tiles": [[None]], "farmer": [0, 0], "hands": [], "unlocked_quadrants": ["NW"], "hires_today": 0}],
+        "farms": [
+            {
+                "money": 3000,
+                "tiles": [[None]],
+                "farmer": [0, 0],
+                "hands": [],
+                "unlocked_quadrants": ["NW"],
+                "hires_today": 0,
+            }
+        ],
         "private": {"shed": {}, "seeds": {}, "inventories": [{}]},
         "market": {"inventory": {}, "prices": {}},
         "town": {"unlocked_shops": []},

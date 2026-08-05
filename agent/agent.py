@@ -1,14 +1,10 @@
-from agent.adapters import observation_adapter, action_adapter
-from agent.decision import decision_engine
+from agent.adapters import action_adapter, observation_adapter
 from agent.config import settings
+from agent.decision import decision_engine
 
 
 def agent(obs: dict) -> dict:
     player = obs["player"]
-    me = obs["farms"][player]
-    private = obs["private"]
-    market = obs["market"]
-    town = obs["town"]
 
     context = decision_engine.DecisionContext(
         obs=obs,

@@ -1,5 +1,4 @@
-from agent.decision import decision_engine
-from agent.decision import decision_context
+from agent.decision import decision_context, decision_engine
 
 
 def test_decide_returns_action():

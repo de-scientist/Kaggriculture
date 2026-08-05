@@ -1,11 +1,10 @@
-from dataclasses import dataclass, field
-from typing import Any, Optional
+from dataclasses import dataclass
 
 
 @dataclass
 class Tile:
     kind: str = "EMPTY"
-    crop: Optional[str] = None
+    crop: str | None = None
     planted_day: int = -1
     watered_today: bool = False
     consecutive_unwatered: int = 0
