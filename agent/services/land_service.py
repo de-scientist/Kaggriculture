@@ -22,7 +22,7 @@ def available_land(farm: object) -> list[str]:
 
 
 def purchase_cost(quadrant: str) -> int:
-    return QUADrant_COSTS.get(quadrant, 0)
+    return QUADRANT_COSTS.get(quadrant, 0)
 
 
 def expandable(farm: object, money: float) -> list[str]:
@@ -31,7 +31,7 @@ def expandable(farm: object, money: float) -> list[str]:
 
 
 def neighboring_quadrants(quadrant: str) -> list[str]:
-    return QUADrant_NEIGHBORS.get(quadrant, [])
+    return QUADRANT_NEIGHBORS.get(quadrant, [])
 
 
 def expected_land_value(quadrant: str) -> float:
