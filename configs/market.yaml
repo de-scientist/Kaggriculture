@@ -1,0 +1,53 @@
+market:
+  base_prices:
+    WHEAT: 10
+    CARROT: 20
+    TOMATO: 30
+    STRAWBERRY: 50
+    MELON: 80
+    GOOSE: 30
+    COW: 50
+    SHEEP: 40
+    FERTILIZER: 15
+
+  price_shapes:
+    WHEAT:
+      below: linear
+      above: linear
+    CARROT:
+      below: linear
+      above: sq
+    TOMATO:
+      below: sqrt
+      above: sq
+    STRAWBERRY:
+      below: log
+      above: sqrt
+    MELON:
+      below: log
+      above: sqrt
+    GOOSE:
+      below: linear
+      above: sqrt
+    COW:
+      below: linear
+      above: sqrt
+    SHEEP:
+      below: linear
+      above: sqrt
+    FERTILIZER:
+      below: linear
+      above: linear
+
+  initial_inventory:
+    WHEAT: 20
+    CARROT: 15
+    TOMATO: 15
+    STRAWBERRY: 10
+    MELON: 5
+    GOOSE: 5
+    COW: 3
+    SHEEP: 3
+    FERTILIZER: 10
+
+  floor_price: 1

@@ -1,0 +1,20 @@
+simulation:
+  num_episodes: 100
+  opponent: random
+  seed: null
+
+  replay:
+    enabled: true
+    directory: replays/
+
+  logging:
+    step_log: false
+    summary_log: true
+
+  metrics:
+    - reward
+    - coins
+    - crops_harvested
+    - animals_produced
+    - market_orders
+    - decision_latency_ms
