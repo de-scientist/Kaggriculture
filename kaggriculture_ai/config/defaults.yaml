@@ -1,0 +1,26 @@
+strategy: deterministic
+logging:
+  level: WARNING
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+performance:
+  max_step_ms: 500
+  max_memory_mb: 100
+market:
+  I0: 10000
+  price_floor: 1
+farm:
+  board_size: 10
+  starting_money: 3000
+  shed_capacity: 100
+  turns_per_day: 24
+  days: 30
+crops:
+  - WHEAT
+  - CARROT
+  - TOMATO
+  - STRAWBERRY
+  - MELON
+animals:
+  - GOOSE
+  - COW
+  - SHEEP
