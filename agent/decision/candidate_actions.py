@@ -1,5 +1,21 @@
-from agent.decision import decision_context
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Any
 
 
-def build_candidates(context: decision_context.DecisionContext) -> list:
-    return []
+@dataclass(frozen=True)
+class CandidateAction:
+    id: str
+    action_type: str
+    target_entity: str = ""
+    target_position: tuple[int, int] | None = None
+    worker: str = ""
+    estimated_cost: float = 0.0
+    estimated_reward: float = 0.0
+    metadata: dict = field(default_factory=dict)
+    strategy_annotations: dict = field(default_factory=dict)
+
+    @property
+    def net_value(self) -> float:
+        return self.estimated_reward - self.estimated_cost
