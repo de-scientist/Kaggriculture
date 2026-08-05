@@ -16,6 +16,7 @@ class GameState:
         "_market",
         "_opponent",
         "_player",
+        "_private",
         "_season",
         "_step",
         "_town",
@@ -32,6 +33,7 @@ class GameState:
         season: Season | None = None,
         weather: Weather | None = None,
         opponent: Player | None = None,
+        private: dict | None = None,
         step: int = 0,
     ) -> None:
         self._player = player
@@ -42,6 +44,7 @@ class GameState:
         self._season = season or Season()
         self._weather = weather or Weather()
         self._opponent = opponent or Player(index=1)
+        self._private = dict(private or {})
         self._step = step
 
     @property
@@ -79,6 +82,10 @@ class GameState:
     @property
     def step(self) -> int:
         return self._step
+
+    @property
+    def private(self) -> dict:
+        return dict(self._private)
 
     def current_day(self) -> int:
         return self._season.day
