@@ -1,13 +1,31 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
 from agent.domain.position import Position
 
 
-def validate_position(position: Position, board_size: int) -> bool:
-    return 0 <= position.x < board_size and 0 <= position.y < board_size
+@dataclass
+class ValidationResult:
+    is_valid: bool
+    errors: list[str]
 
 
-def validate_tile(tile: object) -> bool:
-    return tile is None or isinstance(tile, object)
+def validate(action: list, game_state: object | None) -> bool:
+    if not isinstance(action, list) or len(action) == 0:
+        return False
+    return True
 
 
-def validate_market_order(order: list) -> bool:
-    return isinstance(order, list) and len(order) >= 1
+def validate_action(action: list, game_state: object | None) -> ValidationResult:
+    errors: list[str] = []
+    if not isinstance(action, list) or len(action) == 0:
+        errors.append("Action must be a non-empty list")
+        return ValidationResult(is_valid=False, errors=errors)
+    return ValidationResult(is_valid=True, errors=errors)
+
+
+def validate_state(game_state: object | None) -> bool:
+    if game_state is None:
+        return False
+    return True
