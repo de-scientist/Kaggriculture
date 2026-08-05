@@ -60,15 +60,12 @@ class Crop:
     def is_harvested(self) -> bool:
         return self._harvested
 
-    @property
     def is_mature(self, current_day: int) -> bool:
         return (current_day - self._planted_day) >= 2
 
-    @property
     def is_alive(self, current_day: int) -> bool:
         return (current_day - self._planted_day) <= self._max_lifespan_step + 1
 
-    @property
     def is_in_bonus_window(self, current_day: int) -> bool:
         bonus_start = (self._max_lifespan_step + 1) // 2
         return bonus_start <= (current_day - self._planted_day) <= self._max_lifespan_step

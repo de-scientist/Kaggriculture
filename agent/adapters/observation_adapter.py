@@ -10,7 +10,7 @@ def adapt(obs: dict) -> game_state.GameState:
     return game_state.GameState(
         player=player,
         step=obs["step"],
-        farms=obs["farms"],
+        farm=obs["farms"][player],
         private=private,
         market=market,
         town=town,
