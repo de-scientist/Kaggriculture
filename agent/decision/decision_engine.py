@@ -57,5 +57,26 @@ def _action_to_dict(action: object) -> dict:
     if isinstance(action, dict):
         return action
     if isinstance(action, CandidateAction):
-        return {"action_type": action.action_type, "id": action.id}
+        atype = action.action_type.lower()
+        if atype in ("pass",):
+            return {"farmer": ["PASS"], "hands": [], "market": []}
+        if atype in ("harvest",):
+            return {"farmer": ["HARVEST"], "hands": [], "market": []}
+        if atype in ("water",):
+            return {"farmer": ["WATER"], "hands": [], "market": []}
+        if atype in ("plant",):
+            return {"farmer": ["PLANT", "WHEAT"], "hands": [], "market": []}
+        if atype in ("sell",):
+            return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 1]]}
+        if atype in ("buy_seed", "buy_product", "buy_animal"):
+            return {"farmer": ["PASS"], "hands": [], "market": [["BUY_SEED", "WHEAT", 1]]}
+        if atype in ("hire",):
+            return {"farmer": ["PASS"], "hands": [], "market": [["HIRE"]]}
+        if atype in ("feed",):
+            return {"farmer": ["FEED"], "hands": [], "market": []}
+        if atype in ("care",):
+            return {"farmer": ["CARE"], "hands": [], "market": []}
+        if atype in ("collect_fertilizer",):
+            return {"farmer": ["COLLECT_FERTILIZER"], "hands": [], "market": []}
+        return {"farmer": ["PASS"], "hands": [], "market": []}
     return {"farmer": ["PASS"], "hands": [], "market": []}
