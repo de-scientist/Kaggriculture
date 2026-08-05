@@ -4,7 +4,7 @@ from agent.domain.position import Position
 
 
 class Worker:
-    __slots__ = ("_id", "_position", "_task", "_available", "_remaining_movement")
+    __slots__ = ("_available", "_id", "_position", "_remaining_movement", "_task")
 
     def __init__(
         self,

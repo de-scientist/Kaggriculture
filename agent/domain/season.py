@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Season:
-    __slots__ = ("_day", "_turn", "_turns_per_day", "_total_days", "_total_turns")
+    __slots__ = ("_day", "_total_days", "_total_turns", "_turn", "_turns_per_day")
 
     def __init__(
         self,

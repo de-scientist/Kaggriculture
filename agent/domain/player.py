@@ -7,7 +7,7 @@ from agent.domain.wallet import Wallet
 
 
 class Player:
-    __slots__ = ("_index", "_wallet", "_farm", "_inventory", "_statistics")
+    __slots__ = ("_farm", "_index", "_inventory", "_statistics", "_wallet")
 
     def __init__(
         self,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Town:
-    __slots__ = ("_unlocked_shops", "_demand", "_town_center_sell_interval")
+    __slots__ = ("_demand", "_town_center_sell_interval", "_unlocked_shops")
 
     def __init__(
         self,

@@ -4,17 +4,17 @@ from __future__ import annotations
 class Animal:
     __slots__ = (
         "_animal_type",
-        "_hunger",
-        "_production_timer",
-        "_producing",
+        "_cared_today",
+        "_consecutive_unfed",
+        "_escaped",
+        "_fed_today",
+        "_fertilizer_available",
         "_health",
         "_housing",
-        "_fed_today",
-        "_consecutive_unfed",
-        "_cared_today",
-        "_fertilizer_available",
+        "_hunger",
         "_pending_care_bonus",
-        "_escaped",
+        "_producing",
+        "_production_timer",
     )
 
     def __init__(

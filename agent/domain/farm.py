@@ -4,7 +4,7 @@ from agent.domain.position import Position
 
 
 class Farm:
-    __slots__ = ("_tiles", "_quadrants", "_buildings", "_workers", "_money")
+    __slots__ = ("_buildings", "_money", "_quadrants", "_tiles", "_workers")
 
     def __init__(
         self,

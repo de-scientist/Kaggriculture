@@ -2,7 +2,13 @@ from __future__ import annotations
 
 
 class Statistics:
-    __slots__ = ("_crops_harvested", "_animals_produced", "_land_purchased", "_coins_earned", "_coins_spent")
+    __slots__ = (
+        "_animals_produced",
+        "_coins_earned",
+        "_coins_spent",
+        "_crops_harvested",
+        "_land_purchased",
+    )
 
     def __init__(
         self,

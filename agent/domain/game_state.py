@@ -11,15 +11,15 @@ from agent.domain.weather import Weather
 
 class GameState:
     __slots__ = (
-        "_player",
-        "_opponent",
         "_farm",
         "_inventory",
         "_market",
-        "_town",
+        "_opponent",
+        "_player",
         "_season",
-        "_weather",
         "_step",
+        "_town",
+        "_weather",
     )
 
     def __init__(

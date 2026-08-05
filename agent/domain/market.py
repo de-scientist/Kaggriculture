@@ -4,7 +4,7 @@ from agent.domain.prices import Price
 
 
 class Market:
-    __slots__ = ("_inventory", "_prices", "_history")
+    __slots__ = ("_history", "_inventory", "_prices")
 
     def __init__(
         self,

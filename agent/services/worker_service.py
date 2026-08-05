@@ -1,5 +1,5 @@
-from agent.domain.worker import Worker
 from agent.domain.position import Position
+from agent.domain.worker import Worker
 
 
 def assign_task(worker: Worker, task: object) -> Worker:

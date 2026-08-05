@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Quadrant:
-    __slots__ = ("_name", "_unlocked", "_cost", "_owner")
+    __slots__ = ("_cost", "_name", "_owner", "_unlocked")
 
     def __init__(
         self,

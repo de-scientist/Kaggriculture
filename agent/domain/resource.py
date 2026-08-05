@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Resource:
-    __slots__ = ("_name", "_amount")
+    __slots__ = ("_amount", "_name")
 
     def __init__(self, name: str, amount: int) -> None:
         self._name = name

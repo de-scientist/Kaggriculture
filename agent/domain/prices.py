@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Price:
-    __slots__ = ("_value", "_currency", "_timestamp")
+    __slots__ = ("_currency", "_timestamp", "_value")
 
     def __init__(self, value: int, currency: str = "COIN", timestamp: int = 0) -> None:
         self._value = value

@@ -1,6 +1,5 @@
 from agent.domain.position import Position
 
-
 DIRECTIONS = {
     "NORTH": Position(0, -1),
     "SOUTH": Position(0, 1),

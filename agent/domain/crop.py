@@ -3,14 +3,14 @@ from __future__ import annotations
 
 class Crop:
     __slots__ = (
-        "_crop_type",
-        "_planted_day",
-        "_watered_today",
         "_consecutive_unwatered",
-        "_yield_units",
-        "_max_lifespan_step",
+        "_crop_type",
         "_fertilized_until_day",
         "_harvested",
+        "_max_lifespan_step",
+        "_planted_day",
+        "_watered_today",
+        "_yield_units",
     )
 
     def __init__(

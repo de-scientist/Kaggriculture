@@ -6,7 +6,7 @@ class DomainEvent:
 
 
 class CropPlanted(DomainEvent):
-    __slots__ = ("position", "crop_type", "day")
+    __slots__ = ("crop_type", "day", "position")
 
     def __init__(self, position: tuple[int, int], crop_type: str, day: int) -> None:
         self.position = position
@@ -15,9 +15,15 @@ class CropPlanted(DomainEvent):
 
 
 class CropHarvested(DomainEvent):
-    __slots__ = ("position", "crop_type", "yield_units", "day")
+    __slots__ = ("crop_type", "day", "position", "yield_units")
 
-    def __init__(self, position: tuple[int, int], crop_type: str, yield_units: int, day: int) -> None:
+    def __init__(
+        self,
+        position: tuple[int, int],
+        crop_type: str,
+        yield_units: int,
+        day: int,
+    ) -> None:
         self.position = position
         self.crop_type = crop_type
         self.yield_units = yield_units
@@ -25,7 +31,7 @@ class CropHarvested(DomainEvent):
 
 
 class AnimalFed(DomainEvent):
-    __slots__ = ("position", "animal_type", "day")
+    __slots__ = ("animal_type", "day", "position")
 
     def __init__(self, position: tuple[int, int], animal_type: str, day: int) -> None:
         self.position = position
@@ -34,7 +40,7 @@ class AnimalFed(DomainEvent):
 
 
 class ProductCollected(DomainEvent):
-    __slots__ = ("position", "product", "quantity", "day")
+    __slots__ = ("day", "position", "product", "quantity")
 
     def __init__(self, position: tuple[int, int], product: str, quantity: int, day: int) -> None:
         self.position = position
@@ -44,7 +50,7 @@ class ProductCollected(DomainEvent):
 
 
 class WorkerAssigned(DomainEvent):
-    __slots__ = ("worker_id", "task", "day")
+    __slots__ = ("day", "task", "worker_id")
 
     def __init__(self, worker_id: str, task: str, day: int) -> None:
         self.worker_id = worker_id
@@ -53,7 +59,7 @@ class WorkerAssigned(DomainEvent):
 
 
 class MarketUpdated(DomainEvent):
-    __slots__ = ("product", "old_price", "new_price", "day")
+    __slots__ = ("day", "new_price", "old_price", "product")
 
     def __init__(self, product: str, old_price: int, new_price: int, day: int) -> None:
         self.product = product
@@ -63,7 +69,7 @@ class MarketUpdated(DomainEvent):
 
 
 class LandPurchased(DomainEvent):
-    __slots__ = ("quadrant", "cost", "day")
+    __slots__ = ("cost", "day", "quadrant")
 
     def __init__(self, quadrant: str, cost: int, day: int) -> None:
         self.quadrant = quadrant

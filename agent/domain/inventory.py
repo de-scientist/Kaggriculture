@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 class Inventory:
-    __slots__ = ("_items", "_capacity")
+    __slots__ = ("_capacity", "_items")
 
     def __init__(self, capacity: int = 100) -> None:
         self._items: dict[str, int] = {}

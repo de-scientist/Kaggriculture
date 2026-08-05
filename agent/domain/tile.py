@@ -4,7 +4,7 @@ from agent.domain.position import Position
 
 
 class Tile:
-    __slots__ = ("_position", "_terrain", "_crop", "_animal", "_fertility", "_moisture", "_owner")
+    __slots__ = ("_animal", "_crop", "_fertility", "_moisture", "_owner", "_position", "_terrain")
 
     def __init__(
         self,
@@ -128,4 +128,9 @@ class Tile:
         )
 
     def __repr__(self) -> str:
-        return f"Tile(pos={self._position}, terrain={self._terrain!r}, crop={self._crop is not None}, animal={self._animal is not None})"
+        return (
+            f"Tile(pos={self._position}, "
+            f"terrain={self._terrain!r}, "
+            f"crop={self._crop is not None}, "
+            f"animal={self._animal is not None})"
+        )
