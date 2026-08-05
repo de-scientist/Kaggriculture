@@ -39,7 +39,7 @@ def decide(context: decision_context.DecisionContext) -> dict:
 
     strategy_name = context.config.get("strategy", {}).get("name", "baseline") if context.config else "baseline"
     strategy = strategy_manager.get_strategy(strategy_name)
-    scored = strategy.rank(valid, context)
+    scored = strategy.evaluate(context, valid)
     trace.record_ranking(scored)
 
     if not scored:
