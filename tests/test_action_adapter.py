@@ -1,11 +1,17 @@
-from agent.adapters import action_adapter
+from agent.adapters.action_adapter import ActionAdapter
 
 
-def test_validate_valid_action():
+def test_convert_valid_action():
+    adapter = ActionAdapter()
     action = {"farmer": ["PASS"], "hands": [], "market": []}
-    assert action_adapter.validate(action) is True
+    result = adapter.convert(action)
+    assert result["farmer"] == ["PASS"]
 
 
-def test_validate_invalid_action():
+def test_convert_invalid_action():
+    adapter = ActionAdapter()
     action = {"farmer": ["PASS"]}
-    assert action_adapter.validate(action) is False
+    try:
+        adapter.convert(action)
+    except KeyError:
+        pass

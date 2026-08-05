@@ -1,6 +1,9 @@
-from agent.adapters import action_adapter, observation_adapter
+from agent.adapters import ActionAdapter, ObservationAdapter
 from agent.config import settings
 from agent.decision import decision_engine
+
+_adapter = ObservationAdapter()
+_action_adapter = ActionAdapter()
 
 
 def agent(obs: dict) -> dict:
@@ -9,11 +12,11 @@ def agent(obs: dict) -> dict:
     context = decision_engine.DecisionContext(
         obs=obs,
         player=player,
-        game_state=observation_adapter.adapt(obs),
+        game_state=_adapter.parse(obs),
         config=settings.get_config(),
     )
 
     action = decision_engine.decide(context)
-    kaggle_action = action_adapter.to_kaggle_format(action)
+    kaggle_action = _action_adapter.convert(action)
 
     return kaggle_action

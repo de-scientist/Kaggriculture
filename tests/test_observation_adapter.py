@@ -1,7 +1,7 @@
 from agent.adapters import observation_adapter
 
 
-def test_adapt_returns_game_state():
+def test_parse_returns_game_state():
     obs = {
         "player": 0,
         "step": 0,
@@ -21,6 +21,6 @@ def test_adapt_returns_game_state():
         "market": {"inventory": {}, "prices": {}},
         "town": {"unlocked_shops": []},
     }
-    state = observation_adapter.adapt(obs)
+    state = observation_adapter.ObservationAdapter().parse(obs)
     assert state.player == 0
     assert state.current_day() == 0
