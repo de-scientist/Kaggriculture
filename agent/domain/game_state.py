@@ -119,6 +119,7 @@ class GameState:
             season=new_season,
             weather=self._weather,
             opponent=self._opponent,
+            private=self._private,
             step=self._step + 1,
         )
 
