@@ -40,14 +40,14 @@ def test_check_no_budget_defined() -> None:
 
 
 def test_enforce_raises_on_critical() -> None:
-    perf = PerformanceBudget({}, failure_ms=50.0)
+    perf = PerformanceBudget({"total_decision_ms": 10}, failure_ms=50.0)
     with pytest.raises(StrategyError):
-        perf.enforce("anything", 100.0)
+        perf.enforce("total_decision_ms", 100.0)
 
 
 def test_enforce_passes_under_failure_threshold() -> None:
-    perf = PerformanceBudget({"total_decision_ms": 10}, failure_ms=50.0)
-    result = perf.enforce("total_decision_ms", 100.0)
+    perf = PerformanceBudget({"total_decision_ms": 10}, warning_ms=15.0, failure_ms=50.0)
+    result = perf.enforce("total_decision_ms", 20.0)
     assert result.status is BudgetStatus.WARNING
 
 
