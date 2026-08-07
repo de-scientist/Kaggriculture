@@ -54,7 +54,7 @@ def _set_player_correlation(player: int, seed: int | None) -> None:
     _tracer_initialized = True
 
 
-def agent(obs: dict) -> dict[str, Any]:
+def agent(obs: dict[str, Any]) -> dict[str, Any]:
     """Return a Kaggle-formatted action dict for the current observation.
 
     Args:
@@ -69,6 +69,7 @@ def agent(obs: dict) -> dict[str, Any]:
         player = int(obs.get("player", 0))
         _set_player_correlation(player, settings.seed)
 
+        assert _adapter is not None and _action_adapter is not None
         game_state = _adapter.parse(obs)
         step = int(obs.get("step", 0))
         day = int(obs.get("day", 0))

@@ -9,7 +9,7 @@ class DecisionContext:
     obs: dict
     player: int
     game_state: Any = None
-    config: dict = field(default_factory=dict)
+    config: Any = field(default_factory=dict)
     step: int = 0
     day: int = 0
     hour: int = 0
