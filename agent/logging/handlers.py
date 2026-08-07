@@ -31,7 +31,8 @@ class InMemoryHandler(logging.Handler):
         return [self._record_to_dict(r) for r in self._records]
 
     def _record_to_dict(self, record: logging.LogRecord) -> dict[str, Any]:
-        formatter = JSONFormatter() if self._json else logging.Formatter("%(message)s")
+        if self._json:
+            payload = JSONFormatter().format(record)  # use real formatter when available
         return {"level": record.levelname, "message": record.getMessage()}
 
     def set_structured(self, structured: bool) -> None:
