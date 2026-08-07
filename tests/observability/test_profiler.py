@@ -87,22 +87,23 @@ def test_profiled_decorator_short_circuits_when_disabled() -> None:
 
 
 def test_reset_profiler_clears() -> None:
-    profiler = reset_profiler()
+    profiler = Profiler(enabled=True)
     profiler.record("x", 1.0)
     assert len(profiler.samples()) == 1
     reset_profiler()
     assert len(get_profiler().samples()) == 0
 
 
-def test_is_enabled_respects_env_flag(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("ENABLE_PROFILING", raising=False)
-    # When env flag absent and module-level _enabled is False, is_enabled is False
+def test_is_enabled_reflects_enable_toggle() -> None:
     from agent.observability import profiler as prof_mod
+
     original = prof_mod._enabled
-    prof_mod._enabled = False
     try:
+        prof_mod._enabled = False
         assert is_enabled() is False
-        monkeypatch.setenv("ENABLE_PROFILING", "true")
+        prof_mod.enable(True)
         assert is_enabled() is True
+        prof_mod.enable(False)
+        assert is_enabled() is False
     finally:
         prof_mod._enabled = original
