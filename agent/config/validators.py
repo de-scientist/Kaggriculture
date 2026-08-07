@@ -67,7 +67,9 @@ class ConfigValidator:
     def _validate_environment(self) -> None:
         env = self._config.get("environment")
         if env is not None and env not in VALID_ENVS:
-            self._errors.append(f"environment '{env}' is not valid; use one of {sorted(VALID_ENVS)}")
+            self._errors.append(
+                f"environment '{env}' is not valid; use one of {sorted(VALID_ENVS)}"
+            )
 
     def _validate_game(self) -> None:
         game = self._game()

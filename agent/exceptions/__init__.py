@@ -31,6 +31,7 @@ __all__ = [
     "InventoryError",
     "KaggricultureError",
     "MarketError",
+    "ObservationParseError",
     "MissingFieldError",
     "MovementError",
     "ObservationError",
