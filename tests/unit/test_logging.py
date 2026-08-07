@@ -67,7 +67,7 @@ def test_emits_json_with_bound_fields(isolated_logger) -> None:
 def test_json_formatter_skips_none_fields(isolated_logger) -> None:
     logger, handler = isolated_logger
     logger.info("simple")
-    formatted = json.loads(handler.formatter().format(handler.records[0]))
+    formatted = json.loads(handler.format(handler.records[0]))
     assert "turn" in formatted
     assert formatted["turn"] is None
 
@@ -126,7 +126,7 @@ def test_exception_logs_with_traceback(isolated_logger) -> None:
     except ValueError:
         logger.exception("caught it")
     record = handler.records[-1]
-    formatted = json.loads(handler.formatter().format(record))
+    formatted = json.loads(handler.format(record))
     assert formatted["severity"] == "ERROR"
     assert "Traceback" in formatted["exception"]
     assert "ValueError" in formatted["exception"]
