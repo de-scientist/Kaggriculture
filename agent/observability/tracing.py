@@ -145,7 +145,7 @@ def get_active_trace() -> Trace | None:
     return _ACTIVE_TRACE.get()
 
 
-class trace_scope:
+class trace_scope:  # noqa: N801
     """Context manager that pushes a :class:`Trace` onto the active-trace slot."""
 
     def __init__(self, tracer: Tracer, trace: Trace) -> None:

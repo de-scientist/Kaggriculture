@@ -88,7 +88,7 @@ class Profiler:
         self._samples.clear()
 
 
-class profile_scope:
+class profile_scope:  # noqa: N801
     """Context manager that profiles a code block when profiling is enabled."""
 
     def __init__(self, profiler: Profiler, operation: str, **attributes: Any) -> None:
