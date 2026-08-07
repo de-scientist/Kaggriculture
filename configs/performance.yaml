@@ -1,0 +1,10 @@
+performance:
+  observation_parsing_ms: 5
+  decision_engine_ms: 20
+  strategy_evaluation_ms: 10
+  action_conversion_ms: 2
+  total_decision_ms: 500
+  warning_threshold_ms: 800
+  failure_threshold_ms: 1500
+  memory_per_step_mb: 10
+  peak_memory_mb: 100
