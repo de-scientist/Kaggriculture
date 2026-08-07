@@ -178,7 +178,6 @@ def decide(context: decision_context.DecisionContext) -> dict:
         log.error("Decision failed: %s", failure, exc_info=True,
                   component="DecisionEngine", action="decide")
         metrics.record_value("decision_failures", 1.0)
-        raise  # DEBUG
         if isinstance(exc, StrategyError) and "Performance budget" in str(exc):
             raise
         return {"farmer": ["PASS"], "hands": [], "market": []}
