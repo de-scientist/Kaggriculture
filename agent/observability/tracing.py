@@ -152,13 +152,18 @@ class trace_scope:  # noqa: N801
     def __init__(self, tracer: Tracer, trace: Trace) -> None:
         self._tracer = tracer
         self._trace = trace
-        self._token: contextvars.Token = None  # type: ignore[assignment]
+        self._token: contextvars.Token[None] | None = None
 
     def __enter__(self) -> Trace:
         self._token = _ACTIVE_TRACE.set(self._trace)
         return self._trace
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: Any,
+    ) -> None:
         _ACTIVE_TRACE.reset(self._token)
         self._token = None
 
