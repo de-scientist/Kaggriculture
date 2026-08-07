@@ -143,8 +143,12 @@ class ConfigValidator:
     def _validate_observability(self) -> None:
         obs = self._observability()
         self._check_bool(obs, "metrics_enabled")
-        self._check_bool(obs, "tracers")
         self._check_bool(obs, "replay_enabled")
+        tracers = obs.get("tracers")
+        if tracers is not None and not isinstance(tracers, (list, str, bool)):
+            self._errors.append(
+                f"observability.tracers must be a list or string, got {tracers!r}"
+            )
 
     # -- generic numerical checks -------------------------------------------
     def _check_positive_int(self, mapping: dict[str, Any], key: str) -> None:
