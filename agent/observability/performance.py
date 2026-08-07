@@ -49,7 +49,7 @@ class BudgetResult:
 
 
 # Default Stage 1 budgets (ms) per the chapter specification.
-DEFAULT_BUDGETS: dict[str, dict[str, float]] = {
+DEFAULT_BUDGETS: dict[str, dict[str, Any]] = {
     "observation_parsing_ms": {"target": 5, "component": "ObservationAdapter"},
     "decision_engine_ms": {"target": 20, "component": "DecisionEngine"},
     "strategy_evaluation_ms": {"target": 10, "component": "StrategyManager"},
@@ -102,9 +102,14 @@ class PerformanceBudget:
                 status=BudgetStatus.OK,
                 message="no budget defined",
             )
-        if duration_ms >= self._failure_ms:
+        critical = self._failure_ms is not None and duration_ms >= self._failure_ms
+        warning = (
+            (self._warning_ms is not None and duration_ms >= self._warning_ms)
+            or duration_ms > budget
+        )
+        if critical:
             status = BudgetStatus.CRITICAL
-        elif duration_ms >= self._warning_ms or duration_ms > budget:
+        elif warning:
             status = BudgetStatus.WARNING
         else:
             status = BudgetStatus.OK
