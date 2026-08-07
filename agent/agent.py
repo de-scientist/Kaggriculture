@@ -100,6 +100,7 @@ def agent(obs: dict) -> dict[str, Any]:
     except Exception as exc:
         telemetry = get_telemetry()
         telemetry.record_exception(type(exc).__name__)
+        import traceback; traceback.print_exc()  # DEBUG
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         logger.error(
             "Agent error: %s", exc, exc_info=True,
