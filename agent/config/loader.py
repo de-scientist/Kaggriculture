@@ -127,7 +127,8 @@ def _set_path(base: dict[str, Any], dotted: str, value: Any) -> dict[str, Any]:
         if not isinstance(node, dict):
             node = {}
             base[part] = node
-    base[parts[-1]] = value
+    base[parts[-1]] = value  # placeholder, replaced below
+    node[parts[-1]] = value
     return base
 
 
