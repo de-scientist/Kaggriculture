@@ -8,7 +8,7 @@ identifying the offending key.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from agent.exceptions.configuration import ConfigurationError
 
@@ -42,25 +42,25 @@ class ConfigValidator:
 
     # -- helpers -------------------------------------------------------------
     def _game(self) -> dict[str, Any]:
-        return self._config.get("game", {})
+        return cast(dict[str, Any], self._config.get("game", {}))
 
     def _market(self) -> dict[str, Any]:
-        return self._config.get("market", {})
+        return cast(dict[str, Any], self._config.get("market", {}))
 
     def _strategy(self) -> dict[str, Any]:
-        return self._config.get("strategy", {})
+        return cast(dict[str, Any], self._config.get("strategy", {}))
 
     def _features(self) -> dict[str, Any]:
-        return self._config.get("features", {})
+        return cast(dict[str, Any], self._config.get("features", {}))
 
     def _performance(self) -> dict[str, Any]:
-        return self._config.get("performance", {})
+        return cast(dict[str, Any], self._config.get("performance", {}))
 
     def _logging(self) -> dict[str, Any]:
-        return self._config.get("logging", {})
+        return cast(dict[str, Any], self._config.get("logging", {}))
 
     def _observability(self) -> dict[str, Any]:
-        return self._config.get("observability", {})
+        return cast(dict[str, Any], self._config.get("observability", {}))
 
     # -- individual validators ----------------------------------------------
     def _validate_environment(self) -> None:

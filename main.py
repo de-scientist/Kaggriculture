@@ -19,5 +19,5 @@ from agent.agent import agent as _agent
 __all__ = ["agent"]
 
 
-def agent(obs: dict) -> dict[str, Any]:
+def agent(obs: dict[str, Any]) -> dict[str, Any]:
     return _agent(obs)
