@@ -98,7 +98,7 @@ def test_strategy_error_carries_context() -> None:
 
 def test_observation_parse_error_is_adapter_error() -> None:
     assert issubclass(ObservationParseError, AdapterError)
-    assert issubclass(ObservationParseError, ObservationError)
+    assert issubclass(ObservationParseError, KaggricultureError)
 
 
 def test_validation_error_is_kaggriculture_error() -> None:

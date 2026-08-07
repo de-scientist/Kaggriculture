@@ -13,7 +13,6 @@ from agent.config import (
     schema_defaults,
     validate_settings,
 )
-from agent.config.validators import ConfigValidator
 from agent.exceptions.configuration import ConfigurationError
 
 
@@ -111,11 +110,11 @@ def test_env_coerces_types() -> None:
         "development",
         env={
             "KAG_GAME__BOARD_SIZE": "15",
-            "KAG_FEATURES__ENABLE_PROFILING": "true",
+            "KAG_OBSERVABILITY__METRICS_ENABLED": "true",
         },
     )
     assert settings.game["board_size"] == 15
-    assert settings.features["ENABLE_PROFILING"] is True
+    assert settings.observability["metrics_enabled"] is True
 
 
 def test_settings_is_frozen_and_immutable() -> None:
@@ -178,9 +177,11 @@ def test_validate_settings_accepts_defaults() -> None:
 
 
 def test_config_validator_collects_multiple_errors() -> None:
-    validator = ConfigValidator(schema_defaults())
-    validator._errors = []
-    validator._config["environment"] = "bad"
-    validator._config["game"]["board_size"] = -5
-    validator.validate()
-    assert validator._errors
+    bad = schema_defaults()
+    bad["environment"] = "qa"
+    bad["game"]["board_size"] = -5
+    with pytest.raises(ConfigurationError) as exc:
+        validate_settings(bad)
+    msg = str(exc.value)
+    assert "environment 'qa'" in msg
+    assert "board_size must be positive" in msg

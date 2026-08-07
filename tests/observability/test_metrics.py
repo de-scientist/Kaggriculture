@@ -80,7 +80,9 @@ def test_record_harvest_profit() -> None:
     metrics = reset_metrics()
     metrics.record_harvest("WHEAT", 5.0, 50.0)
     snap = metrics.snapshot()
-    assert snap["total_harvests"] == 5.0
+    assert snap["total_harvests"] == 1.0
+    assert metrics.counter("crop_yield_total") == 5.0
+    assert metrics.counter("harvest_count_WHEAT") == 5.0
     assert snap["total_profit"] == 50.0
 
 

@@ -114,7 +114,7 @@ def test_configure_logging_idempotent_without_force() -> None:
 def test_performance_helper_emits_metric(isolated_logger) -> None:
     logger, handler = isolated_logger
     logger.performance("DecisionEngine", 12.5, turn=1, day=0, player=0)
-    formatted = json.loads(handler.formatter().format(handler.records[0]))
+    formatted = json.loads(handler.format(handler.records[0]))
     assert formatted["component"] == "DecisionEngine"
     assert formatted["execution_time_ms"] == 12.5
 

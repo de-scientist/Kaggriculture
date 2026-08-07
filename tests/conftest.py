@@ -24,8 +24,10 @@ from agent.observability.profiler import reset_profiler
 
 @pytest.fixture(autouse=True)
 def _reset_operational_singletons():
-    reset_telemetry()
+    # Order matters: metrics must reset before telemetry, because Telemetry
+    # binds to the current MetricsCollector at construction time.
     reset_metrics()
+    reset_telemetry()
     reset_replay_store()
     reset_default_tracer()
     reset_profiler()
