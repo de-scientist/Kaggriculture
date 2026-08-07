@@ -2,4 +2,4 @@ from agent.exceptions.base import KaggricultureError
 
 
 class MovementError(KaggricultureError):
-    pass
+    """Raised when a worker movement or pathfinding operation fails."""
