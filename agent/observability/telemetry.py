@@ -45,8 +45,8 @@ class Telemetry:
         self._total_latency = 0.0
         self._longest_latency = 0.0
         self._failed_validations = 0
-        self._strategy_usage: Counter = Counter()
-        self._exceptions: Counter = Counter()
+        self._strategy_usage: Counter[str] = Counter()
+        self._exceptions: Counter[str] = Counter()
         self._started_at = time.perf_counter()
 
     @property
