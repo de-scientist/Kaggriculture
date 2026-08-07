@@ -34,14 +34,15 @@ from agent.decision.candidate_actions import CandidateAction
 from agent.exceptions.strategy import StrategyError
 from agent.logging import get_logger
 from agent.observability import (
+    MetricsCollector,
     PerformanceBudget,
     ReplayStore,
     Trace,
     Tracer,
-    get_default_tracer,
     get_metrics,
     get_replay_store,
     get_telemetry,
+    get_default_tracer,
 )
 from agent.strategies import strategy_manager
 
@@ -57,7 +58,7 @@ def _normalise_config(config: Any) -> Settings:
     return Settings()
 
 
-def _settings_fields() -> tuple:
+def _settings_fields() -> tuple[Any, ...]:
     from dataclasses import fields
 
     return fields(Settings())
@@ -96,7 +97,7 @@ def _tracer_from_config(config: Any, seed: int | None, player: int) -> Tracer:
     return tracer
 
 
-def decide(context: decision_context.DecisionContext) -> dict:
+def decide(context: decision_context.DecisionContext) -> dict[str, Any]:
     start = time.perf_counter()
     config = context.config
     step = context.step or _obs_field(context.obs, "step", 0)
@@ -137,7 +138,7 @@ def decide(context: decision_context.DecisionContext) -> dict:
     selected: CandidateAction = fallback.get_fallback()
     strategy_scores: dict[str, Any] = {}
     trace_record = decision_trace.DecisionTrace(step=step, day=day, strategy_name=strategy_name)
-    action_dict: dict = {"farmer": ["PASS"], "hands": [], "market": []}
+    action_dict: dict[str, Any] = {"farmer": ["PASS"], "hands": [], "market": []}
     failure: str | None = None
 
     try:
@@ -218,7 +219,7 @@ def decide(context: decision_context.DecisionContext) -> dict:
 
 
 # -- helpers --------------------------------------------------------------
-def _obs_field(obs: dict, key: str, default: Any) -> Any:
+def _obs_field(obs: dict[str, Any], key: str, default: Any) -> Any:
     try:
         return obs.get(key, default)
     except Exception:
@@ -239,7 +240,9 @@ def _collect_scores(scored: list[Any]) -> dict[str, Any]:
     return result
 
 
-def _record_performance(perf: PerformanceBudget, elapsed_ms: float, metrics) -> None:
+def _record_performance(
+    perf: PerformanceBudget, elapsed_ms: float, metrics: MetricsCollector
+) -> None:
     metrics.record_decision_time(elapsed_ms)
     result = perf.check("total_decision_ms", elapsed_ms)
     if result.status.value != "ok":
@@ -254,7 +257,12 @@ def _record_performance(perf: PerformanceBudget, elapsed_ms: float, metrics) -> 
 
 
 def _log_decision_complete(
-    log, trace: Trace, strategy_name: str, selected: Any, scored: list, elapsed_ms: float
+    log: Any,
+    trace: Trace,
+    strategy_name: str,
+    selected: Any,
+    scored: list[Any],
+    elapsed_ms: float,
 ) -> None:
     if isinstance(selected, CandidateAction):
         action = selected.action_type
@@ -277,10 +285,10 @@ def _record_replay(
     day: int,
     hour: int,
     player: int,
-    observation: dict | None,
+    observation: dict[str, Any] | None,
     trace: Trace,
     strategy_scores: dict[str, Any],
-    action_dict: dict,
+    action_dict: dict[str, Any],
     elapsed_ms: float,
 ) -> None:
     if not replay.enabled:
@@ -298,7 +306,7 @@ def _record_replay(
     )
 
 
-def _action_to_dict(action: object) -> dict:
+def _action_to_dict(action: object) -> dict[str, Any]:
     if isinstance(action, dict):
         return action
     if isinstance(action, CandidateAction):
