@@ -1,13 +1,10 @@
 """Tests for the optional profiling layer."""
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from agent.observability.profiler import (
     Profiler,
-    ProfileSample,
     profiled,
     profile_scope,
     reset_profiler,
