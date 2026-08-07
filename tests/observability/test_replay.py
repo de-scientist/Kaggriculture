@@ -62,13 +62,16 @@ def test_find_by_turn() -> None:
 
 
 def test_find_by_decision_id() -> None:
+    from agent.observability.tracing import Trace
+
     store = reset_replay_store()
-    store.record(turn=1, day=0, hour=0, player=0, observation={},
-                 decision_id="d-1" if False else None,
+    trace = Trace(correlation_id="c-1", decision_id="d-1", step=1, day=0,
+                  player=0, strategy="baseline")
+    store.record(turn=1, day=0, hour=0, player=0, observation={}, trace=trace,
                  selected_action={"farmer": ["PASS"]}, execution_time_ms=1.0)
-    # decision_id extracted from trace only; passing None falls back to ""
-    results = store.find(decision_id="")
-    assert len(results) == 1
+    assert len(store.find(decision_id="d-1")) == 1
+    assert store.find(decision_id="d-1")[0].decision_id == "d-1"
+    assert len(store.find(decision_id="d-99")) == 0
 
 
 def test_to_dict_and_clear() -> None:
