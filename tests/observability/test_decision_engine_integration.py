@@ -1,6 +1,8 @@
 """Integration tests for the decision engine with full observability wiring."""
 from __future__ import annotations
 
+import pytest
+
 from agent.config import load_config
 from agent.decision import decision_context, decision_engine
 from agent.observability import get_metrics, get_replay_store, get_telemetry
@@ -88,48 +90,28 @@ def test_decide_records_execution_time_in_replay() -> None:
     assert rec.execution_time_ms >= 0.0
 
 
-def test_decide_fallback_returns_pass_on_failure() -> None:
-    """When the pipeline raises a non-budget error, decide returns PASS."""
-    ctx = _context()
-    # Force a failure by giving decide a game_state that will break validation
-    # via an empty context obs that still parses; here we simulate a broken strategy
-    # by pointing at an unknown strategy name -> get_strategy falls back to baseline,
-    # so instead corrupt the context to force an exception path.
-    import agent.observability as obs_mod
+def test_decide_fallback_returns_pass_on_failure(monkeypatch) -> None:
+    """When a pipeline phase raises, decide returns PASS and records the error."""
+    import agent.decision.decision_engine as de
 
-    real_reset = decision_engine.get_telemetry
-    # Make validate_actions raise by passing game_state=None and a broken config:
-    broken_ctx = decision_context.DecisionContext(
-        obs={"player": 0}, player=0, game_state=None, config={},
-        step=0, day=0, hour=0, remaining_turns=720, strategy_name="baseline",
-    )
-    action = decision_engine.decide(broken_ctx)
+    def boom(_ctx):
+        raise ValueError("candidate generation exploded")
+
+    monkeypatch.setattr(de.action_generator, "generate_candidates", boom)
+    action = decision_engine.decide(_context())
     assert action == {"farmer": ["PASS"], "hands": [], "market": []}
-    # exception should be recorded in telemetry
-    assert get_telemetry().snapshot().exception_counts
+    assert "ValueError" in get_telemetry().snapshot().exception_counts
+    assert get_metrics().counter("decision_count") == 1.0
 
 
-def test_decide_budget_violation_propagates_and_records() -> None:
-    """A StrategyError containing 'Performance budget' is re-raised by decide."""
+def test_decision_performance_budget_strategy_error_propagates(monkeypatch) -> None:
+    """A StrategyError mentioning 'Performance budget' is not swallowed by decide."""
     from agent.exceptions.strategy import StrategyError
 
-    original = decision_engine.decision_engine.__dict__.get("enforce")  # noqa: no cover
-    # Patch PerformanceBudget.check to always return CRITICAL, forcing enforce path
-    perf_mod = __import__(
-        "agent.observability.performance", fromlist=["PerformanceBudget"]
-    ).PerformanceBudget
-
-    class _AlwaysCritical:
+    class _Budget:
         def check(self, *a, **k):
-            from agent.observability.performance import BudgetResult, BudgetStatus
-            return BudgetResult("x", 1.0, 1.0, BudgetStatus.CRITICAL, "bad")
+            raise StrategyError("Performance budget exceeded for DecisionEngine")
 
-    import agent.decision.decision_engine as de
-    saved = de.PerformanceBudget
-    de.PerformanceBudget = _AlwaysCritical  # noqa: monkeypatch via type swap
-    # _budget returns PerformanceBudget(_normalise_config(config).performance or {})
-    # which calls our swapped class -> no CRITICAL enforcement in decide path anyway.
-    # decide does NOT call enforce, only check; so no StrategyError is raised. Restore.
-    de.PerformanceBudget = saved  # type: ignore[assignment]
-    # This test simply ensures no crash; the enforce path is exercised via API directly.
-    assert perf_mod is not None
+    monkeypatch.setattr(decision_engine, "_budget", lambda config: _Budget())
+    with pytest.raises(StrategyError, match="Performance budget"):
+        decision_engine.decide(_context())
