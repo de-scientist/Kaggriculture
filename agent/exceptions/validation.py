@@ -2,4 +2,4 @@ from agent.exceptions.base import KaggricultureError
 
 
 class ValidationError(KaggricultureError):
-    pass
+    """Raised when an observation, action, or state fails invariant checks."""

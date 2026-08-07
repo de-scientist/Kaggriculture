@@ -2,4 +2,4 @@ from agent.exceptions.base import KaggricultureError
 
 
 class StrategyError(KaggricultureError):
-    pass
+    """Raised when strategy selection, evaluation, or execution fails."""
