@@ -7,7 +7,7 @@ from collections import deque
 from pathlib import Path
 from typing import Any
 
-from agent.logging.formatter import JSONFormatter, StandardFormatter
+from agent.logging.formatter import JSONFormatter
 
 
 class InMemoryHandler(logging.Handler):

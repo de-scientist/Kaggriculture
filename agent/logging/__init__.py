@@ -1,5 +1,5 @@
 """Structured logging package for the Kaggriculture AI platform."""
-from agent.logging.formatter import JSONFormatter, StandardFormatter, STRUCTURED_FIELDS
+from agent.logging.formatter import STRUCTURED_FIELDS, JSONFormatter, StandardFormatter
 from agent.logging.handlers import (
     InMemoryHandler,
     get_console_handler,
@@ -15,11 +15,11 @@ from agent.logging.logger import (
 )
 
 __all__ = [
-    "JSONFormatter",
-    "InMemoryHandler",
-    "StructuredLogger",
-    "StandardFormatter",
     "STRUCTURED_FIELDS",
+    "InMemoryHandler",
+    "JSONFormatter",
+    "StandardFormatter",
+    "StructuredLogger",
     "configure_logging",
     "get_console_handler",
     "get_file_handler",

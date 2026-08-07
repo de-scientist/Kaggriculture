@@ -16,8 +16,9 @@ selection.  Every decision turn is wrapped in the operational layer:
 from __future__ import annotations
 
 import time
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Iterator
+from typing import Any
 
 from agent.config.settings import Settings
 from agent.decision import (
@@ -36,10 +37,10 @@ from agent.observability import (
     ReplayStore,
     Trace,
     Tracer,
+    get_default_tracer,
     get_metrics,
     get_replay_store,
     get_telemetry,
-    get_default_tracer,
 )
 from agent.strategies import strategy_manager
 

@@ -24,12 +24,16 @@ from agent.observability.performance import (
 from agent.observability.profiler import (
     Profiler,
     ProfileSample,
-    enable as enable_profiling,
     get_profiler,
-    is_enabled as profiling_enabled,
     profile_scope,
     profiled,
     reset_profiler,
+)
+from agent.observability.profiler import (
+    enable as enable_profiling,
+)
+from agent.observability.profiler import (
+    is_enabled as profiling_enabled,
 )
 from agent.observability.replay import (
     ReplayRecord,

@@ -15,14 +15,12 @@ The package is configured once via :func:`configure_logging` from a
 from __future__ import annotations
 
 import logging
-import sys
 import threading
-from typing import Any, Mapping
+from typing import Any
 
 from agent.config.settings import Settings
 
-from .formatter import JSONFormatter
-from .handlers import get_console_handler, get_file_handler, get_in_memory_handler, InMemoryHandler
+from .handlers import InMemoryHandler, get_console_handler, get_file_handler, get_in_memory_handler
 
 _DEFAULT_LEVEL = logging.INFO
 _LOCK = threading.Lock()

@@ -144,7 +144,7 @@ class ReplayStore:
         return out
 
     @classmethod
-    def load(cls, path: str | Path) -> "ReplayStore":
+    def load(cls, path: str | Path) -> ReplayStore:
         p = Path(path)
         with open(p, encoding="utf-8") as f:
             data = json.load(f)

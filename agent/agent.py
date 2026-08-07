@@ -20,9 +20,9 @@ from typing import Any
 
 from agent.adapters import ActionAdapter, ObservationAdapter
 from agent.config import Settings, get_config
-from agent.decision import decision_engine
-from agent.logging import configure_logging, get_logger
+from agent.decision import DecisionContext, decision_engine
 from agent.exceptions.adapter import ObservationParseError
+from agent.logging import configure_logging, get_logger
 from agent.observability import get_default_tracer, get_telemetry
 from agent.observability.tracing import make_correlation_id
 
@@ -73,7 +73,7 @@ def agent(obs: dict) -> dict[str, Any]:
         day = int(obs.get("day", 0))
         hour = int(obs.get("hour", 0))
 
-        context = decision_engine.DecisionContext(
+        context = DecisionContext(
             obs=obs,
             player=player,
             game_state=game_state,
@@ -100,7 +100,6 @@ def agent(obs: dict) -> dict[str, Any]:
     except Exception as exc:
         telemetry = get_telemetry()
         telemetry.record_exception(type(exc).__name__)
-        import traceback; traceback.print_exc()  # DEBUG
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         logger.error(
             "Agent error: %s", exc, exc_info=True,

@@ -17,8 +17,9 @@ from __future__ import annotations
 import os
 import time
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 try:
     from agent.config import is_feature_enabled
@@ -96,7 +97,7 @@ class profile_scope:
         self._attributes = attributes
         self._start: float = 0.0
 
-    def __enter__(self) -> "profile_scope":
+    def __enter__(self) -> profile_scope:
         self._start = time.perf_counter()
         return self
 

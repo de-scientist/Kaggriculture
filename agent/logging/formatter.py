@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 #: Fields that stdlib's :class:`logging.LogRecord` reserves; values here must
@@ -57,7 +57,7 @@ class JSONFormatter(logging.Formatter):
             payload[field] = getattr(record, field, None)
 
         payload["timestamp"] = datetime.fromtimestamp(
-            record.created, tz=timezone.utc
+            record.created, tz=UTC
         ).isoformat(timespec="milliseconds")
         if payload["component"] is None:
             payload["component"] = record.name
