@@ -1,21 +1,8 @@
 environment: development
-
-game:
-  episode_steps: 720
-  turns_per_day: 24
-  board_size: 10
-  starting_money: 3000
-  farm_hand_cost_mult: 1
-
-market:
-  max_market_orders_per_turn: 10
-
-town:
-  town_center_sell_interval: 12
-  town_shop_unlock_interval: 3
-  town_shop_sell_interval: 4
+seed: 42
 
 logging:
   level: DEBUG
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
   file: logs/development.log
+  structured: true
