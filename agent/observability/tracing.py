@@ -164,7 +164,8 @@ class trace_scope:  # noqa: N801
         exc: BaseException | None,
         tb: Any,
     ) -> None:
-        _ACTIVE_TRACE.reset(self._token)
+        if self._token is not None:
+            _ACTIVE_TRACE.reset(self._token)
         self._token = None
 
 
