@@ -107,16 +107,23 @@ class profile_scope:  # noqa: N801
         self._start = time.perf_counter()
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: Any,
+    ) -> None:
         if self._profiler.enabled:
             duration = (time.perf_counter() - self._start) * 1000.0
             self._profiler.record(self._operation, duration, **self._attributes)
 
 
-def profiled(operation: str, *, profiler: Profiler | None = None) -> Callable[[Callable], Callable]:
+def profiled(
+    operation: str, *, profiler: Profiler | None = None
+) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Decorator that profiles a function when profiling is enabled."""
 
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         prof = profiler or get_profiler()
         if not prof.enabled:
             return func
