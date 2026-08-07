@@ -106,12 +106,20 @@ class PerformanceBudget:
             status = BudgetStatus.OK
         message = ""
         if status is BudgetStatus.CRITICAL:
-            message = f"{label} exceeded failure threshold ({duration_ms:.1f}ms >= {self._failure_ms}ms)"
+            message = (
+                f"{label} exceeded failure threshold "
+                f"({duration_ms:.1f}ms >= {self._failure_ms}ms)"
+            )
         elif status is BudgetStatus.WARNING:
             if duration_ms > budget:
-                message = f"{label} exceeded target ({duration_ms:.1f}ms > {budget}ms)"
+                message = (
+                    f"{label} exceeded target ({duration_ms:.1f}ms > {budget}ms)"
+                )
             else:
-                message = f"{label} near warning threshold ({duration_ms:.1f}ms >= {self._warning_ms}ms)"
+                message = (
+                    f"{label} near warning threshold "
+                    f"({duration_ms:.1f}ms >= {self._warning_ms}ms)"
+                )
         return BudgetResult(
             component=label, duration_ms=duration_ms, budget_ms=budget,
             status=status, message=message,
