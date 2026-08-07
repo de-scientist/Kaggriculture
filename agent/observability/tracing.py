@@ -152,7 +152,7 @@ class trace_scope:  # noqa: N801
     def __init__(self, tracer: Tracer, trace: Trace) -> None:
         self._tracer = tracer
         self._trace = trace
-        self._token: contextvars.Token[None] | None = None
+        self._token: contextvars.Token[Trace | None] | None = None
 
     def __enter__(self) -> Trace:
         self._token = _ACTIVE_TRACE.set(self._trace)
