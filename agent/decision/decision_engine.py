@@ -175,7 +175,7 @@ def decide(context: decision_context.DecisionContext) -> dict:
 
         with _timed_span(tracer, trace, "select_and_convert"):
             if scored:
-                selected = scored[0]
+                selected = scored[0].action
             else:
                 selected = fallback.get_fallback()
             trace_record.record_final(selected)
