@@ -14,14 +14,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field, fields
 from typing import Any
 
-from agent.exceptions.configuration import ConfigurationError
-
-
-def _immutable_error(attr: str) -> ConfigurationError:
-    return ConfigurationError(
-        f"Settings field '{attr}' is immutable; rebuild Settings instead"
-    )
-
 
 @dataclass(frozen=True)
 class Settings:
@@ -48,13 +40,6 @@ class Settings:
     observability: dict[str, Any] = field(default_factory=dict)
     simulation: dict[str, Any] = field(default_factory=dict)
 
-    # -- immutability -----------------------------------------------------
-    def __setattr__(self, key: str, value: Any) -> None:
-        raise _immutable_error(key)
-
-    def __delattr__(self, key: str) -> None:
-        raise _immutable_error(key)
-
     # -- dict-style access (for backward compat) --------------------------
     def get(self, key: str, default: Any = None) -> Any:
         return getattr(self, key, default)
@@ -70,7 +55,7 @@ class Settings:
     # -- serialisation ----------------------------------------------------
     def to_dict(self) -> dict[str, Any]:
         result: dict[str, Any] = {}
-        for f in fields(self):  # type: ignore[arg-type]
+        for f in fields(self):
             result[f.name] = getattr(self, f.name)
         return result
 
