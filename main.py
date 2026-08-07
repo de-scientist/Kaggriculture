@@ -9,6 +9,7 @@ observability (tracing, metrics, telemetry, replay, performance budgets).
 
 A single ``agent(obs)`` call per turn yields a Kaggle-format action dict.
 """
+
 from __future__ import annotations
 
 from typing import Any
