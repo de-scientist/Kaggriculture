@@ -11,6 +11,7 @@ Priority (highest first):
     3. YAML configuration file
     4. Schema defaults (this module)
 """
+
 from __future__ import annotations
 
 from typing import Any

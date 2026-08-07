@@ -8,6 +8,7 @@ Each exception captures an optional ``context`` dict carrying diagnostic
 information (turn, day, player, component, etc.) to support structured
 logging and replay analysis.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping

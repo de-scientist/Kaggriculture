@@ -13,6 +13,7 @@ The resulting :class:`Settings` is immutable and validated before being
 returned.  Invalid configuration raises ``ConfigurationError`` immediately
 (fail fast).
 """
+
 from __future__ import annotations
 
 import os
@@ -78,16 +79,13 @@ def _load_yaml(name: str) -> dict[str, Any]:
     path = DEFAULT_CONFIG_DIR / f"{name}.yaml"
     if not path.exists():
         if name in ("development", "production"):
-            raise ConfigurationError(
-                f"Required config file not found: {path}"
-            )
+            raise ConfigurationError(f"Required config file not found: {path}")
         return {}
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
     if not isinstance(data, dict):
         raise ConfigurationError(
-            f"Config file {path} must contain a top-level mapping, got "
-            f"{type(data).__name__}"
+            f"Config file {path} must contain a top-level mapping, got {type(data).__name__}"
         )
     return data
 
@@ -97,7 +95,7 @@ def _load_environment(env: Mapping[str, str]) -> dict[str, Any]:
     for key, raw in env.items():
         if not key.startswith(_ENV_PREFIX):
             continue
-        stripped = key[len(_ENV_PREFIX):]
+        stripped = key[len(_ENV_PREFIX) :]
         if not stripped:
             continue
         result = _set_path(result, stripped.lower(), _coerce(raw))

@@ -12,6 +12,7 @@ every decision turn:
 Replay support is essential for debugging, regression testing, optimization,
 and competition analysis.
 """
+
 from __future__ import annotations
 
 import hashlib

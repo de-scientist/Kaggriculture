@@ -12,6 +12,7 @@ Provides :class:`StructuredLogger` — a thin wrapper over the standard library
 The package is configured once via :func:`configure_logging` from a
 :class:`~agent.config.settings.Settings` instance.
 """
+
 from __future__ import annotations
 
 import logging
@@ -103,12 +104,15 @@ class StructuredLogger:
     ) -> None:
         if not self._logger.isEnabledFor(level):
             return
-        record_extra = {
-            k: v for k, v in {**self._context, **extra}.items() if v is not None
-        }
+        record_extra = {k: v for k, v in {**self._context, **extra}.items() if v is not None}
         self._logger._log(
-            level, msg, args, exc_info=exc_info, stack_info=stack_info,
-            stacklevel=stacklevel, extra=record_extra or None,
+            level,
+            msg,
+            args,
+            exc_info=exc_info,
+            stack_info=stack_info,
+            stacklevel=stacklevel,
+            extra=record_extra or None,
         )
 
     def debug(self, msg: str, *args: Any, **extra: Any) -> None:
@@ -254,9 +258,7 @@ def configure_logging(
 
         log_file = log_cfg.get("file")
         if log_file:
-            root.addHandler(
-                get_file_handler(log_file, level, structured=structured)
-            )
+            root.addHandler(get_file_handler(log_file, level, structured=structured))
 
         # In-memory capture for replay analysis when tracing/replay is on.
         if settings.is_feature_enabled("ENABLE_TRACE") or settings.is_feature_enabled(

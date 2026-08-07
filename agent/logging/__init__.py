@@ -1,4 +1,5 @@
 """Structured logging package for the Kaggriculture AI platform."""
+
 from agent.logging.formatter import STRUCTURED_FIELDS, JSONFormatter, StandardFormatter
 from agent.logging.handlers import (
     InMemoryHandler,

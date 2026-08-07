@@ -9,6 +9,7 @@ Tracked metrics: average decision time, average worker utilization, harvest
 count, crop yield, animal productivity, inventory turnover, profit per day,
 idle turns, land utilization, and expansion frequency.
 """
+
 from __future__ import annotations
 
 import threading

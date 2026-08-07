@@ -9,6 +9,7 @@ The object supports both attribute (``settings.game``) and dict-style
 (``settings.get("strategy")``) access so that legacy call-sites that treat
 the config as a mapping keep working.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
@@ -19,19 +20,23 @@ from typing import Any
 class Settings:
     environment: str = "development"
     seed: int | None = None
-    game: dict[str, Any] = field(default_factory=lambda: {
-        "episode_steps": 720,
-        "turns_per_day": 24,
-        "board_size": 10,
-        "starting_money": 3000,
-        "farm_hand_cost_mult": 1,
-        "shed_capacity": 100,
-        "weed_spawn_chance": 0.005,
-    })
-    market: dict[str, Any] = field(default_factory=lambda: {
-        "max_market_orders_per_turn": 10,
-        "floor_price": 1,
-    })
+    game: dict[str, Any] = field(
+        default_factory=lambda: {
+            "episode_steps": 720,
+            "turns_per_day": 24,
+            "board_size": 10,
+            "starting_money": 3000,
+            "farm_hand_cost_mult": 1,
+            "shed_capacity": 100,
+            "weed_spawn_chance": 0.005,
+        }
+    )
+    market: dict[str, Any] = field(
+        default_factory=lambda: {
+            "max_market_orders_per_turn": 10,
+            "floor_price": 1,
+        }
+    )
     town: dict[str, Any] = field(default_factory=dict)
     logging: dict[str, Any] = field(default_factory=dict)
     strategy: dict[str, Any] = field(default_factory=dict)

@@ -9,6 +9,7 @@ Two formatters are provided:
 * :class:`StandardFormatter` — human-readable plain-text output for
   interactive / console use.
 """
+
 from __future__ import annotations
 
 import json
@@ -20,10 +21,29 @@ from typing import Any
 #: not be passed via ``extra``.
 RESERVED = frozenset(
     {
-        "name", "msg", "args", "levelname", "levelno", "pathname", "filename",
-        "module", "exc_info", "exc_text", "stack_info", "funcName", "lineno",
-        "created", "msecs", "relativeCreated", "thread", "threadName",
-        "process", "processName", "taskName", "message", "asctime",
+        "name",
+        "msg",
+        "args",
+        "levelname",
+        "levelno",
+        "pathname",
+        "filename",
+        "module",
+        "exc_info",
+        "exc_text",
+        "stack_info",
+        "funcName",
+        "lineno",
+        "created",
+        "msecs",
+        "relativeCreated",
+        "thread",
+        "threadName",
+        "process",
+        "processName",
+        "taskName",
+        "message",
+        "asctime",
     }
 )
 
@@ -56,25 +76,22 @@ class JSONFormatter(logging.Formatter):
         for field in STRUCTURED_FIELDS:
             payload[field] = getattr(record, field, None)
 
-        payload["timestamp"] = datetime.fromtimestamp(
-            record.created, tz=UTC
-        ).isoformat(timespec="milliseconds")
+        payload["timestamp"] = datetime.fromtimestamp(record.created, tz=UTC).isoformat(
+            timespec="milliseconds"
+        )
         if payload["component"] is None:
             payload["component"] = record.name
         payload["severity"] = record.levelname
         payload["message"] = record.getMessage()
 
         if self._include_source:
-            payload["source"] = (
-                f"{record.module}:{record.funcName}:{record.lineno}"
-            )
+            payload["source"] = f"{record.module}:{record.funcName}:{record.lineno}"
 
         # Carry any additional (non-reserved) structured extras.
         extras = {
             k: v
             for k, v in record.__dict__.items()
-            if k not in RESERVED and k not in STRUCTURED_FIELDS
-            and k != "message"
+            if k not in RESERVED and k not in STRUCTURED_FIELDS and k != "message"
         }
         if extras:
             payload["extra"] = extras

@@ -6,6 +6,7 @@ Public entry points:
     - :class:`Settings`, :func:`validate_settings`
     - :data:`DEFAULTS`, :func:`schema_defaults`, :func:`deep_merge`
 """
+
 from agent.config.loader import get_config, load_config, reset_config
 from agent.config.schema import DEFAULTS, deep_merge, schema_defaults
 from agent.config.settings import Settings

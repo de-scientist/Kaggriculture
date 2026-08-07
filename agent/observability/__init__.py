@@ -9,6 +9,7 @@ Public entry points are the module-level singletons:
 * :func:`get_telemetry`— :class:`Telemetry` aggregator
 * :func:`get_replay_store` — :class:`ReplayStore`
 """
+
 from agent.observability.metrics import (
     MetricsCollector,
     RateCounter,

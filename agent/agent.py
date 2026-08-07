@@ -13,6 +13,7 @@ environment each turn.  It is the composition root for the operational layer:
 Any unexpected error is logged, recorded in telemetry, and recovered from
 with a safe ``PASS`` fallback so a single turn never kills the episode.
 """
+
 from __future__ import annotations
 
 import time
@@ -94,16 +95,24 @@ def agent(obs: dict) -> dict[str, Any]:
     except ObservationParseError as exc:
         telemetry = get_telemetry()
         telemetry.record_exception("ObservationParseError")
-        logger.error("Observation parse error: %s", exc, exc_info=True,
-                     component="ObservationAdapter", action="parse")
+        logger.error(
+            "Observation parse error: %s",
+            exc,
+            exc_info=True,
+            component="ObservationAdapter",
+            action="parse",
+        )
         return {"farmer": ["PASS"], "hands": [], "market": []}
     except Exception as exc:
         telemetry = get_telemetry()
         telemetry.record_exception(type(exc).__name__)
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         logger.error(
-            "Agent error: %s", exc, exc_info=True,
-            component="Agent", action="agent",
+            "Agent error: %s",
+            exc,
+            exc_info=True,
+            component="Agent",
+            action="agent",
             execution_time_ms=round(elapsed_ms, 3),
         )
         return {"farmer": ["PASS"], "hands": [], "market": []}

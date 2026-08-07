@@ -12,6 +12,7 @@ analysis and debugging in Stage 1:
 
 Telemetry remains local; future stages may export metrics externally.
 """
+
 from __future__ import annotations
 
 import threading

@@ -5,6 +5,7 @@ values never reach runtime.  Any validation failure raises
 :class:`~agent.exceptions.configuration.ConfigurationError` with a message
 identifying the offending key.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -37,9 +38,7 @@ class ConfigValidator:
         self._validate_logging()
         self._validate_observability()
         if self._errors:
-            raise ConfigurationError(
-                "Invalid configuration:\n  - " + "\n  - ".join(self._errors)
-            )
+            raise ConfigurationError("Invalid configuration:\n  - " + "\n  - ".join(self._errors))
 
     # -- helpers -------------------------------------------------------------
     def _game(self) -> dict[str, Any]:
@@ -115,9 +114,7 @@ class ConfigValidator:
     def _validate_features(self) -> None:
         for flag in self._features():
             if not flag.startswith("ENABLE_"):
-                self._errors.append(
-                    f"feature flag '{flag}' must start with ENABLE_"
-                )
+                self._errors.append(f"feature flag '{flag}' must start with ENABLE_")
 
     def _validate_performance(self) -> None:
         perf = self._performance()
@@ -148,9 +145,7 @@ class ConfigValidator:
         self._check_bool(obs, "replay_enabled")
         tracers = obs.get("tracers")
         if tracers is not None and not isinstance(tracers, (list, str, bool)):
-            self._errors.append(
-                f"observability.tracers must be a list or string, got {tracers!r}"
-            )
+            self._errors.append(f"observability.tracers must be a list or string, got {tracers!r}")
 
     # -- generic numerical checks -------------------------------------------
     def _check_positive_int(self, mapping: dict[str, Any], key: str) -> None:

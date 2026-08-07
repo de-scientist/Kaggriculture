@@ -10,6 +10,7 @@ submitted action is reconstructable (see chapter 162).
 IDs are derived from the step/seed so that, with unchanged configuration, the
 same observation produces identical traces (deterministic debugging).
 """
+
 from __future__ import annotations
 
 import contextvars

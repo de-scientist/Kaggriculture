@@ -12,6 +12,7 @@ Usage::
     @profiled("my_function")
     def f(): ...
 """
+
 from __future__ import annotations
 
 import os
@@ -24,8 +25,10 @@ from typing import Any
 try:
     from agent.config import is_feature_enabled
 except Exception:  # pragma: no cover - fallback if config not loaded yet
+
     def is_feature_enabled(flag: str) -> bool:
         return os.environ.get(flag, "false").lower() in ("1", "true", "yes")
+
 
 _env_flag = os.environ.get("ENABLE_PROFILING", "").lower() in ("1", "true", "yes")
 _enabled = _env_flag
@@ -62,8 +65,11 @@ class Profiler:
         if not self._enabled:
             return
         self._samples.append(
-            ProfileSample(operation=operation, duration_ms=round(float(duration_ms), 3),
-                          attributes=dict(attributes))
+            ProfileSample(
+                operation=operation,
+                duration_ms=round(float(duration_ms), 3),
+                attributes=dict(attributes),
+            )
         )
 
     def samples(self) -> list[ProfileSample]:

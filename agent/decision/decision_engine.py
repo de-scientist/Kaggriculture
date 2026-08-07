@@ -13,6 +13,7 @@ selection.  Every decision turn is wrapped in the operational layer:
   analysis; and
 * fail-fast exception handling with telemetry + safe fallback.
 """
+
 from __future__ import annotations
 
 import time
@@ -118,13 +119,19 @@ def decide(context: decision_context.DecisionContext) -> dict:
     available_workers = len(game_state.available_workers()) if game_state else 1
 
     log = logger.bind(
-        turn=step, day=day, player=player, strategy=strategy_name,
-        correlation_id=trace.correlation_id, decision_id=trace.decision_id,
+        turn=step,
+        day=day,
+        player=player,
+        strategy=strategy_name,
+        correlation_id=trace.correlation_id,
+        decision_id=trace.decision_id,
     )
     log.info(
         "Decision started",
-        component="DecisionEngine", action="decide",
-        worker_count=available_workers, available_money=available_money,
+        component="DecisionEngine",
+        action="decide",
+        worker_count=available_workers,
+        available_money=available_money,
     )
 
     selected: CandidateAction = fallback.get_fallback()
@@ -138,8 +145,10 @@ def decide(context: decision_context.DecisionContext) -> dict:
             candidates = action_generator.generate_candidates(context)
         trace_record.record_candidates(len(candidates))
         log.debug(
-            "Generated %d candidates", len(candidates),
-            component="DecisionEngine", action="generate_candidates",
+            "Generated %d candidates",
+            len(candidates),
+            component="DecisionEngine",
+            action="generate_candidates",
         )
 
         with _timed_span(tracer, trace, "filter_pre_validation"):
@@ -176,8 +185,13 @@ def decide(context: decision_context.DecisionContext) -> dict:
         failure = f"{type(exc).__name__}: {exc}"
         telemetry.record_exception(type(exc).__name__)
         trace_record.record_failure(failure)
-        log.error("Decision failed: %s", failure, exc_info=True,
-                  component="DecisionEngine", action="decide")
+        log.error(
+            "Decision failed: %s",
+            failure,
+            exc_info=True,
+            component="DecisionEngine",
+            action="decide",
+        )
         metrics.record_value("decision_failures", 1.0)
         if isinstance(exc, StrategyError) and "Performance budget" in str(exc):
             raise
@@ -188,8 +202,16 @@ def decide(context: decision_context.DecisionContext) -> dict:
     _record_performance(perf, elapsed_ms, metrics)
     _log_decision_complete(log, trace, strategy_name, selected, scored, elapsed_ms)
     _record_replay(
-        replay, step, day, hour, player, context.obs, trace,
-        strategy_scores, action_dict, elapsed_ms,
+        replay,
+        step,
+        day,
+        hour,
+        player,
+        context.obs,
+        trace,
+        strategy_scores,
+        action_dict,
+        elapsed_ms,
     )
     trace_record.mark_complete(start)
     return action_dict
@@ -223,8 +245,10 @@ def _record_performance(perf: PerformanceBudget, elapsed_ms: float, metrics) -> 
     if result.status.value != "ok":
         logger.warning(
             "Performance budget %s for %s",
-            result.status.value, result.component,
-            component="PerformanceBudget", execution_time_ms=elapsed_ms,
+            result.status.value,
+            result.component,
+            component="PerformanceBudget",
+            execution_time_ms=elapsed_ms,
         )
     metrics.record_value("decision_time_ms", elapsed_ms)
 
@@ -237,23 +261,39 @@ def _log_decision_complete(
     else:
         action = "unknown"
     log.info(
-        "Decision complete: selected %s from %d candidates", action, len(scored),
-        component="DecisionEngine", action=action,
-        strategy=strategy_name, execution_time_ms=round(elapsed_ms, 3),
+        "Decision complete: selected %s from %d candidates",
+        action,
+        len(scored),
+        component="DecisionEngine",
+        action=action,
+        strategy=strategy_name,
+        execution_time_ms=round(elapsed_ms, 3),
     )
 
 
 def _record_replay(
-    replay: ReplayStore, step: int, day: int, hour: int, player: int,
-    observation: dict | None, trace: Trace, strategy_scores: dict[str, Any],
-    action_dict: dict, elapsed_ms: float,
+    replay: ReplayStore,
+    step: int,
+    day: int,
+    hour: int,
+    player: int,
+    observation: dict | None,
+    trace: Trace,
+    strategy_scores: dict[str, Any],
+    action_dict: dict,
+    elapsed_ms: float,
 ) -> None:
     if not replay.enabled:
         return
     replay.record(
-        turn=step, day=day, hour=hour, player=player,
-        observation=observation or {}, trace=trace,
-        strategy_scores=strategy_scores, selected_action=action_dict,
+        turn=step,
+        day=day,
+        hour=hour,
+        player=player,
+        observation=observation or {},
+        trace=trace,
+        strategy_scores=strategy_scores,
+        selected_action=action_dict,
         execution_time_ms=elapsed_ms,
     )
 

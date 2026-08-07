@@ -1,4 +1,5 @@
 """Logging handlers for the Kaggriculture AI platform."""
+
 from __future__ import annotations
 
 import logging
