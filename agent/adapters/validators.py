@@ -52,7 +52,7 @@ def validate_market_order(order: list) -> None:
 def validate_action_dict(action: dict) -> None:
     if not isinstance(action, dict):
         raise TypeError(f"Action must be a dict, got {type(action)}")
-    for key in ("farmer", "hands", "market"):
+    for key in ("hands", "market"):
         if key not in action:
             raise KeyError(f"Action missing required key: {key}")
 

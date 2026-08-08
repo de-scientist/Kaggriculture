@@ -80,8 +80,6 @@ class Tile:
         )
 
     def with_animal(self, animal: object) -> Tile:
-        if self._animal is not None:
-            raise ValueError(f"Tile {self._position} already has an animal")
         return Tile(
             position=self._position,
             terrain=self._terrain,
