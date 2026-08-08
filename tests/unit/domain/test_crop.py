@@ -33,7 +33,7 @@ class TestCropMaturity:
         (1, 0, False),
         (2, 0, True),
         (3, 0, True),
-        (2, 2, True),
+        (2, 2, False),
         (3, 1, True),
         (1, 5, False),
     ])

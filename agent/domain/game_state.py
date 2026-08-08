@@ -41,7 +41,11 @@ class GameState:
         self._inventory = inventory or Inventory()
         self._market = market or Market()
         self._town = town or Town()
-        self._season = season or Season()
+        if season is None:
+            day, turn = divmod(step, 24)
+            self._season = Season(day=day, turn=turn)
+        else:
+            self._season = season
         self._weather = weather or Weather()
         self._opponent = opponent or Player(index=1)
         self._private = dict(private or {})

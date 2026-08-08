@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from agent.domain.position import Position
+from agent.domain.worker import Worker
 
 
 class Farm:
@@ -17,7 +18,7 @@ class Farm:
         self._tiles = dict(tiles or {})
         self._quadrants = list(quadrants or [])
         self._buildings = list(buildings or [])
-        self._workers = list(workers or [])
+        self._workers = list(workers or [Worker(worker_id="farmer", position=Position(0, 0))])
         self._money = money
 
     @property
