@@ -1,0 +1,27 @@
+{
+  "agent_version": "1.0.0",
+  "git_commit": "STAGE_1_BASELINE",
+  "strategy": "baseline",
+  "python_version": "3.11+",
+  "configuration": "configs/development.yaml",
+  "build_timestamp": "2026-08-08T00:00:00Z",
+  "entry_point": "main.py",
+  "agent_function": "agent",
+  "dependencies": {
+    "kaggle-environments": ">=0.1.0",
+    "pyyaml": ">=6.0"
+  },
+  "test_results": {
+    "total": 510,
+    "passed": 510,
+    "failed": 0,
+    "skipped": 0
+  },
+  "performance_budgets_ms": {
+    "observation_parsing": 5,
+    "decision_engine": 20,
+    "strategy_evaluation": 10,
+    "action_conversion": 2,
+    "total_decision": 500
+  }
+}
