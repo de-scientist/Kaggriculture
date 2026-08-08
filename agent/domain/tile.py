@@ -69,8 +69,6 @@ class Tile:
         return self.is_empty and self._terrain in ("PLAIN", "GRASS")
 
     def with_crop(self, crop: object) -> Tile:
-        if self._crop is not None:
-            raise ValueError(f"Tile {self._position} already has a crop")
         return Tile(
             position=self._position,
             terrain=self._terrain,

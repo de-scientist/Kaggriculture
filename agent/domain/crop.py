@@ -134,8 +134,6 @@ class Crop:
     def harvest(self) -> Crop:
         if self._harvested:
             raise ValueError("Cannot harvest an already harvested crop")
-        if not self.is_mature(0):
-            raise ValueError("Cannot harvest an immature crop")
         harvested = Crop(
             crop_type=self._crop_type,
             planted_day=self._planted_day,

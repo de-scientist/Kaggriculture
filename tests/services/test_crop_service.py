@@ -35,7 +35,7 @@ def test_water_harvested_crop_raises():
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
-    harvested = crop_service.harvest(planted)
+    harvested = crop_service.harvest(planted, current_day=2)
     try:
         crop_service.water(harvested)
         raise AssertionError("Should have raised ValueError")
@@ -56,7 +56,7 @@ def test_harvest_crop():
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
     watered = crop_service.water(planted)
-    result = crop_service.harvest(watered)
+    result = crop_service.harvest(watered, current_day=2)
     assert result.crop.is_harvested is True
 
 

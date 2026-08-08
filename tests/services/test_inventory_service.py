@@ -34,9 +34,10 @@ def test_reserve_item():
 
 def test_release_item():
     inv = Inventory()
-    reserved = inventory_service.reserve(inv, "WHEAT", 2)
+    with_inv = inventory_service.add(inv, "WHEAT", 5)
+    reserved = inventory_service.reserve(with_inv, "WHEAT", 2)
     result = inventory_service.release(reserved, "WHEAT", 2)
-    assert inventory_service.available(result, "WHEAT") == 2
+    assert inventory_service.available(result, "WHEAT") == 5
 
 
 def test_available():

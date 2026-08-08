@@ -27,10 +27,10 @@ def fertilize(tile: Tile, day: int) -> Tile:
     return tile.with_crop(updated_crop)
 
 
-def harvest(tile: Tile) -> Tile:
+def harvest(tile: Tile, current_day: int = 0) -> Tile:
     if tile.crop is None:
         raise ValueError("Cannot harvest a tile with no crop")
-    if not tile.crop.is_mature(day=0):
+    if not tile.crop.is_mature(current_day):
         raise ValueError("Cannot harvest an immature crop")
     updated_crop = tile.crop.harvest()
     return tile.with_crop(updated_crop)
@@ -51,11 +51,11 @@ def expected_profit(crop_type: str, day: int, sell_price: float, seed_cost: floa
 def growth_progress(tile: Tile, day: int) -> float:
     if tile.crop is None:
         return 0.0
+    maturity_days = 2
     age = day - tile.crop.planted_day
-    max_age = tile.crop.max_lifespan_step
-    if max_age <= 0:
+    if age >= maturity_days:
         return 1.0
-    return min(1.0, age / max_age)
+    return age / maturity_days
 
 
 def ready_for_harvest(tile: Tile, day: int) -> bool:
