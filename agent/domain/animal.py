@@ -154,11 +154,28 @@ class Animal:
             cared._fed_today = self._fed_today
             cared._consecutive_unfed = self._consecutive_unfed
             cared._cared_today = False
-            cared._fertilizer_available = self._fertilizer_available
+            cared._fertilizer_available = self._fertilizer_available + 1
             cared._pending_care_bonus = 0
             cared._escaped = self._escaped
             return cared, bonus
-        return self, 0
+        if self._consecutive_unfed >= 2:
+            self._escaped = True
+            raise ValueError("Animal has escaped due to lack of feeding")
+        produced = Animal(
+            animal_type=self._animal_type,
+            housing=self._housing,
+        )
+        produced._hunger = self._hunger
+        produced._production_timer = self._production_timer
+        produced._producing = self._producing
+        produced._health = self._health
+        produced._fed_today = self._fed_today
+        produced._consecutive_unfed = self._consecutive_unfed
+        produced._cared_today = False
+        produced._fertilizer_available = True
+        produced._pending_care_bonus = self._pending_care_bonus
+        produced._escaped = self._escaped
+        return produced, 1
 
     def collect_fertilizer(self) -> tuple[Animal, int]:
         if self._escaped:

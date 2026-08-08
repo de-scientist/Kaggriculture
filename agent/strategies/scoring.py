@@ -53,7 +53,7 @@ def compute_resource_sustainability_score(action: CandidateAction) -> float:
 
 
 def compute_action_cost_penalty(action: CandidateAction) -> float:
-    return -action.estimated_cost * WEIGHTS["action_cost"]
+    return action.estimated_cost * WEIGHTS["action_cost"]
 
 
 def compute_opportunity_cost_penalty(action: CandidateAction) -> float:
