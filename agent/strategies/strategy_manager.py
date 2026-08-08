@@ -3,10 +3,12 @@ from __future__ import annotations
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 from agent.strategies.baseline_strategy import BaselineStrategy
+from agent.strategies.economic_strategy import EconomicStrategy
 from agent.strategies.strategy import ScoredAction, Strategy
 
 _STRATEGIES: dict[str, type[Strategy]] = {
     "baseline": BaselineStrategy,
+    "economic": EconomicStrategy,
 }
 
 

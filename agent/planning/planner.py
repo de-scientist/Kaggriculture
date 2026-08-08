@@ -310,6 +310,7 @@ class Planner:
 
     def evaluate_plan(self, plan: Plan, game_state: Any, context: Any) -> PlanEvaluation:
         """Evaluate a plan against the current game state."""
+        remaining_turns = getattr(context, "remaining_turns", 720) if context else 720
         available_cash = game_state.available_money() if game_state else 3000.0
         available_workers = len(game_state.available_workers()) if game_state else 1
 

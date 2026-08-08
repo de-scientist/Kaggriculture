@@ -37,7 +37,7 @@ class ResourceOptimizer:
         """Identify the most binding resource constraints."""
         bottlenecks: list[Bottleneck] = []
 
-        cash_severity = self._ratio_severity(cash, 500.0, 0.0)
+        cash_severity = self._ratio_severity(cash, 500.0, 0.4)
         if cash_severity > 0.0:
             bottlenecks.append(
                 Bottleneck(
@@ -73,8 +73,8 @@ class ResourceOptimizer:
                 )
             )
 
-        shed_severity = self._ratio_severity(shed_items, shed_capacity, 1.0)
-        if shed_severity > 0.5:
+        shed_severity = self._ratio_severity(shed_items, shed_capacity, 0.9)
+        if shed_severity > 0.0:
             bottlenecks.append(
                 Bottleneck(
                     name="shed_capacity",

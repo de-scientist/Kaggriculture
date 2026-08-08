@@ -154,6 +154,21 @@ VALID_STRATEGIES = {"baseline", "heuristic", "economic", "utility"}
 VALID_PRICE_SHAPES = {"linear", "sq", "sqrt", "log"}
 VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
+# Stage 2 additions to schema defaults
+DEFAULTS["strategy"]["planning"] = {"horizon_turns": 5, "max_rollouts": 10, "max_branching": 8}
+DEFAULTS["strategy"]["market_lookback"] = 10
+DEFAULTS["strategy"]["econ_lookahead"] = True
+DEFAULTS["strategy"]["econ_risk_aversion"] = 0.5
+DEFAULTS["strategy"]["econ_min_roi_threshold"] = 10.0
+DEFAULTS["strategy"]["econ_min_cash_reserve"] = 500
+DEFAULTS["strategy"]["econ_enable_planning"] = True
+
+DEFAULTS["features"]["ENABLE_ECONOMIC_PLANNING"] = True
+DEFAULTS["features"]["ENABLE_MARKET_INTELLIGENCE"] = True
+DEFAULTS["features"]["ENABLE_PRICE_FORECASTING"] = True
+DEFAULTS["features"]["ENABLE_DEMAND_MODELING"] = True
+DEFAULTS["features"]["ENABLE_BOTTLENECK_DETECTION"] = True
+
 
 def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
     """Recursively merge ``override`` into ``base`` returning a new dict."""
