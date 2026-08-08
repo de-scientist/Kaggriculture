@@ -137,6 +137,7 @@ def decide(context: decision_context.DecisionContext) -> dict[str, Any]:
 
     selected: CandidateAction = fallback.get_fallback()
     strategy_scores: dict[str, Any] = {}
+    scored: list[Any] = []
     trace_record = decision_trace.DecisionTrace(step=step, day=day, strategy_name=strategy_name)
     action_dict: dict[str, Any] = {"farmer": ["PASS"], "hands": [], "market": []}
     failure: str | None = None
@@ -196,7 +197,6 @@ def decide(context: decision_context.DecisionContext) -> dict[str, Any]:
         metrics.record_value("decision_failures", 1.0)
         if isinstance(exc, StrategyError) and "Performance budget" in str(exc):
             raise
-        return {"farmer": ["PASS"], "hands": [], "market": []}
 
     elapsed_ms = (time.perf_counter() - start) * 1000.0
     telemetry.record_decision(elapsed_ms, strategy=strategy_name)
