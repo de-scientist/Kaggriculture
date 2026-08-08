@@ -79,6 +79,8 @@ class PerformanceBudget:
                 if isinstance(value, dict) and "target" in value:
                     self._targets[key] = float(value["target"])
                     self._components[key] = value.get("component", key)
+                    if "critical" in value:
+                        self._failure_ms = float(value["critical"])
                 elif isinstance(value, (int, float)) and key.endswith("_ms"):
                     self._targets[key] = float(value)
                     self._components[key] = key.replace("_ms", "")

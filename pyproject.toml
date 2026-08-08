@@ -52,17 +52,29 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v --tb=short"
+addopts = "-v --tb=short --import-mode=importlib"
 markers = [
     "unit: unit tests",
     "integration: integration tests",
     "performance: performance benchmarks",
+    "e2e: end-to-end tests",
+    "regression: regression tests",
+    "observability: observability layer tests",
+    "determinism: determinism and reproducibility tests",
 ]
 
 [tool.coverage.run]
-source = ["agent", "tests"]
-omit = ["tests/*"]
+source = ["agent"]
+omit = ["tests/*", "agent/config/*"]
+branch = true
 
 [tool.coverage.report]
 show_missing = true
 fail_under = 80
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]

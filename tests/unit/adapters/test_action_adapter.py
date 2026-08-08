@@ -20,15 +20,10 @@ from tests.fixtures.actions import (
     hire_action,
     movement_action,
     pass_action,
-    pay_action,
     plant_action,
     sell_action,
     water_action,
 )
-
-
-def pay_action() -> dict:
-    return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 1]]}
 
 
 @pytest.fixture
