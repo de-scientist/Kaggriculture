@@ -40,7 +40,8 @@ class Season:
 
     @property
     def remaining_turns(self) -> int:
-        return max(0, self._total_turns - self._turn)
+        absolute_turn = self._day * self._turns_per_day + self._turn
+        return max(0, self._total_turns - absolute_turn)
 
     @property
     def remaining_days(self) -> int:
