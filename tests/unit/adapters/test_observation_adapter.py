@@ -65,7 +65,7 @@ class TestObservationAdapterParse:
     def test_parse_advanced_observation(self, adapter: ObservationAdapter) -> None:
         obs = observation_advanced(day=5, money=4500.0)
         state = adapter.parse(obs)
-        assert state.current_day() == 0
+        assert state.current_day() == 5
         assert state.available_money() == 4500.0
         assert "NE" in state.farm.quadrants
 

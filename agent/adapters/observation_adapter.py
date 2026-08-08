@@ -9,6 +9,7 @@ from agent.domain.farm import Farm
 from agent.domain.inventory import Inventory
 from agent.domain.market import Market
 from agent.domain.position import Position
+from agent.domain.season import Season
 from agent.domain.tile import Tile
 from agent.domain.town import Town
 from agent.utilities.logging import get_logger
@@ -40,7 +41,10 @@ class ObservationAdapter:
             except ValueError:
                 pass
 
-        farm = Farm(money=farm_data.get("money", 3000.0))
+        farm = Farm(
+            money=farm_data.get("money", 3000.0),
+            quadrants=farm_data.get("unlocked_quadrants", ["NW"]),
+        )
         for y, row in enumerate(farm_data.get("tiles", [])):
             for x, tile_data in enumerate(row):
                 pos = Position(x, y)
@@ -61,12 +65,16 @@ class ObservationAdapter:
         town_data = obs.get("town", {})
         town = Town(unlocked_shops=town_data.get("unlocked_shops", []))
 
+        day = obs.get("day", 0)
+        hour = obs.get("hour", 0)
+        season = Season(day=day, turn=hour)
         game_state = gs_domain.GameState(
             player=player,
             farm=farm,
             inventory=inventory,
             market=market,
             town=town,
+            season=season,
             private=private,
             step=obs.get("step", 0),
         )
