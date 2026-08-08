@@ -1,7 +1,7 @@
 """Tests for the telemetry aggregator."""
 from __future__ import annotations
 
-from agent.observability import get_metrics, reset_metrics, reset_telemetry
+from agent.observability import get_metrics, reset_telemetry
 from agent.observability.telemetry import get_telemetry
 
 

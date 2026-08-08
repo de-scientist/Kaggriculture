@@ -6,9 +6,9 @@ import pytest
 from agent.exceptions.strategy import StrategyError
 from agent.observability import PerformanceBudget
 from agent.observability.performance import (
+    DEFAULT_BUDGETS,
     BudgetResult,
     BudgetStatus,
-    DEFAULT_BUDGETS,
     PerformanceMonitor,
 )
 

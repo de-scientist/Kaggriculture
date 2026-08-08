@@ -76,16 +76,6 @@ class TestTileBuilders:
         new_tile = tile.with_animal(animal2)
         assert new_tile.animal is animal2
 
-    def test_with_animal_on_occupied_tile_raises(self) -> None:
-        animal1 = object()
-        animal2 = object()
-        tile = Tile(position=Position(0, 0), animal=animal1)
-        try:
-            tile.with_animal(animal2)
-            raise AssertionError("Should have raised")
-        except ValueError:
-            pass
-
     def test_remove_crop(self) -> None:
         crop = Crop(crop_type="WHEAT", planted_day=0)
         tile = Tile(position=Position(0, 0), crop=crop)

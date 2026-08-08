@@ -7,7 +7,6 @@ from agent.agent import agent
 from agent.config import reset_config
 from agent.observability import get_metrics, get_replay_store, get_telemetry
 
-
 OBS = {
     "player": 0,
     "step": 1,

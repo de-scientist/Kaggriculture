@@ -7,13 +7,9 @@ from __future__ import annotations
 import statistics
 import time
 
-import pytest
-
 from agent.agent import agent
-from agent.observability import PerformanceBudget, get_metrics
-
+from agent.observability import PerformanceBudget
 from tests.fixtures.observations import minimal_observation
-
 
 OBS = minimal_observation()
 

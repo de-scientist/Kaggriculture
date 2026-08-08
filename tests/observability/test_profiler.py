@@ -3,14 +3,14 @@ from __future__ import annotations
 
 import pytest
 
+from agent.observability import get_profiler
 from agent.observability.profiler import (
     Profiler,
-    profiled,
-    profile_scope,
-    reset_profiler,
     is_enabled,
+    profile_scope,
+    profiled,
+    reset_profiler,
 )
-from agent.observability import get_profiler
 
 
 def test_profiler_disabled_by_default_records_nothing() -> None:

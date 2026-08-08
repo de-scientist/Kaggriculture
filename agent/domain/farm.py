@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from agent.domain.position import Position
-from agent.domain.worker import Worker
 
 
 class Farm:

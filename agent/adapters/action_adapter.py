@@ -18,7 +18,11 @@ class ActionAdapter:
         kaggle_action = {
             "farmer": self._convert_farmer_op(domain_action.get("farmer", ["PASS"])),
             "hands": [self._convert_hand_op(h) for h in domain_action.get("hands", [])],
-            "market": [m for m in (self._convert_market_op(m) for m in domain_action.get("market", [])) if m],
+            "market": [
+                m
+                for m in (self._convert_market_op(m) for m in domain_action.get("market", []))
+                if m
+            ],
         }
 
         elapsed_ms = (time.perf_counter() - start) * 1000

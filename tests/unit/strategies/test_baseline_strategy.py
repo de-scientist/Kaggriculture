@@ -8,8 +8,8 @@ from agent.decision.decision_context import DecisionContext
 from agent.strategies import baseline_strategy
 from agent.strategies.priorities import PRIORITY_HARVEST, PRIORITY_IDLE, get_priority
 from agent.strategies.scoring import score_action
-from tests.fixtures.observations import minimal_observation
 from tests.fixtures.game_states import empty_game_state
+from tests.fixtures.observations import minimal_observation
 
 
 @pytest.fixture

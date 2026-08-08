@@ -11,9 +11,6 @@ import pytest
 
 from agent.config import reset_config
 from agent.observability import (
-    get_metrics,
-    get_replay_store,
-    get_telemetry,
     reset_default_tracer,
     reset_metrics,
     reset_replay_store,

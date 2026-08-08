@@ -5,13 +5,10 @@ returns silently.  A bug fixed once must never return.
 """
 from __future__ import annotations
 
-import pytest
-
-from agent.decision.decision_engine import decide
 from agent.decision.decision_context import DecisionContext
-from agent.domain.crop import Crop
-from agent.domain.tile import Tile
+from agent.decision.decision_engine import decide
 from agent.domain.position import Position
+from agent.domain.tile import Tile
 from agent.services import crop_service
 
 

@@ -1,12 +1,9 @@
 """Tests for the tracing layer."""
 from __future__ import annotations
 
-import contextvars
-
 from agent.observability import reset_default_tracer
 from agent.observability.tracing import (
     Span,
-    Trace,
     Tracer,
     get_active_trace,
     make_correlation_id,

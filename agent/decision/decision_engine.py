@@ -39,10 +39,10 @@ from agent.observability import (
     ReplayStore,
     Trace,
     Tracer,
+    get_default_tracer,
     get_metrics,
     get_replay_store,
     get_telemetry,
-    get_default_tracer,
 )
 from agent.strategies import strategy_manager
 

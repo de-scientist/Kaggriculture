@@ -4,7 +4,6 @@ from __future__ import annotations
 import pytest
 
 from agent.config import (
-    DEFAULTS,
     Settings,
     deep_merge,
     get_config,

@@ -4,8 +4,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from agent.observability import reset_replay_store
 from agent.observability.replay import (
     ReplayStore,

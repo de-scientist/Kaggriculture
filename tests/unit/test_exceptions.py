@@ -6,8 +6,8 @@ import pytest
 from agent.exceptions import (
     AdapterError,
     AnimalError,
-    ConfigurationError,
     CompatibilityError,
+    ConfigurationError,
     CropError,
     KaggricultureError,
     MarketError,

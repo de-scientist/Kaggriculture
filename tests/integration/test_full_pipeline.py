@@ -9,19 +9,16 @@ import pytest
 
 from agent.adapters.action_adapter import ActionAdapter
 from agent.adapters.observation_adapter import ObservationAdapter
-from agent.decision.decision_engine import decide
 from agent.decision.decision_context import DecisionContext
-from agent.observability import get_metrics, get_telemetry
-
+from agent.decision.decision_engine import decide
+from agent.observability import get_metrics
 from tests.fixtures.observations import (
     minimal_observation,
     observation_advanced,
-    observation_with_crop,
-    observation_with_money,
-    observation_with_seeds,
     observation_with_animal,
-    observation_with_hands,
+    observation_with_crop,
     observation_with_market,
+    observation_with_seeds,
 )
 
 

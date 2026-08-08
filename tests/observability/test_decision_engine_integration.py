@@ -3,10 +3,10 @@ from __future__ import annotations
 
 import pytest
 
+from agent.adapters import ObservationAdapter
 from agent.config import load_config
 from agent.decision import decision_context, decision_engine
 from agent.observability import get_metrics, get_replay_store, get_telemetry
-from agent.adapters import ObservationAdapter
 
 SAMPLE_OBS = {
     "player": 0,

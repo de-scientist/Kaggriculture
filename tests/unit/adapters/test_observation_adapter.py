@@ -4,16 +4,13 @@ from __future__ import annotations
 import pytest
 
 from agent.adapters.observation_adapter import ObservationAdapter
-from agent.adapters.validators import validate_observation_not_none
 from agent.domain.game_state import GameState
-
 from tests.fixtures.observations import (
     minimal_observation,
     observation_advanced,
     observation_malformed,
     observation_partial,
     observation_with_animal,
-    observation_with_crop,
     observation_with_hands,
     observation_with_market,
     observation_with_money,

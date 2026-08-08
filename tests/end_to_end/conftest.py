@@ -7,10 +7,10 @@ from __future__ import annotations
 import pytest
 
 from agent.observability import (
+    reset_default_tracer,
     reset_metrics,
     reset_replay_store,
     reset_telemetry,
-    reset_default_tracer,
 )
 from agent.observability.profiler import reset_profiler
 

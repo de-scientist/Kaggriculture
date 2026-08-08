@@ -6,11 +6,8 @@ validity, state progression, and absence of fatal exceptions.
 """
 from __future__ import annotations
 
-import pytest
-
 from agent.agent import agent
 from agent.observability import get_metrics, get_telemetry
-
 from tests.fixtures.observations import (
     minimal_observation,
     observation_advanced,

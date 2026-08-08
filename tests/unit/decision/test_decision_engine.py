@@ -11,7 +11,6 @@ from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 from agent.decision.decision_engine import decide
 from agent.decision.fallback import get_fallback
-
 from tests.fixtures.game_states import empty_game_state
 from tests.fixtures.observations import minimal_observation
 
@@ -146,8 +145,8 @@ class TestActionValidator:
 
     def test_hire_action_max_reached(self) -> None:
         from agent.domain.farm import Farm
-        from agent.domain.worker import Worker
         from agent.domain.position import Position
+        from agent.domain.worker import Worker
 
         farm = Farm(workers=[Worker(worker_id="farmer", position=Position(0, 0))], money=10000.0)
         farm = farm.add_quadrant("NE")

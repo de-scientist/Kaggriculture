@@ -6,9 +6,8 @@ import logging
 
 import pytest
 
-from agent.config import Settings, reset_config
+from agent.config import Settings
 from agent.logging import (
-    JSONFormatter,
     StandardFormatter,
     StructuredLogger,
     configure_logging,

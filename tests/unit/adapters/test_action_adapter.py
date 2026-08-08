@@ -4,18 +4,14 @@ from __future__ import annotations
 import pytest
 
 from agent.adapters.action_adapter import ActionAdapter
-
 from tests.fixtures.actions import (
     build_coop_action,
     build_pasture_action,
     buy_animal_action,
-    buy_land_action,
     buy_seed_action,
     collect_fertilizer_action,
-    dig_action,
-    drop_action,
-    fertilize_action,
     feed_action,
+    fertilize_action,
     harvest_action,
     hire_action,
     movement_action,
