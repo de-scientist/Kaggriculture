@@ -141,41 +141,25 @@ class Animal:
             raise ValueError("Escaped animal cannot produce")
         if not self._fed_today:
             raise ValueError("Animal must be fed before producing")
-        if self._pending_care_bonus > 0:
-            bonus = self._pending_care_bonus
-            cared = Animal(
-                animal_type=self._animal_type,
-                housing=self._housing,
-            )
-            cared._hunger = self._hunger
-            cared._production_timer = self._production_timer
-            cared._producing = self._producing
-            cared._health = self._health
-            cared._fed_today = self._fed_today
-            cared._consecutive_unfed = self._consecutive_unfed
-            cared._cared_today = False
-            cared._fertilizer_available = self._fertilizer_available + 1
-            cared._pending_care_bonus = 0
-            cared._escaped = self._escaped
-            return cared, bonus
         if self._consecutive_unfed >= 2:
             self._escaped = True
             raise ValueError("Animal has escaped due to lack of feeding")
-        produced = Animal(
+        bonus = self._pending_care_bonus
+        new_animal = Animal(
             animal_type=self._animal_type,
             housing=self._housing,
         )
-        produced._hunger = self._hunger
-        produced._production_timer = self._production_timer
-        produced._producing = self._producing
-        produced._health = self._health
-        produced._fed_today = self._fed_today
-        produced._consecutive_unfed = self._consecutive_unfed
-        produced._cared_today = False
-        produced._fertilizer_available = True
-        produced._pending_care_bonus = self._pending_care_bonus
-        produced._escaped = self._escaped
-        return produced, 1
+        new_animal._hunger = self._hunger
+        new_animal._production_timer = self._production_timer
+        new_animal._producing = self._producing
+        new_animal._health = self._health
+        new_animal._fed_today = self._fed_today
+        new_animal._consecutive_unfed = self._consecutive_unfed
+        new_animal._cared_today = False
+        new_animal._fertilizer_available = True
+        new_animal._pending_care_bonus = 0
+        new_animal._escaped = self._escaped
+        return new_animal, bonus
 
     def collect_fertilizer(self) -> tuple[Animal, int]:
         if self._escaped:

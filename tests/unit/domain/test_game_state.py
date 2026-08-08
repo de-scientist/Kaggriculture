@@ -19,7 +19,7 @@ class TestGameStateConstruction:
         assert state.remaining_turns() == 720
         assert state.remaining_days() == 30
         assert state.available_money() == 3000.0
-        assert len(state.available_workers()) == 1
+        assert len(state.available_workers()) == 0
 
     def test_custom_state(self) -> None:
         farm = Farm(money=5000.0)

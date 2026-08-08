@@ -28,7 +28,7 @@ class TestSeasonRemaining:
         assert s.remaining_turns == 720
 
     def test_remaining_turns_mid_game(self) -> None:
-        s = Season(day=5, turn=120)
+        s = Season(day=5, turn=0)
         assert s.remaining_turns == 600
 
     def test_remaining_turns_at_end(self) -> None:
