@@ -46,6 +46,7 @@ class MarketIntelligenceEngine:
         self._supply_signals: dict[str, int] = {}
         self._market_regime: dict[str, str] = {}
         self._snapshots: list[MarketSnapshot] = []
+        self._forecasts: dict[str, PriceForecast] = {}
 
     def update(
         self,
@@ -80,11 +81,9 @@ class MarketIntelligenceEngine:
             for product in self._price_history:
                 prices_list = self._price_history[product]
                 if len(prices_list) >= 5:
-                    avg = sum(prices_list[-10:]) / min(10, len(prices_list[-10:]))
                     regime = self._market_analyzer.detect_regime(prices_list)
                     self._market_regime[product] = regime
 
-        # Update forecasts
         forecasts = self._price_forecaster.forecast(
             current_prices=prices,
             history=self._price_history,
@@ -128,7 +127,6 @@ class MarketIntelligenceEngine:
         return 1
 
     def classify_regime(self, product: str) -> str:
-        """Classify market regime for a product."""
         history = self._price_history.get(product, [])
         if len(history) < 5:
             return "unknown"
@@ -153,8 +151,4 @@ class MarketIntelligenceEngine:
         return self._price_tracker.get_current_price(product) or 1
 
     def get_forecast(self, product: str) -> PriceForecast | None:
-        return self._forecasts.get(product) if hasattr(self, "_forecasts") else None
-
-    def __init_post_init__(self):
-        if not hasattr(self, "_forecasts"):
-            self._forecasts: dict[str, PriceForecast] = {}
+        return self._forecasts.get(product)
