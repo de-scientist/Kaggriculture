@@ -1,216 +1,134 @@
-"""Stage 2 — Profitability Engine.
-
-Estimates the expected net profit of a production opportunity.
-"""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
+
+from agent.economics.economic_state import EconomicState
+from agent.economics.profit_model import ProfitabilityEstimate
 
 
-@dataclass(frozen=True)
+@dataclass
 class ProfitabilityEstimate:
-    """Estimated profitability of a production opportunity."""
-
-    name: str
+    crop: str
     seed_cost: float
-    water_cost: float = 0.0
-    fertilizer_cost: float = 0.0
-    feed_cost: float = 0.0
-    worker_cost: float = 0.0
-    expansion_cost: float = 0.0
+    water_cost: float
+    fertilizer_cost: float
+    growth_days: int
+    worker_requirement: int
+    expected_yield: int
+    expected_sale_price: float
+    expected_revenue: float
+    expected_net_profit: float
+    profit_per_turn: float
+    capital_efficiency: float
+    land_efficiency: float
 
-    expected_yield: float = 0.0
-    expected_sale_price: float = 0.0
-    expected_revenue: float = 0.0
 
-    growth_duration: int = 0
-    remaining_season: int = 720
+class ProfitabilityEngine:
+    """Estimates profitability of crop, animal, and land investments.
 
-    @property
-    def total_cost(self) -> float:
-        return (
-            self.seed_cost
-            + self.water_cost
-            + self.fertilizer_cost
-            + self.feed_cost
-            + self.worker_cost
-            + self.expansion_cost
+    Calculates:
+    * Gross revenue
+    * Net revenue
+    * Time to completion
+    * Resource requirements
+    * Labor requirements
+    * Expected return
+    * Return per turn
+    * Return on capital
+    """
+
+    def __init__(self):
+        self._crop_data = {}
+        self._animal_data = {}
+        self._land_data = {}
+
+    def estimate_crop_profitability(
+        self,
+        crop_type: str,
+        seed_cost: float,
+        water_requirement: int,
+        fertilizer_requirement: int,
+        growth_days: int,
+        worker_requirement: int,
+        expected_yield: int,
+        expected_sale_price: float,
+    ) -> ProfitabilityEstimate:
+        net_profit = expected_sale_price * expected_yield - seed_cost - water_requirement * 0.1 - fertilizer_requirement * 0.1
+        profit_per_turn = net_profit / growth_days
+        capital_efficiency = expected_sale_price * expected_yield / max(seed_cost, 0.01)
+        land_efficiency = expected_yield / max(growth_days, 1)
+        return ProfitabilityEstimate(
+            crop=crop_type,
+            seed_cost=seed_cost,
+            water_cost=water_requirement,
+            fertilizer_cost=fertilizer_requirement,
+            growth_days=growth_days,
+            worker_requirement=worker_requirement,
+            expected_yield=expected_yield,
+            expected_sale_price=expected_sale_price,
+            expected_revenue=expected_sale_price * expected_yield,
+            expected_net_profit=net_profit,
+            profit_per_turn=profit_per_turn,
+            capital_efficiency=capital_efficiency,
+            land_efficiency=land_efficiency,
         )
 
-    @property
-    def expected_profit(self) -> float:
-        return self.expected_revenue - self.total_cost
+    def estimate_animal_profitability(
+        self,
+        animal_type: str,
+        purchase_cost: float,
+        feed_cost: float,
+        production_rate: int,
+        product_value: float,
+        worker_requirement: int,
+        feed_days: int,
+    ) -> ProfitabilityEstimate:
+        payback_turns = purchase_cost / max(product_value, 0.01)
+        net_profit = product_value * production_rate - feed_cost * feed_days - purchase_cost
+        profit_per_turn = net_profit / feed_days if feed_days > 0 else 0.0
+        capital_efficiency = product_value * production_rate / max(purchase_cost, 0.01)
+        land_efficiency = production_rate / max(feed_days, 1)
+        return ProfitabilityEstimate(
+            crop=animal_type,
+            seed_cost=purchase_cost,
+            water_cost=0,
+            fertilizer_cost=0,
+            growth_days=feed_days,
+            worker_requirement=worker_requirement,
+            expected_yield=production_rate,
+            expected_sale_price=product_value,
+            expected_revenue=product_value * production_rate,
+            expected_net_profit=net_profit,
+            profit_per_turn=profit_per_turn,
+            capital_efficiency=capital_efficiency,
+            land_efficiency=land_efficiency,
+        )
 
-    @property
-    def profit_per_turn(self) -> float:
-        if self.growth_duration <= 0:
-            return 0.0
-        return self.expected_profit / self.growth_duration
-
-    @property
-    def roi(self) -> float:
-        if self.total_cost <= 0:
-            return 0.0
-        return (self.expected_profit / self.total_cost) * 100.0
-
-    @property
-    def can_complete(self) -> bool:
-        return self.growth_duration <= self.remaining_season
-
-    @property
-    def capital_efficiency(self) -> float:
-        """Profit per unit of upfront capital."""
-        if self.total_cost <= 0:
-            return 0.0
-        return self.expected_profit / self.total_cost
-
-    @property
-    def land_efficiency(self) -> float:
-        """Profit per tile used."""
-        if self.growth_duration <= 0:
-            return 0.0
-        return self.expected_profit / max(1, self.growth_duration)
-
-    def to_dict(self) -> dict:
-        return {
-            "name": self.name,
-            "total_cost": self.total_cost,
-            "expected_revenue": self.expected_revenue,
-            "expected_profit": self.expected_profit,
-            "roi": self.roi,
-            "profit_per_turn": self.profit_per_turn,
-            "can_complete": self.can_complete,
-            "capital_efficiency": self.capital_efficiency,
-            "growth_duration": self.growth_duration,
-        }
-
-
-# Crop profitability constants from official Kaggriculture rules
-CROP_PARAMS: dict[str, dict] = {
-    "WHEAT": {
-        "seed_cost": 10,
-        "first_yield_day": 2,
-        "max_yield_day": 4,
-        "base_yield": 1,
-        "bonus_yield_per_water": 1,
-        "base_price": 10,
-    },
-    "CARROT": {
-        "seed_cost": 20,
-        "first_yield_day": 3,
-        "max_yield_day": 6,
-        "base_yield": 2,
-        "bonus_yield_per_water": 1,
-        "base_price": 20,
-    },
-    "TOMATO": {
-        "seed_cost": 30,
-        "first_yield_day": 2,
-        "max_yield_day": 8,
-        "base_yield": 1,
-        "ongoing": True,
-        "base_price": 25,
-    },
-    "STRAWBERRY": {
-        "seed_cost": 40,
-        "first_yield_day": 1,
-        "max_yield_day": 6,
-        "base_yield": 1,
-        "ongoing": True,
-        "base_price": 50,
-    },
-    "MELON": {
-        "seed_cost": 50,
-        "first_yield_day": 5,
-        "max_yield_day": 10,
-        "base_yield": 3,
-        "bonus_yield_per_water": 2,
-        "base_price": 80,
-    },
-}
-
-ANIMAL_PARAMS: dict[str, dict] = {
-    "GOOSE": {
-        "purchase_cost": 30,
-        "feed_cost_per_day": 10,  # wheat cost
-        "production_per_day": 1,
-        "product": "EGG",
-        "base_price": 30,
-        "structure": "COOP",
-    },
-    "COW": {
-        "purchase_cost": 50,
-        "feed_cost_per_day": 10,
-        "production_per_day": 1,
-        "product": "MILK",
-        "base_price": 50,
-        "structure": "PASTURE",
-    },
-    "SHEEP": {
-        "purchase_cost": 40,
-        "feed_cost_per_day": 10,
-        "production_per_day": 1,
-        "product": "WOOL",
-        "base_price": 40,
-        "structure": "PASTURE",
-    },
-}
-
-
-def estimate_crop_profitability(
-    crop_type: str,
-    current_day: int,
-    remaining_turns: int,
-    sale_price: int | None = None,
-) -> ProfitabilityEstimate:
-    """Estimate profitability of planting a crop at the current turn."""
-    params = CROP_PARAMS.get(crop_type, CROP_PARAMS["WHEAT"])
-    seed_cost = params["seed_cost"]
-    max_yield_day = params["max_yield_day"]
-    growth_duration = max_yield_day - current_day
-    total_turns = min(growth_duration, remaining_turns)
-
-    base_price = sale_price or params["base_price"]
-    is_ongoing = params.get("ongoing", False)
-
-    if is_ongoing:
-        expected_revenue = base_price * params["base_yield"] * total_turns
-    else:
-        bonus_window_start = (max_yield_day + 1) // 2
-        bonus_days = max(0, max_yield_day - bonus_window_start + 1)
-        expected_yield = params["base_yield"] + bonus_days * params.get("bonus_yield_per_water", 1)
-        expected_revenue = base_price * expected_yield
-
-    return ProfitabilityEstimate(
-        name=f"crop_{crop_type}",
-        seed_cost=float(seed_cost),
-        expected_yield=expected_yield if not is_ongoing else params["base_yield"] * total_turns,
-        expected_sale_price=float(base_price),
-        expected_revenue=float(expected_revenue),
-        growth_duration=growth_duration if not is_ongoing else 1,
-        remaining_season=remaining_turns,
-    )
-
-
-def estimate_animal_profitability(
-    animal_type: str,
-    current_day: int,
-    remaining_turns: int,
-    sale_price: int | None = None,
-) -> ProfitabilityEstimate:
-    """Estimate profitability of purchasing an animal at the current turn."""
-    params = ANIMAL_PARAMS.get(animal_type, ANIMAL_PARAMS["GOOSE"])
-    purchase_cost = params["purchase_cost"]
-    feed_cost = params["feed_cost_per_day"] * remaining_turns
-    base_price = sale_price or params["base_price"]
-    expected_revenue = base_price * params["production_per_day"] * remaining_turns
-
-    return ProfitabilityEstimate(
-        name=f"animal_{animal_type}",
-        seed_cost=float(purchase_cost),
-        feed_cost=float(feed_cost),
-        expected_sale_price=float(base_price),
-        expected_revenue=float(expected_revenue),
-        growth_duration=1,
-        remaining_season=remaining_turns,
-    )
+    def estimate_land_profitability(
+        self,
+        cost: float,
+        additional_capacity: int,
+        expected_revenue_per_turn: float,
+        remaining_turns: int,
+    ) -> ProfitabilityEstimate:
+        total_return = expected_revenue_per_turn * remaining_turns
+        net_return = total_return - cost
+        profit_per_turn = expected_revenue_per_turn
+        capital_efficiency = net_return / max(cost, 0.01)
+        land_efficiency = expected_revenue_per_turn
+        return ProfitabilityEstimate(
+            crop="LAND",
+            seed_cost=0,
+            water_cost=0,
+            fertilizer_cost=0,
+            growth_days=remaining_turns,
+            worker_requirement=0,
+            expected_yield=additional_capacity,
+            expected_sale_price=expected_revenue_per_turn,
+            expected_revenue=total_return,
+            expected_net_profit=net_return,
+            profit_per_turn=profit_per_turn,
+            capital_efficiency=capital_efficiency,
+            land_efficiency=land_efficiency,
+        )
