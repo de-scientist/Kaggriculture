@@ -1,135 +1,85 @@
-"""Stage 2 — Price Forecasting.
-
-Simple, conservative price forecasting using moving averages and
-exponential smoothing. All forecasts use only historical data available
-at or before the current turn (no future leakage).
-"""
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Any
 
-from agent.market.price_tracker import PriceHistory
+from agent.market.price_tracker import PriceTracker
 
 
 @dataclass
 class PriceForecast:
-    """Forecasted price with confidence."""
-
-    product: str
-    expected_price: float
+    predicted_price: float
     confidence: float
-    lower_bound: float
-    upper_bound: float
-    trend: str  # "rising", "falling", "stable"
-    method: str
+    predicted_range: tuple[float, float]
+    forecast_date: str
 
 
 class PriceForecaster:
-    """Forecasts future prices using simple, conservative methods.
+    """Simple price forecasting using moving average and trend estimation."""
 
-    Supports:
-    - Simple moving average (default)
-    - Exponential smoothing
-    - Linear trend estimation
-    """
+    def __init__(self):
+        self._window = 5
+        self._trend_window = 10
 
-    def __init__(self, lookback: int = 10, smoothing_alpha: float = 0.3) -> None:
-        self._lookback = lookback
-        self._alpha = smoothing_alpha
+    def forecast(
+        self,
+        current_prices: dict[str, int],
+        history: dict[str, list[float]],
+    ) -> dict[str, PriceForecast]:
+        forecasts: dict[str, PriceForecast] = {}
+        for product, current_price in current_prices.items():
+            hist = history.get(product, [])
+            if len(hist) < 2:
+                forecasts[product] = PriceForecast(
+                    predicted_price=float(current_price),
+                    confidence=0.5,
+                    predicted_range=(float(current_price) - 1, float(current_price) + 1),
+                    forecast_date="unknown",
+                )
+                continue
 
-    def forecast(self, history: PriceHistory | None) -> PriceForecast | None:
-        """Forecast the next price for a product.
+            recent = hist[-self._window:]
+            if len(recent) < 2:
+                forecasts[product] = PriceForecast(
+                    predicted_price=float(current_price),
+                    confidence=0.5,
+                    predicted_range=(float(current_price) - 1, float(current_price) + 1),
+                    forecast_date="unknown",
+                )
+                continue
 
-        Returns None if insufficient history.
-        """
-        if history is None or history.count() < 2:
-            return None
+            moving_avg = sum(recent) / len(recent)
+            trend = sum(hist[-self._trend_window:]) / min(len(hist), self._trend_window) - moving_avg
 
-        prices = history.prices_list()
-        recent = prices[-self._lookback:] if len(prices) >= 2 else prices
+            predicted = float(moving_avg) + trend * 0.5
+            confidence = self._compute_confidence(hist)
+            predicted_range = (
+                max(1.0, predicted - 2.0 * confidence),
+                predicted + 2.0 * confidence,
+            )
 
-        forecast_price = self._moving_average(recent)
-        trend = self._detect_trend(prices)
-        confidence = self._compute_confidence(len(prices), trend, recent)
-        lower, upper = self._compute_bounds(recent, confidence)
+            forecasts[product] = PriceForecast(
+                predicted_price=round(predicted, 1),
+                confidence=confidence,
+                predicted_range=(round(predicted_range[0], 1), round(predicted_range[1], 1)),
+                forecast_date="current",
+            )
 
-        return PriceForecast(
-            product=history.product,
-            expected_price=forecast_price,
-            confidence=confidence,
-            lower_bound=lower,
-            upper_bound=upper,
-            trend=trend,
-            method="moving_average",
-        )
+        return forecasts
 
-    def exponential_smooth(
-        self, history: PriceHistory | None
-    ) -> PriceForecast | None:
-        """Forecast using exponential smoothing."""
-        if history is None or history.count() < 2:
-            return None
+    def _compute_confidence(self, history: list[float]) -> float:
+        if len(history) < 5:
+            return 0.5
+        recent = history[-10:]
+        avg = sum(recent) / len(recent)
+        variance = sum((x - avg) ** 2 for x in recent) / len(recent)
+        return max(0.0, min(1.0, 1.0 - variance / 100.0))
 
-        prices = history.prices_list()
-        if len(prices) < 2:
-            return self.forecast(history)
-
-        smoothed = prices[0]
-        for p in prices[1:]:
-            smoothed = self._alpha * p + (1 - self._alpha) * smoothed
-
-        trend = self._detect_trend(prices)
-        confidence = self._compute_confidence(len(prices), trend, prices)
-        lower = smoothed * 0.8
-        upper = smoothed * 1.2
-
-        return PriceForecast(
-            product=history.product,
-            expected_price=smoothed,
-            confidence=confidence,
-            lower_bound=lower,
-            upper_bound=upper,
-            trend=trend,
-            method="exponential_smoothing",
-        )
-
-    def _moving_average(self, prices: list[float]) -> float:
-        if not prices:
-            return 0.0
-        return sum(prices) / len(prices)
-
-    def _detect_trend(self, prices: list[float]) -> str:
-        if len(prices) < 3:
-            return "stable"
-
-        recent = prices[-5:] if len(prices) >= 5 else prices
-        first = recent[0]
-        last = recent[-1]
-        diff = last - first
-
-        if abs(diff) < 0.5:
-            return "stable"
-        return "rising" if diff > 0 else "falling"
-
-    def _compute_confidence(
-        self, n: int, trend: str, prices: list[float]
-    ) -> float:
-        if not prices:
-            return 0.0
-        base = min(1.0, n / self._lookback)
-        if trend == "stable":
-            base *= 0.8
-        else:
-            base *= 0.6
-        return max(0.1, min(1.0, base))
-
-    def _compute_bounds(
-        self, prices: list[float], confidence: float
-    ) -> tuple[float, float]:
-        if not prices:
-            return 0.0, 0.0
-        avg = sum(prices) / len(prices)
-        volatility = max(prices) - min(prices)
-        spread = volatility * (1.0 - confidence)
-        return avg - spread, avg + spread
+    def update_history(
+        self,
+        product: str,
+        new_price: int,
+        history: list[float],
+    ) -> list[float]:
+        history.append(float(new_price))
+        return history[-20:]
