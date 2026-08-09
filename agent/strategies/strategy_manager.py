@@ -1,19 +1,21 @@
 from __future__ import annotations
 
-from agent.decision.candidate_actions import CandidateAction
-from agent.decision.decision_context import DecisionContext
+from agent.strategies.strategy import Strategy
 from agent.strategies.baseline_strategy import BaselineStrategy
 from agent.strategies.economic_strategy import EconomicStrategy
-from agent.strategies.strategy import ScoredAction, Strategy
+from agent.strategies.market_strategy import MarketAwareStrategy
+from agent.strategies.planning_strategy import PlanningStrategy
+from agent.strategies.competitive_strategy import CompetitiveStrategy
+from agent.strategies.strategy_manager import StrategyManager
 
-_STRATEGIES: dict[str, type[Strategy]] = {
+
+_STRATEGIES = {
     "baseline": BaselineStrategy,
     "economic": EconomicStrategy,
+    "market_aware": MarketAwareStrategy,
+    "planning": PlanningStrategy,
+    "competitive": CompetitiveStrategy,
 }
-
-
-def register_strategy(name: str, cls: type[Strategy]) -> None:
-    _STRATEGIES[name] = cls
 
 
 def get_strategy(name: str) -> Strategy:
@@ -21,16 +23,16 @@ def get_strategy(name: str) -> Strategy:
     return cls()
 
 
-def list_strategies() -> list[str]:
+def is_registered(name: str) -> bool:
+    return name in _STRATEGIES
+
+
+def names() -> list[str]:
     return list(_STRATEGIES.keys())
 
 
-def evaluate_all(
-    context: DecisionContext,
-    actions: list[CandidateAction],
-) -> dict[str, list[ScoredAction]]:
-    results: dict[str, list[ScoredAction]] = {}
-    for name, cls in _STRATEGIES.items():
-        strategy = cls()
-        results[name] = strategy.evaluate(context, actions)
-    return results
+def validate(name: str) -> bool:
+    cls = _STRATEGIES.get(name)
+    if cls is None:
+        return False
+    return issubclass(cls, Strategy)
