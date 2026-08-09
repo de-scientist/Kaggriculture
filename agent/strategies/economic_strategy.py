@@ -10,12 +10,14 @@ from typing import Any
 
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
+from agent.decision.candidate_actions import ScoredAction
 from agent.economics.economic_state import EconomicEvaluator
-from agent.economics.profit_model import ProfitabilityEstimate, estimate_crop_profitability
+from agent.economics.profit_model import ProfitabilityEstimate
 from agent.market.market_intelligence import MarketIntelligenceEngine
 from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation
 from agent.optimization.animal_optimizer import AnimalOptimizer
 from agent.optimization.land_optimizer import LandOptimizer
+from agent.optimization.worker_optimizer import WorkerOptimizer
 from agent.optimization.resource_optimizer import ResourceOptimizer
 from agent.planning.planner import Planner, PlannerConfig
 from agent.strategies.baseline_strategy import BaselineStrategy
@@ -44,13 +46,14 @@ class EconomicStrategy(Strategy):
         self._crop_opt = CropOptimizer()
         self._animal_opt = AnimalOptimizer()
         self._land_opt = LandOptimizer()
+        self._worker_opt = WorkerOptimizer()
         self._resource_opt = ResourceOptimizer()
-        self._planner = Planner(config=PlannerConfig(
-            horizon_turns=5,
-            max_rollouts=10,
-            max_branching=8,
-            enable_planning=True,
-        ))
+        self._planner = Planner(config={
+            "horizon_turns": 5,
+            "max_rollouts": 10,
+            "max_branching": 8,
+            "enable_planning": True,
+        })
 
     def evaluate(
         self,
@@ -61,7 +64,6 @@ class EconomicStrategy(Strategy):
         try:
             return self._economic_evaluate(context, actions)
         except Exception:
-            # Fallback to baseline strategy
             return self._baseline.evaluate(context, actions)
 
     def _economic_evaluate(
@@ -73,13 +75,10 @@ class EconomicStrategy(Strategy):
         if game_state is None:
             return self._baseline.evaluate(context, actions)
 
-        # Update market intelligence
         self._update_market_intelligence(context)
 
-        # Build economic state
         econ_state = self._economic.evaluate(game_state)
 
-        # Evaluate each action with economic context
         scored: list[ScoredAction] = []
         for action in actions:
             baseline_score, baseline_explanation = score_action(action)
@@ -105,12 +104,10 @@ class EconomicStrategy(Strategy):
             )
             scored.append(ScoredAction(action, total_score, explanation))
 
-        # Sort by score descending, with priority tie-break
         scored.sort(key=lambda s: (-s.score, get_priority(s.action.action_type), s.action.id))
         return scored
 
     def _update_market_intelligence(self, context: DecisionContext) -> None:
-        """Update market intelligence with current observation data."""
         obs = context.obs
         if not obs or "market" not in obs:
             return
@@ -126,9 +123,8 @@ class EconomicStrategy(Strategy):
         self,
         action: CandidateAction,
         context: DecisionContext,
-        econ_state: Any,
+        econ_state: EconomicState,
     ) -> float:
-        """Calculate economic bonus for an action."""
         action_type = action.action_type
         bonus = 0.0
 
@@ -138,7 +134,6 @@ class EconomicStrategy(Strategy):
             market_prices = self._get_market_prices(context)
             seeds = context.game_state.private.get("seeds", {}) if context.game_state else {}
 
-            market = self._market_intel
             best_crop: CropRecommendation | None = None
             try:
                 best_crop = self._crop_opt.optimal_crop(
@@ -146,7 +141,7 @@ class EconomicStrategy(Strategy):
                     remaining_turns=remaining_turns,
                     market_prices=market_prices,
                     available_seeds=seeds,
-                    available_cash=econ_state.available_capital,
+                    available_cash=econ_state.cash,
                     planted_tiles={},
                 )
             except Exception:
@@ -156,14 +151,14 @@ class EconomicStrategy(Strategy):
                 bonus += best_crop.score * 0.1
 
         if action_type in ("sell",):
-            bonus += 5.0  # selling frees capital
+            bonus += 5.0
 
         if action_type in ("buy_land",):
             farm_profit = econ_state.expected_profit
-            tiles = getattr(econ_state, "land_tiles", 0)
+            tiles = 25
             land_rec = self._land_opt.evaluate_expansion(
                 available_cash=econ_state.cash,
-                unlocked_quadrants=getattr(econ_state, "land_tiles", 0),
+                unlocked_quadrants=econ_state.unlocked_quadrants,
                 remaining_turns=econ_state.remaining_turns,
                 farm_profit_per_turn=farm_profit,
                 tile_count=tiles,
@@ -174,7 +169,6 @@ class EconomicStrategy(Strategy):
         return bonus
 
     def _market_bonus(self, action: CandidateAction, context: DecisionContext) -> float:
-        """Calculate market intelligence bonus."""
         action_type = action.action_type
         bonus = 0.0
 
@@ -187,13 +181,13 @@ class EconomicStrategy(Strategy):
                     intel = self._market_intel.get_intelligence(
                         item, prices.get(item, 1), shed.get(item, 0)
                     )
-                    if intel.is_sell_opportunity:
+                    if intel.get("is_sell_opportunity", False):
                         bonus += 10.0
                     else:
-                        bonus += 1.0  # still sell to avoid capacity issues
+                        bonus += 1.0
 
         if action_type in ("buy_seed", "buy_animal", "buy_product"):
-            bonus += 2.0  # purchasing supports production pipeline
+            bonus += 2.0
 
         return bonus
 
@@ -201,38 +195,37 @@ class EconomicStrategy(Strategy):
         self,
         action: CandidateAction,
         context: DecisionContext,
-        econ_state: Any,
+        econ_state: EconomicState,
     ) -> float:
-        """Calculate planning/forward-looking bonus."""
         action_type = action.action_type
         bonus = 0.0
 
-        # Actions that unlock future value
         if action_type in ("plant",):
-            bonus += 8.0  # sets up future harvest
+            bonus += 8.0
         if action_type in ("buy_land",):
-            bonus += 5.0  # long-term capacity
+            bonus += 5.0
         if action_type in ("build_coop", "build_pasture"):
-            bonus += 3.0  # enables animal production
+            bonus += 3.0
         if action_type in ("buy_animal",):
-            bonus += 2.0  # enables production pipeline
+            bonus += 2.0
 
-        # Time pressure in endgame
         if econ_state.remaining_turns < 100 and action_type in ("harvest", "sell"):
-            bonus += 15.0  # liquidate before end
+            bonus += 15.0
 
         return bonus
 
-    def _risk_penalty(self, action: CandidateAction, econ_state: Any) -> float:
-        """Calculate risk penalty for an action."""
+    def _risk_penalty(
+        self,
+        action: CandidateAction,
+        econ_state: EconomicState,
+    ) -> float:
         penalty = 0.0
         action_type = action.action_type
 
         if action.estimated_cost > econ_state.available_capital:
-            penalty += 50.0  # unaffordable
+            penalty += 50.0
 
         if econ_state.remaining_turns < 50 and action_type in ("plant", "buy_animal", "buy_land"):
-            # High-risk investments in endgame
             payback = getattr(action, "estimated_cost", 0) / max(1, getattr(action, "estimated_reward", 1))
             if payback > econ_state.remaining_turns:
                 penalty += 20.0
@@ -243,4 +236,7 @@ class EconomicStrategy(Strategy):
         market = context.game_state.market if context.game_state else None
         if market and hasattr(market, "prices"):
             return dict(market.prices)
+        obs = context.obs
+        if "market" in obs:
+            return obs.get("market", {}).get("prices", {})
         return {}
