@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
-
 from agent.decision.candidate_actions import CandidateAction
+from agent.decision.decision_context import DecisionContext
+from agent.decision.action_generator import generate_candidates
+from agent.decision.action_ranker import rank
+from agent.decision.action_validator import validate_actions, validate_action
+from agent.decision.strategy import Strategy
+from agent.strategies.strategy_manager import StrategyManager
+from agent.strategies.baseline_strategy import BaselineStrategy
 from agent.economics.economic_state import EconomicEvaluator
 from agent.economics.profit_model import ProfitabilityEstimate
 from agent.market.market_intelligence import MarketIntelligenceEngine
@@ -16,13 +20,10 @@ from agent.planning.planner import Planner
 from agent.planning.rollout import RolloutEngine
 from agent.simulation.simulator import SimulationEngine
 from agent.strategies.adaptive_strategy import AdaptiveStrategyController
-from agent.strategies.strategy_manager import StrategyManager
-from agent.economics.economic_state import EconomicState
+from agent.strategies.economic_strategy import EconomicStrategy
 from agent.economics.opportunity_cost import OpportunityCostEngine
 from agent.economics.capital_allocation import CapitalAllocator
-from agent.market.price_tracker import PriceTracker
-from agent.market.price_forecaster import PriceForecaster
-from agent.market.demand_model import DemandModel
+from agent.economics.economic_state import EconomicState
 
 
 def decide(context: DecisionContext) -> dict[str, Any]:
@@ -106,7 +107,7 @@ def decide(context: DecisionContext) -> dict[str, Any]:
             )
 
         with _timed_span(tracer, trace, "validate"):
-            validated = action_validator.validate_actions(filtered, game_state)
+            validated = validate_actions(filtered, game_state)
             trace_record.record_validation(validated)
             if any(not v.is_valid for v in validated):
                 telemetry.record_failed_validation()
