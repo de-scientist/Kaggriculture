@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
-
-from agent.decision.candidate_actions import CandidateAction
 
 
 @dataclass(frozen=True)
