@@ -14,6 +14,7 @@ from agent.economics.profit_model import (
     CROP_PARAMS,
     ANIMAL_PARAMS,
     ProfitabilityEstimate,
+    ProfitabilityEngine,
     estimate_animal_profitability,
     estimate_crop_profitability,
 )
@@ -26,6 +27,7 @@ __all__ = [
     "CapitalAllocation",
     "CapitalAllocator",
     "ProfitabilityEstimate",
+    "ProfitabilityEngine",
     "CROP_PARAMS",
     "ANIMAL_PARAMS",
     "estimate_crop_profitability",
