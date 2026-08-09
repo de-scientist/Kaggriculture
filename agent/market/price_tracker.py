@@ -3,22 +3,19 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from agent.market.price_tracker import PriceTracker
+
+@dataclass
+class PriceSnapshot:
+    product: str
+    price: int
+    turn: int
+    timestamp: float
 
 
 @dataclass
-class MarketSnapshot:
+class PriceHistory:
     product: str
-    current_price: int
-    previous_price: int
-    moving_average: float
-    price_change: int
-    price_change_rate: float
-    volatility: float
-    demand: int
-    supply: int
-    trend: str
-    regime: str
+    snapshots: list[PriceSnapshot] = field(default_factory=list)
 
 
 class PriceTracker:
@@ -35,14 +32,19 @@ class PriceTracker:
 
     def __init__(self, window: int = 10):
         self._history: dict[str, list[int]] = {}
+        self._snapshots: dict[str, PriceHistory] = {}
         self._window = window
 
-    def update(self, product: str, price: int) -> None:
+    def update(self, product: str, price: int, turn: int = 0) -> None:
         if product not in self._history:
             self._history[product] = []
+            self._snapshots[product] = PriceHistory(product=product)
         self._history[product].append(price)
         if len(self._history[product]) > self._window:
             self._history[product] = self._history[product][-self._window:]
+        self._snapshots[product].snapshots.append(
+            PriceSnapshot(product=product, price=price, turn=turn, timestamp=0.0)
+        )
 
     def get_current_price(self, product: str) -> int | None:
         history = self._history.get(product, [])
@@ -58,12 +60,12 @@ class PriceTracker:
             return None
         return sum(history) / len(history)
 
-    def get_price_change(self, product: str) -> int | None:
+    def get_price_change(self, product: str) -> int:
         current = self.get_current_price(product)
         prev = self.get_previous_price(product)
-        if current is None or prev is None:
+        if current is None:
             return 0
-        return current - prev
+        return current - (prev or current)
 
     def get_price_change_rate(self, product: str) -> float:
         current = self.get_current_price(product)
@@ -82,3 +84,6 @@ class PriceTracker:
 
     def get_all_prices(self, product: str) -> list[int]:
         return list(self._history.get(product, []))
+
+    def get_history(self, product: str) -> PriceHistory | None:
+        return self._snapshots.get(product)

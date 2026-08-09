@@ -3,15 +3,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from agent.market.price_tracker import PriceTracker
-
 
 @dataclass
 class PriceForecast:
+    product: str
     predicted_price: float
     confidence: float
     predicted_range: tuple[float, float]
     forecast_date: str
+    model: str = "moving_average"
 
 
 class PriceForecaster:
@@ -31,6 +31,7 @@ class PriceForecaster:
             hist = history.get(product, [])
             if len(hist) < 2:
                 forecasts[product] = PriceForecast(
+                    product=product,
                     predicted_price=float(current_price),
                     confidence=0.5,
                     predicted_range=(float(current_price) - 1, float(current_price) + 1),
@@ -39,15 +40,6 @@ class PriceForecaster:
                 continue
 
             recent = hist[-self._window:]
-            if len(recent) < 2:
-                forecasts[product] = PriceForecast(
-                    predicted_price=float(current_price),
-                    confidence=0.5,
-                    predicted_range=(float(current_price) - 1, float(current_price) + 1),
-                    forecast_date="unknown",
-                )
-                continue
-
             moving_avg = sum(recent) / len(recent)
             trend = sum(hist[-self._trend_window:]) / min(len(hist), self._trend_window) - moving_avg
 
@@ -59,6 +51,7 @@ class PriceForecaster:
             )
 
             forecasts[product] = PriceForecast(
+                product=product,
                 predicted_price=round(predicted, 1),
                 confidence=confidence,
                 predicted_range=(round(predicted_range[0], 1), round(predicted_range[1], 1)),
