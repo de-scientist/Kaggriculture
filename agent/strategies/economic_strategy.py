@@ -10,7 +10,7 @@ from typing import Any
 
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
-from agent.decision.candidate_actions import ScoredAction
+from agent.strategies.strategy import ScoredAction, Strategy
 from agent.economics.economic_state import EconomicEvaluator
 from agent.economics.profit_model import ProfitabilityEstimate
 from agent.market.market_intelligence import MarketIntelligenceEngine
