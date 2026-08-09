@@ -1,19 +1,14 @@
-"""Stage 2 — Capital Allocation Engine.
-
-Decides how to allocate scarce cash among competing uses:
-seeds, animals, feed, fertilizer, workers, land, or reserve.
-"""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
-from agent.economics.opportunity_cost import OpportunityCost
+from agent.economics.economic_state import EconomicState
+from agent.economics.profit_model import ProfitabilityEstimate
 
 
-@dataclass(frozen=True)
+@dataclass
 class CapitalAllocation:
-    """Result of a capital allocation decision."""
-
     category: str
     amount: float
     expected_roi: float
@@ -22,27 +17,24 @@ class CapitalAllocation:
     description: str = ""
 
 
-@dataclass
 class CapitalAllocator:
-    """Allocates cash toward the highest expected strategic value."""
+    """Allocates cash toward the highest expected strategic value.
+
+    Allocates capital among: seeds, animals, feed, fertilizer, workers, land, or reserve.
+    """
 
     min_cash_reserve: float = 500.0
-    land_costs: dict[str, int] = None  # type: ignore[assignment]
+    land_costs: dict[str, int] = field(default_factory=lambda: {"NE": 1000, "SW": 2000, "SE": 4000})
 
-    def __post_init__(self) -> None:
-        if self.land_costs is None:
-            self.land_costs = {"NE": 1000, "SW": 2000, "SE": 4000}
+    def __init__(self):
+        self._logger = None
 
     def allocate(
         self,
         available_cash: float,
         opportunities: list[CapitalAllocation],
     ) -> list[CapitalAllocation]:
-        """Rank opportunities by expected ROI and allocate capital.
-
-        Returns the highest-value opportunities that fit within
-        available_cash after reserving min_cash_reserve.
-        """
+        """Rank opportunities by expected ROI and allocate capital."""
         reserve = self.min_cash_reserve
         spendable = max(0.0, available_cash - reserve)
 
