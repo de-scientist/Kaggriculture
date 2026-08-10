@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-
-def parse_player(obs: dict) -> dict:
-    return {"player": obs["player"]}
+from typing import Any
 
 
-def parse_farm_layout(obs: dict) -> list:
-    player = obs["player"]
-    return obs["farms"][player]["tiles"]
+def parse_player(obs: dict[str, Any]) -> int:
+    return int(obs["player"])
 
 
-def parse_worker_positions(obs: dict) -> dict:
-    player = obs["player"]
+def parse_farm_layout(obs: dict[str, Any]) -> list[list[Any]]:
+    player = int(obs["player"])
+    tiles = obs["farms"][player]["tiles"]
+    return [[tile for tile in row] for row in tiles]
+
+
+def parse_worker_positions(obs: dict[str, Any]) -> dict[str, list[Any]]:
+    player = int(obs["player"])
     farm = obs["farms"][player]
     return {
         "farmer": farm.get("farmer", [0, 0]),
@@ -19,38 +22,38 @@ def parse_worker_positions(obs: dict) -> dict:
     }
 
 
-def parse_inventory(obs: dict) -> dict:
-    return obs["private"].get("shed", {})
+def parse_inventory(obs: dict[str, Any]) -> dict[str, Any]:
+    return dict(obs["private"].get("shed", {}))
 
 
-def parse_seeds(obs: dict) -> dict:
-    return obs["private"].get("seeds", {})
+def parse_seeds(obs: dict[str, Any]) -> dict[str, Any]:
+    return dict(obs["private"].get("seeds", {}))
 
 
-def parse_market(obs: dict) -> dict:
+def parse_market(obs: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {
-        "inventory": obs["market"].get("inventory", {}),
-        "prices": obs["market"].get("prices", {}),
+        "inventory": dict(obs["market"].get("inventory", {})),
+        "prices": dict(obs["market"].get("prices", {})),
     }
 
 
-def parse_town(obs: dict) -> dict:
+def parse_town(obs: dict[str, Any]) -> dict[str, list[Any]]:
     return {
-        "unlocked_shops": obs["town"].get("unlocked_shops", []),
+        "unlocked_shops": list(obs["town"].get("unlocked_shops", [])),
     }
 
 
-def parse_season(obs: dict) -> dict:
+def parse_season(obs: dict[str, Any]) -> dict[str, int]:
     return {
-        "day": obs["day"],
-        "hour": obs["hour"],
-        "step": obs["step"],
+        "day": int(obs["day"]),
+        "hour": int(obs["hour"]),
+        "step": int(obs["step"]),
     }
 
 
-def parse_crops(obs: dict) -> list:
+def parse_crops(obs: dict[str, Any]) -> list[dict[str, Any]]:
     tiles = parse_farm_layout(obs)
-    crops = []
+    crops: list[dict[str, Any]] = []
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
             if isinstance(tile, dict) and tile.get("kind") == "PLANT":
@@ -69,9 +72,9 @@ def parse_crops(obs: dict) -> list:
     return crops
 
 
-def parse_animals(obs: dict) -> list:
+def parse_animals(obs: dict[str, Any]) -> list[dict[str, Any]]:
     tiles = parse_farm_layout(obs)
-    animals = []
+    animals: list[dict[str, Any]] = []
     for y, row in enumerate(tiles):
         for x, tile in enumerate(row):
             if isinstance(tile, dict) and tile.get("kind") in ("COOP", "PASTURE"):
