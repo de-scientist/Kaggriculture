@@ -2,8 +2,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent.optimization.animal_optimizer import AnimalOptimizer
 from agent.economics.profit_model import ProfitabilityEstimate
+
+
+@dataclass
+class AnimalRecommendation:
+    animal_type: str
+    score: float
+    expected_profit: float = 0.0
+    expected_cost: float = 0.0
+    time_to_payback: float = 0.0
 
 
 class AnimalOptimizer:
