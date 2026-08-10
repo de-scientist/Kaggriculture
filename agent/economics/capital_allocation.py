@@ -23,10 +23,13 @@ class CapitalAllocator:
     Allocates capital among: seeds, animals, feed, fertilizer, workers, land, or reserve.
     """
 
-    min_cash_reserve: float = 500.0
-    land_costs: dict[str, int] = field(default_factory=lambda: {"NE": 1000, "SW": 2000, "SE": 4000})
-
-    def __init__(self):
+    def __init__(
+        self,
+        min_cash_reserve: float = 500.0,
+        land_costs: dict[str, int] | None = None,
+    ) -> None:
+        self.min_cash_reserve = min_cash_reserve
+        self.land_costs: dict[str, int] = land_costs or {"NE": 1000, "SW": 2000, "SE": 4000}
         self._logger = None
 
     def allocate(
