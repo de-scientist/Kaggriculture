@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
-from agent.optimization.resource_optimizer import ResourceOptimizer
+
+@dataclass
+class Bottleneck:
+    resource: str
+    current_value: int
+    capacity: int
+    constraint_score: float
+    upgrade_cost: float
+    upgrade_value: float
 
 
 class ResourceOptimizer:

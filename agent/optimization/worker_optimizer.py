@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
-from agent.optimization.worker_optimizer import WorkerOptimizer
+
+@dataclass
+class WorkerTask:
+    task_type: str
+    priority: int
+    estimated_time: int
+    estimated_profit: float
+    deadline: int
+    worker_type: str = ""
 
 
 class WorkerOptimizer:

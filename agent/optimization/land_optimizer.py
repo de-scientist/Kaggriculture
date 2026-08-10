@@ -1,8 +1,20 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
-from agent.optimization.land_optimizer import LandOptimizer
+
+@dataclass
+class LandInvestment:
+    quadrant: str
+    cost: float
+    additional_capacity: int
+    expected_revenue_per_turn: float
+    expected_profit_per_turn: float
+    remaining_turns: int
+    roi: float
+    payback_turns: float
+    confidence: float
 
 
 class LandOptimizer:
