@@ -49,11 +49,11 @@ def build_care() -> list[str]:
     return ["CARE"]
 
 
-def build_pickup(item: str, count: int = 1) -> list[str]:
+def build_pickup(item: str, count: int = 1) -> list[str | int]:
     return ["PICKUP", item, count]
 
 
-def build_place(item: str, count: int = 1) -> list[str]:
+def build_place(item: str, count: int = 1) -> list[str | int]:
     return ["PLACE", item, count]
 
 
@@ -61,19 +61,19 @@ def build_drop() -> list[str]:
     return ["DROP"]
 
 
-def build_buy_seed(crop: str, count: int) -> list[str]:
+def build_buy_seed(crop: str, count: int) -> list[str | int]:
     return ["BUY_SEED", crop, count]
 
 
-def build_buy_product(item: str, count: int) -> list[str]:
+def build_buy_product(item: str, count: int) -> list[str | int]:
     return ["BUY_PRODUCT", item, count]
 
 
-def build_buy_animal(animal: str, count: int) -> list[str]:
+def build_buy_animal(animal: str, count: int) -> list[str | int]:
     return ["BUY_ANIMAL", animal, count]
 
 
-def build_sell(item: str, count: int) -> list[str]:
+def build_sell(item: str, count: int) -> list[str | int]:
     return ["SELL", item, count]
 
 
