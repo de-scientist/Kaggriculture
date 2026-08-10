@@ -120,7 +120,7 @@ class CompetitiveDecisionMaker:
         self,
         my_state: Any,
         context: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         return {
             "action": "cash_preservation",
             "strategy": "defensive",
