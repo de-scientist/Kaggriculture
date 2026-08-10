@@ -21,7 +21,7 @@ class CashRecord:
     potential_wealth: float
 
 
-def _reserved_amount(capital_requirements: float | dict) -> float:
+def _reserved_amount(capital_requirements: float | dict[str, Any]) -> float:
     """Extract the reserved portion of capital requirements."""
     if isinstance(capital_requirements, dict):
         return float(capital_requirements.get("reserved", 0.0))
