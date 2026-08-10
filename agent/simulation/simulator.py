@@ -50,7 +50,7 @@ class SimulationEngine:
     ) -> SimulationState:
         return SimulationState(
             state=initial_state,
-            action=action,
+            action=action or {},
             next_state=initial_state,
             trajectory=[],
             expected_profit=0.0,

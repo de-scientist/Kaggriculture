@@ -1,4 +1,7 @@
-def create_worker(position: list) -> dict:
+from typing import Any
+
+
+def create_worker(position: list[int]) -> dict[str, Any]:
     return {"position": position, "inventory": {}, "busy": False}
 
 
