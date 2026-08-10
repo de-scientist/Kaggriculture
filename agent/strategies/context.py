@@ -10,6 +10,6 @@ class StrategyContext:
     step: int = 0
     day: int = 0
     remaining_turns: int = 720
-    market_snapshot: dict = field(default_factory=dict)
-    config: dict = field(default_factory=dict)
-    metrics: dict = field(default_factory=dict)
+    market_snapshot: dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)

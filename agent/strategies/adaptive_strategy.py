@@ -14,7 +14,7 @@ class StrategyMode:
 class AdaptiveStrategyController:
     """Selects strategy mode based on current economic state."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.modes: dict[str, StrategyMode] = {}
         self._current_mode: str = "growth"
         self._min_cash_threshold = 500.0
