@@ -7,4 +7,4 @@ def apply_fertilizer(tile: dict[str, Any], current_day: int) -> dict[str, Any]:
 
 
 def is_fertilized(tile: dict[str, Any], current_day: int) -> bool:
-    return tile.get("fertilized_until_day", -1) >= current_day
+    return int(tile.get("fertilized_until_day", -1)) >= current_day
