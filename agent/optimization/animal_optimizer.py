@@ -121,5 +121,5 @@ class AnimalOptimizer:
         )
         return recs[0] if recs else None
 
-    def set_animal_data(self, animal_type: str, data: dict) -> None:
+    def set_animal_data(self, animal_type: str, data: dict[str, Any]) -> None:
         self._animal_data[animal_type] = data

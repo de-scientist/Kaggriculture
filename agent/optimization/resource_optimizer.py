@@ -28,7 +28,7 @@ class ResourceOptimizer:
     LATE_GAME_THRESHOLD = 100
     ENDGAME_THRESHOLD = 30
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._bottlenecks: dict[str, float] = {}
         self._resource_data: dict[str, Any] = {}
 
@@ -177,5 +177,5 @@ class ResourceOptimizer:
     ) -> Any:
         return None
 
-    def set_resource_data(self, resource: str, data: dict) -> None:
+    def set_resource_data(self, resource: str, data: dict[str, Any]) -> None:
         self._resource_data[resource] = data

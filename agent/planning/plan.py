@@ -21,7 +21,7 @@ class PlanStep:
     params: dict[str, Any] = field(default_factory=dict)
 
     @property
-    def worker_op(self) -> tuple:
+    def worker_op(self) -> tuple[str, ...]:
         if self.action_type in ("plant", "water", "harvest", "fertilize", "dig", "feed", "care"):
             return (self.action_type.upper(),)
         elif self.action_type in ("build_coop", "build_pasture"):
@@ -58,7 +58,7 @@ class Plan:
         self.completion_turns = max(self.completion_turns, step.turn)
 
     @property
-    def first_action(self) -> tuple | None:
+    def first_action(self) -> tuple[str, ...] | None:
         if not self.steps:
             return None
         return self.steps[0].worker_op

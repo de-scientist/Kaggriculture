@@ -44,11 +44,11 @@ class Planner:
     actions exist, it returns a plan containing a single PASS step.
     """
 
-    def __init__(self, config: PlannerConfig | dict | None = None) -> None:
+    def __init__(self, config: PlannerConfig | dict[str, Any] | None = None) -> None:
         self.config = self._coerce_config(config)
 
     @staticmethod
-    def _coerce_config(config: PlannerConfig | dict | None) -> PlannerConfig:
+    def _coerce_config(config: PlannerConfig | dict[str, Any] | None) -> PlannerConfig:
         if config is None:
             return PlannerConfig()
         if isinstance(config, PlannerConfig):
