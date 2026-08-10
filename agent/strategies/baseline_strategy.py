@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from agent.strategies.strategy import Strategy, ScoredAction
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 from agent.strategies.priorities import get_priority
 from agent.strategies.scoring import score_action
+from agent.strategies.strategy import ScoredAction, Strategy
 
 
 class BaselineStrategy(Strategy):

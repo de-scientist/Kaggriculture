@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import Any
 
 from agent.strategies.baseline_strategy import BaselineStrategy
+from agent.strategies.competitive_strategy import CompetitiveStrategy
 from agent.strategies.economic_strategy import EconomicStrategy
 from agent.strategies.market_strategy import MarketAwareStrategy
 from agent.strategies.planning_strategy import PlanningStrategy
-from agent.strategies.competitive_strategy import CompetitiveStrategy
 from agent.strategies.strategy import Strategy
-from agent.strategies.strategy_registry import register, get, names, is_registered, validate
+from agent.strategies.strategy_registry import register
 
 _STRATEGIES: dict[str, type[Strategy]] = {
     "baseline": BaselineStrategy,

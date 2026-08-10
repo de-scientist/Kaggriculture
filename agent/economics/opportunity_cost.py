@@ -59,7 +59,7 @@ class OpportunityCostEngine:
             return OpportunityCost(
                 label=f"land_{quadrant}",
                 cost=land_cost,
-                description=f"Cost of land purchase with no expected return",
+                description="Cost of land purchase with no expected return",
             )
         payback_turns = land_cost / expected_additional_profit
         cost = land_cost if payback_turns > remaining_turns else 0.0

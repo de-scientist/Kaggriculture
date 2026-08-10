@@ -6,24 +6,20 @@ Falls back to Stage 1 baseline behavior on any error.
 """
 from __future__ import annotations
 
-from typing import Any
-
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
-from agent.strategies.strategy import ScoredAction, Strategy
 from agent.economics.economic_state import EconomicEvaluator, EconomicState
-from agent.economics.profit_model import ProfitabilityEstimate
 from agent.market.market_intelligence import MarketIntelligenceEngine
-from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation
 from agent.optimization.animal_optimizer import AnimalOptimizer
+from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation
 from agent.optimization.land_optimizer import LandOptimizer
-from agent.optimization.worker_optimizer import WorkerOptimizer
 from agent.optimization.resource_optimizer import ResourceOptimizer
-from agent.planning.planner import Planner, PlannerConfig
+from agent.optimization.worker_optimizer import WorkerOptimizer
+from agent.planning.planner import Planner
 from agent.strategies.baseline_strategy import BaselineStrategy
+from agent.strategies.priorities import get_priority
 from agent.strategies.scoring import score_action
 from agent.strategies.strategy import ScoredAction, Strategy
-from agent.strategies.priorities import get_priority
 
 
 class EconomicStrategy(Strategy):

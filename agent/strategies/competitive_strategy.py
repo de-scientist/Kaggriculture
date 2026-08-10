@@ -6,8 +6,6 @@ are favored. Always falls back to the Stage 1 baseline on any error.
 """
 from __future__ import annotations
 
-from typing import Any
-
 from agent.competition.opponent_model import OpponentModel
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext

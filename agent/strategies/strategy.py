@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 
@@ -18,16 +19,16 @@ class ScoredAction:
         self.score = score
         self.explanation = explanation
 
-    def __lt__(self, other: "ScoredAction") -> bool:
+    def __lt__(self, other: ScoredAction) -> bool:
         return self.score < other.score
 
-    def __le__(self, other: "ScoredAction") -> bool:
+    def __le__(self, other: ScoredAction) -> bool:
         return self.score <= other.score
 
-    def __gt__(self, other: "ScoredAction") -> bool:
+    def __gt__(self, other: ScoredAction) -> bool:
         return self.score > other.score
 
-    def __ge__(self, other: "ScoredAction") -> bool:
+    def __ge__(self, other: ScoredAction) -> bool:
         return self.score >= other.score
 
 

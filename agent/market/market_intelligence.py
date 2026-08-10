@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from agent.market.price_tracker import PriceTracker
-from agent.market.price_forecaster import PriceForecast, PriceForecaster
 from agent.market.demand_model import DemandModel
+from agent.market.price_forecaster import PriceForecast, PriceForecaster
+from agent.market.price_tracker import PriceTracker
 
 
 @dataclass

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 from agent.economics.economic_state import EconomicState
 
@@ -57,7 +56,7 @@ class OpportunityCostEngine:
             return OpportunityCost(
                 label=f"land_{quadrant}",
                 cost=land_cost,
-                description=f"Cost of land purchase with no expected return",
+                description="Cost of land purchase with no expected return",
             )
         payback_turns = land_cost / expected_additional_profit
         cost = land_cost if payback_turns > remaining_turns else 0.0

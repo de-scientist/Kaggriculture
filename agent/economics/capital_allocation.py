@@ -1,10 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
-
-from agent.economics.economic_state import EconomicState
-from agent.economics.profit_model import ProfitabilityEstimate
+from dataclasses import dataclass
 
 
 @dataclass

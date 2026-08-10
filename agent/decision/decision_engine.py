@@ -21,6 +21,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
+from agent.config.settings import Settings
 from agent.decision import (
     action_filter,
     action_generator,
@@ -43,7 +44,6 @@ from agent.observability import (
     get_replay_store,
     get_telemetry,
 )
-from agent.config.settings import Settings
 
 logger = get_logger("agent.decision.engine")
 
@@ -78,7 +78,6 @@ def _seed(config: Any) -> int | None:
 
 
 def _budget(config: Any) -> PerformanceBudget:
-    from agent.config.settings import Settings as _S
 
     s = _normalise_config(config)
     return PerformanceBudget(s.performance if isinstance(config, Settings) else {})
