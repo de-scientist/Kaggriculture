@@ -66,7 +66,10 @@ class OpportunityCostEngine:
         return OpportunityCost(
             label=f"land_{quadrant}",
             cost=cost,
-            description=f"Land {quadrant} payback takes {payback_turns:.1f} turns (remaining: {remaining_turns})",
+            description=(
+                f"Land {quadrant} payback takes {payback_turns:.1f} turns "
+                f"(remaining: {remaining_turns})"
+            ),
         )
 
     def calculate_all(

@@ -69,7 +69,9 @@ class MarketIntelligenceEngine:
         self._last_prices = {product: float(price) for product, price in prices.items()}
         self._last_inventory = dict(inventory)
 
-    def get_intelligence(self, product: str, current_price: int, stock: int = 0) -> MarketIntelligence:
+    def get_intelligence(
+        self, product: str, current_price: int, stock: int = 0
+    ) -> MarketIntelligence:
         history = self._price_tracker.get_history(product)
         forecast = self._price_forecaster.forecast(history) if history else None
         demand_trend = 0.0
