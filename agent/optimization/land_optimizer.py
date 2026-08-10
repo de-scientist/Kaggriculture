@@ -37,8 +37,8 @@ class LandOptimizer:
     * Remaining Turns
     """
 
-    def __init__(self):
-        self._land_data: dict[str, dict] = {}
+    def __init__(self) -> None:
+        self._land_data: dict[str, dict[str, float]] = {}
 
     def evaluate_expansion(
         self,

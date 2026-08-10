@@ -31,8 +31,8 @@ class WorkerOptimizer:
     * Opportunity Cost
     """
 
-    def __init__(self):
-        self._worker_data: dict[str, dict] = {}
+    def __init__(self) -> None:
+        self._worker_data: dict[str, dict[str, Any]] = {}
 
     def assign_tasks(
         self,
@@ -52,7 +52,7 @@ class WorkerOptimizer:
         available_workers: int,
         current_actions: list[str],
         available_turns: int,
-    ) -> dict[str, Any]:
+    ) -> dict[str, Any] | None:
         best = None
         best_score = -float("inf")
         for worker_type, data in self._worker_data.items():
@@ -74,9 +74,9 @@ class WorkerOptimizer:
         available_workers: int,
         current_actions: list[str],
         available_turns: int,
-        data: dict,
+        data: dict[str, Any],
     ) -> float:
         return 0.0
 
-    def set_worker_data(self, worker_type: str, data: dict) -> None:
+    def set_worker_data(self, worker_type: str, data: dict[str, Any]) -> None:
         self._worker_data[worker_type] = data

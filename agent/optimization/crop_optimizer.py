@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from agent.economics.profit_model import CROP_PARAMS
 
@@ -26,8 +27,8 @@ class CropOptimizer:
 
     TURNS_PER_DAY = 24
 
-    def __init__(self):
-        self._crop_data: dict[str, dict] = {}
+    def __init__(self) -> None:
+        self._crop_data: dict[str, dict[str, Any]] = {}
         self._portfolio: list[CropRecommendation] = []
         for crop_type, params in CROP_PARAMS.items():
             self._crop_data[crop_type] = {
@@ -45,7 +46,7 @@ class CropOptimizer:
         market_prices: dict[str, int],
         available_seeds: dict[str, int],
         available_cash: float,
-        planted_tiles: dict | None = None,
+        planted_tiles: dict[Any, Any] | None = None,
     ) -> list[CropRecommendation]:
         planted_tiles = planted_tiles or {}
         results: list[CropRecommendation] = []
@@ -83,7 +84,7 @@ class CropOptimizer:
         market_prices: dict[str, int],
         available_seeds: dict[str, int],
         available_cash: float,
-        planted_tiles: dict,
+        planted_tiles: dict[Any, Any],
     ) -> CropRecommendation | None:
         recs = self.evaluate_planting(
             current_day=current_day,
@@ -116,7 +117,7 @@ class CropOptimizer:
         self._portfolio = portfolio
         return portfolio
 
-    def set_crop_data(self, crop_type: str, data: dict) -> None:
+    def set_crop_data(self, crop_type: str, data: dict[str, Any]) -> None:
         self._crop_data[crop_type] = data
 
     def get_portfolio(self) -> list[CropRecommendation]:
