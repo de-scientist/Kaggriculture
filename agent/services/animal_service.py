@@ -25,7 +25,7 @@ def can_collect(animal: Animal) -> bool:
     return animal.is_alive and animal.fed_today
 
 
-def expected_output(animal: Animal) -> dict:
+def expected_output(animal: Animal) -> dict[str, Any]:
     return {
         "animal_type": animal.animal_type,
         "fed_today": animal.fed_today,
@@ -35,7 +35,7 @@ def expected_output(animal: Animal) -> dict:
     }
 
 
-def production_status(animal: Animal) -> dict:
+def production_status(animal: Animal) -> dict[str, Any]:
     return {
         "animal_type": animal.animal_type,
         "hunger": animal.hunger,
