@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from agent.decision.candidate_actions import CandidateAction
+from agent.decision.decision_context import DecisionContext
 
 
 def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
