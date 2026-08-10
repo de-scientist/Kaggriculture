@@ -87,6 +87,10 @@ class GameState:
     def step(self) -> int:
         return self._step
 
+    @step.setter
+    def step(self, value: int) -> None:
+        self._step = value
+
     @property
     def private(self) -> dict:
         return dict(self._private)
