@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 
@@ -20,7 +22,7 @@ def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
     if not market:
         market = {}
 
-    tiles: dict = {}
+    tiles: dict[Any, Any] = {}
     if farm is not None:
         if isinstance(farm, dict):
             tiles = farm

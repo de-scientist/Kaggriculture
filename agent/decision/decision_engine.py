@@ -67,7 +67,7 @@ def _strategy_name(config: Any) -> str:
     if isinstance(config, Settings):
         return config.strategy_name or "baseline"
     if isinstance(config, dict):
-        return config.get("strategy", {}).get("name", "baseline")
+        return str(config.get("strategy", {}).get("name", "baseline"))
     return "baseline"
 
 
