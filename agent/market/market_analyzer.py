@@ -6,7 +6,7 @@ from typing import Any
 class MarketAnalyzer:
     """Analyzes market trends and conditions."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._window: int = 10
 
     def analyze_trend(

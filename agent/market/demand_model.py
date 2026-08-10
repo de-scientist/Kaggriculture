@@ -39,7 +39,7 @@ class DemandModel:
     Records only observations that have already happened (no future data).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._history: dict[str, DemandHistory] = {}
 
     def record(
