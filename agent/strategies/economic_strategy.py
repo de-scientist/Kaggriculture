@@ -11,7 +11,7 @@ from typing import Any
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
 from agent.strategies.strategy import ScoredAction, Strategy
-from agent.economics.economic_state import EconomicEvaluator
+from agent.economics.economic_state import EconomicEvaluator, EconomicState
 from agent.economics.profit_model import ProfitabilityEstimate
 from agent.market.market_intelligence import MarketIntelligenceEngine
 from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation
@@ -181,7 +181,7 @@ class EconomicStrategy(Strategy):
                     intel = self._market_intel.get_intelligence(
                         item, prices.get(item, 1), shed.get(item, 0)
                     )
-                    if intel.get("is_sell_opportunity", False):
+                    if intel.is_sell_opportunity:
                         bonus += 10.0
                     else:
                         bonus += 1.0

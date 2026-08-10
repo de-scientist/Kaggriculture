@@ -6,12 +6,17 @@ from typing import Any
 
 @dataclass
 class WorkerTask:
-    task_type: str
-    priority: int
-    estimated_time: int
-    estimated_profit: float
-    deadline: int
-    worker_type: str = ""
+    worker_type: str
+    action_type: str
+    position: tuple[int, int]
+    expected_value: float
+    cost: float
+    duration: int
+    description: str = ""
+
+    @property
+    def net_value(self) -> float:
+        return self.expected_value - self.cost
 
 
 class WorkerOptimizer:
@@ -27,7 +32,20 @@ class WorkerOptimizer:
     """
 
     def __init__(self):
-        self._worker_data = {}
+        self._worker_data: dict[str, dict] = {}
+
+    def assign_tasks(
+        self,
+        worker_count: int = 1,
+        available_tasks: list[WorkerTask] | None = None,
+    ) -> list[WorkerTask]:
+        if not available_tasks:
+            return []
+        ranked = sorted(available_tasks, key=lambda t: (-t.net_value, t.duration, t.description))
+        return ranked[: max(0, worker_count)]
+
+    def priority_ranking(self, task: WorkerTask) -> int:
+        return task.duration
 
     def optimize(
         self,

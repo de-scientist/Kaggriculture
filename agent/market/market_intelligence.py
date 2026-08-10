@@ -1,52 +1,54 @@
 from __future__ import annotations
 
-from typing import Any
+from dataclasses import dataclass
 
-from agent.market.price_tracker import PriceTracker, PriceHistory, PriceSnapshot
-from agent.market.price_forecaster import PriceForecaster, PriceForecast
-from agent.market.demand_model import DemandModel, DemandSignal, DemandHistory
-from agent.market.market_snapshot import MarketSnapshot
-from agent.market.market_analyzer import MarketAnalyzer
+from agent.market.price_tracker import PriceTracker
+from agent.market.price_forecaster import PriceForecast, PriceForecaster
+from agent.market.demand_model import DemandModel
 
 
+@dataclass
 class MarketIntelligence:
-    """Container for market intelligence."""
+    """Per-product market intelligence for a single decision point."""
 
-    def __init__(self):
-        self.prices: dict[str, int] = {}
-        self.inventory: dict[str, int] = {}
-        self.price_history: dict[str, list[float]] = {}
-        self.demand_signals: dict[str, int] = {}
-        self.supply_signals: dict[str, int] = {}
-        self.forecasts: dict[str, PriceForecast] = {}
-        self.regimes: dict[str, str] = {}
+    product: str
+    current_price: float
+    forecast: PriceForecast | None = None
+    demand_trend: float = 0.0
+    demand_strength: float = 0.5
+    inventory: int = 0
+
+    @property
+    def is_sell_opportunity(self) -> bool:
+        if self.forecast is None:
+            return True
+        return self.current_price >= self.forecast.expected_price * (1.0 + self.demand_trend * 0.01)
+
+    @property
+    def is_buy_opportunity(self) -> bool:
+        if self.forecast is None:
+            return False
+        return self.current_price < self.forecast.expected_price * (1.0 - self.demand_trend * 0.01)
+
+    @property
+    def confidence(self) -> float:
+        if self.forecast is None:
+            return 0.3
+        return self.forecast.confidence
 
 
 class MarketIntelligenceEngine:
     """Market intelligence engine for tracking and analyzing market conditions.
 
-    Tracks:
-    * Price history
-    * Sales history
-    * Demand signals
-    * Supply signals
-    * Price changes
-    * Trend
-    * Volatility
+    Only observes data up to the current turn; forecasts never use future data.
     """
 
     def __init__(self):
         self._price_tracker = PriceTracker()
         self._price_forecaster = PriceForecaster()
         self._demand_model = DemandModel()
-        self._market_analyzer = MarketAnalyzer()
-        self._price_history: dict[str, list[float]] = {}
-        self._sales_history: dict[str, list[int]] = {}
-        self._demand_signals: dict[str, int] = {}
-        self._supply_signals: dict[str, int] = {}
-        self._market_regime: dict[str, str] = {}
-        self._snapshots: list[MarketSnapshot] = []
-        self._forecasts: dict[str, PriceForecast] = {}
+        self._last_prices: dict[str, float] = {}
+        self._last_inventory: dict[str, int] = {}
 
     def update(
         self,
@@ -54,101 +56,68 @@ class MarketIntelligenceEngine:
         prices: dict[str, int],
         inventory: dict[str, int],
     ) -> None:
-        """Update market intelligence with current observation data."""
-        for product, price in prices.items():
-            self._price_tracker.update(product, price, turn)
-            self._price_history.setdefault(product, []).append(float(price))
-            if len(self._price_history[product]) > 50:
-                self._price_history[product] = self._price_history[product][-50:]
-            self._sales_history.setdefault(product, []).append(0)
-
-        if prices:
-            self._snapshots.append(
-                MarketSnapshot(
-                    timestamp=turn,
-                    inventory=dict(inventory),
-                    prices=dict(prices),
-                )
+        self._price_tracker.record(turn=turn, prices=prices, inventory=inventory)
+        if self._last_inventory:
+            self._demand_model.record(
+                turn=turn,
+                prev_inventory=self._last_inventory,
+                curr_inventory=inventory,
+                prev_prices=self._last_prices,
+                curr_prices=prices,
+                sales={},
             )
-            if len(self._snapshots) > 50:
-                self._snapshots = self._snapshots[-50:]
+        self._last_prices = {product: float(price) for product, price in prices.items()}
+        self._last_inventory = dict(inventory)
 
-        for product, count in inventory.items():
-            self._supply_signals.setdefault(product, 0)
-            self._supply_signals[product] = count
-
-        if self._price_history:
-            for product in self._price_history:
-                prices_list = self._price_history[product]
-                if len(prices_list) >= 5:
-                    regime = self._market_analyzer.detect_regime(prices_list)
-                    self._market_regime[product] = regime
-
-        forecasts = self._price_forecaster.forecast(
-            current_prices=prices,
-            history=self._price_history,
+    def get_intelligence(self, product: str, current_price: int, stock: int = 0) -> MarketIntelligence:
+        history = self._price_tracker.get_history(product)
+        forecast = self._price_forecaster.forecast(history) if history else None
+        demand_trend = 0.0
+        demand = self._demand_model.get(product)
+        if demand is not None:
+            demand_trend = demand.demand_trend()
+        return MarketIntelligence(
+            product=product,
+            current_price=float(current_price),
+            forecast=forecast,
+            demand_trend=demand_trend,
+            demand_strength=0.5,
+            inventory=stock,
         )
-        self._forecasts = forecasts
 
-    def get_intelligence(
+    def get_all_intelligence(
         self,
-        product: str,
-        current_price: int,
-        stock: int,
-    ) -> dict[str, Any]:
-        """Return market intelligence for a product."""
-        history = self._price_history.get(product, [])
+        prices: dict[str, int],
+        inventory: dict[str, int],
+    ) -> dict[str, MarketIntelligence]:
         return {
-            "current_price": current_price,
-            "price_history": history,
-            "moving_average": sum(history[-10:]) / min(10, len(history[-10:])) if history else float(current_price),
-            "price_change": self._price_tracker.get_price_change(product) or 0,
-            "price_change_rate": self._price_tracker.get_price_change_rate(product),
-            "volatility": self._price_tracker.get_volatility(product),
-            "is_sell_opportunity": self._is_sell_opportunity(product, current_price),
-            "demand_signal": self._demand_signals.get(product, 0),
-            "supply_signal": self._supply_signals.get(product, 0),
-            "market_regime": self._market_regime.get(product, "stable"),
-            "forecast": self._forecasts.get(product),
+            product: self.get_intelligence(product, price, inventory.get(product, 0))
+            for product, price in prices.items()
         }
 
-    def _is_sell_opportunity(
-        self,
-        product: str,
-        current_price: int,
-    ) -> bool:
-        history = self._price_history.get(product, [])
-        if len(history) < 5:
-            return current_price > 0
-        moving_avg = sum(history[-5:]) / len(history[-5:])
-        return current_price > moving_avg
+    def sell_recommendation(self, product: str, current_price: int, quantity: int) -> bool:
+        return self.get_intelligence(product, current_price).is_sell_opportunity and quantity > 0
 
-    def _get_floor_price(self, product: str) -> int:
-        return 1
+    def buy_recommendation(self, product: str, current_price: int, quantity: int) -> bool:
+        return self.get_intelligence(product, current_price).is_buy_opportunity and quantity > 0
 
-    def classify_regime(self, product: str) -> str:
-        history = self._price_history.get(product, [])
-        if len(history) < 5:
-            return "unknown"
-        recent = history[-10:]
-        avg_recent = sum(recent) / len(recent)
-        if len(history) >= 30 and avg_recent > 100:
-            return "bullish"
-        elif len(history) >= 30 and avg_recent < 10:
-            return "weak"
-        elif len(history) >= 30 and self._is_volatile(history):
-            return "volatile"
-        return "stable"
-
-    def _is_volatile(self, history: list[float]) -> bool:
-        if len(history) < 5:
-            return False
-        mean = sum(history) / len(history)
-        variance = sum((x - mean) ** 2 for x in history) / len(history)
-        return variance > 100
-
-    def get_current_price(self, product: str) -> int:
-        return self._price_tracker.get_current_price(product) or 1
+    def products_tracked(self) -> list[str]:
+        return self._price_tracker.products_tracked()
 
     def get_forecast(self, product: str) -> PriceForecast | None:
-        return self._forecasts.get(product)
+        history = self._price_tracker.get_history(product)
+        if history is None:
+            return None
+        return self._price_forecaster.forecast(history)
+
+    def get_current_price(self, product: str) -> int:
+        history = self._price_tracker.get_history(product)
+        if history is None or history.current_price() is None:
+            return 1
+        return int(history.current_price())
+
+    def reset(self) -> None:
+        self._price_tracker.reset()
+        self._demand_model.reset()
+        self._last_prices = {}
+        self._last_inventory = {}

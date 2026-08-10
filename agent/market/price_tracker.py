@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 
 @dataclass
 class PriceSnapshot:
     product: str
-    price: int
+    price: float
     turn: int
-    timestamp: float
+    inventory: int = 0
 
 
 @dataclass
@@ -17,73 +16,56 @@ class PriceHistory:
     product: str
     snapshots: list[PriceSnapshot] = field(default_factory=list)
 
+    def add(self, snapshot: PriceSnapshot) -> None:
+        self.snapshots.append(snapshot)
+
+    def count(self) -> int:
+        return len(self.snapshots)
+
+    def current_price(self) -> float | None:
+        if not self.snapshots:
+            return None
+        return float(self.snapshots[-1].price)
+
+    def prices_list(self) -> list[float]:
+        return [float(s.price) for s in self.snapshots]
+
 
 class PriceTracker:
-    """Tracks price history for products.
+    """Tracks price history for products across turns.
 
-    Tracks:
-    * Current Price
-    * Previous Price
-    * Moving Average
-    * Price Change
-    * Price Change Rate
-    * Volatility
+    Records one snapshot per product per turn, in strict turn order.
     """
 
-    def __init__(self, window: int = 10):
-        self._history: dict[str, list[int]] = {}
-        self._snapshots: dict[str, PriceHistory] = {}
+    def __init__(self, window: int = 20):
         self._window = window
+        self._histories: dict[str, PriceHistory] = {}
 
-    def update(self, product: str, price: int, turn: int = 0) -> None:
-        if product not in self._history:
-            self._history[product] = []
-            self._snapshots[product] = PriceHistory(product=product)
-        self._history[product].append(price)
-        if len(self._history[product]) > self._window:
-            self._history[product] = self._history[product][-self._window:]
-        self._snapshots[product].snapshots.append(
-            PriceSnapshot(product=product, price=price, turn=turn, timestamp=0.0)
-        )
+    def record(self, turn: int, prices: dict[str, int], inventory: dict[str, int]) -> None:
+        for product, price in prices.items():
+            history = self._histories.setdefault(product, PriceHistory(product=product))
+            history.add(
+                PriceSnapshot(
+                    product=product,
+                    price=float(price),
+                    turn=turn,
+                    inventory=inventory.get(product, 0),
+                )
+            )
+            if history.count() > self._window:
+                history.snapshots = history.snapshots[-self._window:]
 
-    def get_current_price(self, product: str) -> int | None:
-        history = self._history.get(product, [])
-        return history[-1] if history else None
-
-    def get_previous_price(self, product: str) -> int | None:
-        history = self._history.get(product, [])
-        return history[-2] if len(history) >= 2 else None
-
-    def get_moving_average(self, product: str) -> float | None:
-        history = self._history.get(product, [])
-        if not history:
-            return None
-        return sum(history) / len(history)
-
-    def get_price_change(self, product: str) -> int:
-        current = self.get_current_price(product)
-        prev = self.get_previous_price(product)
-        if current is None:
-            return 0
-        return current - (prev or current)
-
-    def get_price_change_rate(self, product: str) -> float:
-        current = self.get_current_price(product)
-        prev = self.get_previous_price(product)
-        if prev is None or prev == 0:
-            return 0.0
-        return (current - prev) / abs(prev) * 100.0
-
-    def get_volatility(self, product: str) -> float:
-        history = self._history.get(product, [])
-        if len(history) < 2:
-            return 0.0
-        mean = sum(history) / len(history)
-        variance = sum((x - mean) ** 2 for x in history) / len(history)
-        return (variance ** 0.5) / mean if mean > 0 else 0.0
-
-    def get_all_prices(self, product: str) -> list[int]:
-        return list(self._history.get(product, []))
+    def products_tracked(self) -> list[str]:
+        return sorted(self._histories.keys())
 
     def get_history(self, product: str) -> PriceHistory | None:
-        return self._snapshots.get(product)
+        return self._histories.get(product)
+
+    def current_prices(self) -> dict[str, float]:
+        return {
+            product: history.current_price() or 0.0
+            for product, history in self._histories.items()
+        }
+
+    def reset(self) -> None:
+        self._histories.clear()
