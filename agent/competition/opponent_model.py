@@ -97,7 +97,7 @@ class CompetitiveDecisionMaker:
         my_state: Any,
         opponent_state: Any,
         context: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         if self._opponent_model is None:
             return self._absolute_optimization(my_state, context)
 
