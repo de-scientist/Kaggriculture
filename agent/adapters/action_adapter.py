@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import time
 
+from typing import Any
+
 from agent.adapters import validators
 from agent.utilities.logging import get_logger
 
@@ -9,7 +11,7 @@ logger = get_logger("agent.adapters.action")
 
 
 class ActionAdapter:
-    def convert(self, domain_action: dict) -> dict:
+    def convert(self, domain_action: dict[str, Any]) -> dict[str, Any]:
         start = time.perf_counter()
         logger.info("Converting domain action: %s", domain_action)
 
@@ -29,7 +31,7 @@ class ActionAdapter:
         logger.info("Action converted in %.2f ms", elapsed_ms)
         return kaggle_action
 
-    def _convert_farmer_op(self, op: list) -> list:
+    def _convert_farmer_op(self, op: list[Any]) -> list[Any]:
         if not isinstance(op, list) or len(op) == 0:
             return ["PASS"]
         valid_actions = {
@@ -58,12 +60,12 @@ class ActionAdapter:
             return ["PASS"]
         return op
 
-    def _convert_hand_op(self, op: list) -> list:
+    def _convert_hand_op(self, op: list[Any]) -> list[Any]:
         if not isinstance(op, list) or len(op) == 0:
             return ["PASS"]
         return op
 
-    def _convert_market_op(self, op: list) -> list:
+    def _convert_market_op(self, op: list[Any]) -> list[Any]:
         if not isinstance(op, list) or len(op) == 0:
             return []
         valid_actions = {

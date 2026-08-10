@@ -20,7 +20,7 @@ logger = get_logger("agent.adapters.observation")
 
 
 class ObservationAdapter:
-    def parse(self, obs: dict) -> gs_domain.GameState:
+    def parse(self, obs: dict[str, Any]) -> gs_domain.GameState:
         start = time.perf_counter()
         logger.info(
             "Parsing observation for player %s at step %s",
@@ -85,8 +85,8 @@ class ObservationAdapter:
         logger.info("Observation parsed in %.2f ms", elapsed_ms)
         return game_state
 
-    def _build_tiles(self, obs: dict) -> dict:
-        tiles: dict = {}
+    def _build_tiles(self, obs: dict[str, Any]) -> dict[Position, Any]:
+        tiles: dict[Position, Any] = {}
         player = obs["player"]
         farm_data = obs["farms"][player]
         for y, row in enumerate(farm_data.get("tiles", [])):
