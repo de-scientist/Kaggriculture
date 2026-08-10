@@ -19,10 +19,10 @@ class DecisionTrace:
     strategy_name: str = "baseline"
     player: int = 0
     observation_id: str = ""
-    economic_state: dict = field(default_factory=dict)
-    candidates: list[dict] = field(default_factory=list)
-    forecasts: dict = field(default_factory=dict)
-    expected_values: dict = field(default_factory=dict)
+    economic_state: dict[str, Any] = field(default_factory=dict)
+    candidates: list[dict[str, Any]] = field(default_factory=list)
+    forecasts: dict[str, Any] = field(default_factory=dict)
+    expected_values: dict[str, Any] = field(default_factory=dict)
     risk: float = 0.0
     strategy: str = "baseline"
     planning_depth: int = 0
@@ -75,10 +75,10 @@ class DecisionTraceManager:
     def record(
         self,
         observation_id: str = "",
-        economic_state: dict | None = None,
-        candidates: list[dict] | None = None,
-        forecasts: dict | None = None,
-        expected_values: dict | None = None,
+        economic_state: dict[str, Any] | None = None,
+        candidates: list[dict[str, Any]] | None = None,
+        forecasts: dict[str, Any] | None = None,
+        expected_values: dict[str, Any] | None = None,
         risk: float = 0.0,
         strategy: str = "baseline",
         planning_depth: int = 0,
