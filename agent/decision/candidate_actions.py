@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -12,8 +13,8 @@ class CandidateAction:
     worker: str = ""
     estimated_cost: float = 0.0
     estimated_reward: float = 0.0
-    metadata: dict = field(default_factory=dict)
-    strategy_annotations: dict = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    strategy_annotations: dict[str, Any] = field(default_factory=dict)
 
     @property
     def net_value(self) -> float:

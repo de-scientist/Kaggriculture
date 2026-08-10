@@ -6,7 +6,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class DecisionContext:
-    obs: dict
+    obs: dict[str, Any]
     player: int
     game_state: Any = None
     config: Any = field(default_factory=dict)
