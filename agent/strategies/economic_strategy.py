@@ -77,7 +77,7 @@ class EconomicStrategy(Strategy):
 
         scored: list[ScoredAction] = []
         for action in actions:
-            baseline_score, baseline_explanation = score_action(action)
+            baseline_score, _ = score_action(action)
             economic_bonus = self._economic_bonus(action, context, econ_state)
             market_bonus = self._market_bonus(action, context)
             plan_bonus = self._planning_bonus(action, context, econ_state)
@@ -222,7 +222,9 @@ class EconomicStrategy(Strategy):
             penalty += 50.0
 
         if econ_state.remaining_turns < 50 and action_type in ("plant", "buy_animal", "buy_land"):
-            payback = getattr(action, "estimated_cost", 0) / max(1, getattr(action, "estimated_reward", 1))
+            cost = getattr(action, "estimated_cost", 0)
+            reward = getattr(action, "estimated_reward", 1)
+            payback = cost / max(1, reward)
             if payback > econ_state.remaining_turns:
                 penalty += 20.0
 
