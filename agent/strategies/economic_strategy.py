@@ -4,6 +4,7 @@ An adaptive economic strategy that evaluates actions based on expected
 profitability, market conditions, opportunity costs, and multi-turn plans.
 Falls back to Stage 1 baseline behavior on any error.
 """
+
 from __future__ import annotations
 
 from agent.decision.candidate_actions import CandidateAction
@@ -44,12 +45,14 @@ class EconomicStrategy(Strategy):
         self._land_opt = LandOptimizer()
         self._worker_opt = WorkerOptimizer()
         self._resource_opt = ResourceOptimizer()
-        self._planner = Planner(config={
-            "horizon_turns": 5,
-            "max_rollouts": 10,
-            "max_branching": 8,
-            "enable_planning": True,
-        })
+        self._planner = Planner(
+            config={
+                "horizon_turns": 5,
+                "max_rollouts": 10,
+                "max_branching": 8,
+                "enable_planning": True,
+            }
+        )
 
     def evaluate(
         self,
@@ -83,13 +86,7 @@ class EconomicStrategy(Strategy):
             plan_bonus = self._planning_bonus(action, context, econ_state)
             risk_penalty = self._risk_penalty(action, econ_state)
 
-            total_score = (
-                baseline_score
-                + economic_bonus
-                + market_bonus
-                + plan_bonus
-                - risk_penalty
-            )
+            total_score = baseline_score + economic_bonus + market_bonus + plan_bonus - risk_penalty
 
             explanation = (
                 f"baseline={baseline_score:.2f}, "

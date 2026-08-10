@@ -3,6 +3,7 @@
 A plan is a sequence of actions with an expected value estimate.
 Plans are constructed by the planner and consumed by the decision engine.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

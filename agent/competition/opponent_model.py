@@ -4,6 +4,7 @@ Models legally observable opponent state (wealth, expansion, production) using
 only information exposed by the official observation. Never accesses hidden
 state and never uses future information.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -40,7 +41,7 @@ class OpponentModel:
             }
         )
         if len(self._snapshots) > self._max_snapshots:
-            self._snapshots = self._snapshots[-self._max_snapshots:]
+            self._snapshots = self._snapshots[-self._max_snapshots :]
 
     @property
     def latest(self) -> dict[str, Any] | None:
@@ -57,7 +58,7 @@ class OpponentModel:
     def estimate_wealth_growth(self, window: int = 5) -> float | None:
         if len(self._snapshots) < 2:
             return None
-        recent = self._snapshots[-max(2, window):]
+        recent = self._snapshots[-max(2, window) :]
         with_money = [s["money"] for s in recent if s["money"] is not None]
         if len(with_money) < 2:
             return None

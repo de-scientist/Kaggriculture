@@ -53,7 +53,7 @@ class PriceTracker:
                 )
             )
             if history.count() > self._window:
-                history.snapshots = history.snapshots[-self._window:]
+                history.snapshots = history.snapshots[-self._window :]
 
     def products_tracked(self) -> list[str]:
         return sorted(self._histories.keys())
@@ -63,8 +63,7 @@ class PriceTracker:
 
     def current_prices(self) -> dict[str, float]:
         return {
-            product: history.current_price() or 0.0
-            for product, history in self._histories.items()
+            product: history.current_price() or 0.0 for product, history in self._histories.items()
         }
 
     def reset(self) -> None:

@@ -85,11 +85,7 @@ class AnimalOptimizer:
             productions = max(0.0, remaining_days / interval)
             expected_revenue = price * productions
             feed = str(data["feed"])
-            feed_cost = (
-                float(data["feed_quantity"])
-                * remaining_days
-                * market_prices.get(feed, 0)
-            )
+            feed_cost = float(data["feed_quantity"]) * remaining_days * market_prices.get(feed, 0)
             expected_cost = cost + feed_cost
             expected_profit = expected_revenue - expected_cost
             score = expected_profit / max(remaining_turns, 1)

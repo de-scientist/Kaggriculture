@@ -1,4 +1,5 @@
 """Stage 2 — Optimization module exports."""
+
 from __future__ import annotations
 
 from agent.optimization.animal_optimizer import AnimalOptimizer, AnimalRecommendation

@@ -1,4 +1,5 @@
 """Stage 2 — Economic module exports."""
+
 from __future__ import annotations
 
 from agent.economics.capital_allocation import (

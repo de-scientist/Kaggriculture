@@ -4,6 +4,7 @@ Adjusts action rankings based on observable opponent state. When leading,
 low-risk actions are favored; when trailing, higher-upside production actions
 are favored. Always falls back to the Stage 1 baseline on any error.
 """
+
 from __future__ import annotations
 
 from agent.competition.opponent_model import OpponentModel
@@ -30,9 +31,7 @@ class CompetitiveStrategy(Strategy):
             self._update_opponent_model(context)
             scored = self._baseline.evaluate(context, actions)
             adjusted = [self._adjust(sa, context) for sa in scored]
-            adjusted.sort(
-                key=lambda s: (-s.score, get_priority(s.action.action_type), s.action.id)
-            )
+            adjusted.sort(key=lambda s: (-s.score, get_priority(s.action.action_type), s.action.id))
             return adjusted
         except Exception:
             return self._baseline.evaluate(context, actions)

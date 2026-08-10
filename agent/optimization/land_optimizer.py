@@ -112,8 +112,7 @@ class LandOptimizer:
             can_afford=True,
             confidence=confidence,
             reason=(
-                f"Expected {expected_additional_profit:.1f}/turn, "
-                f"payback {payback_turns:.1f} turns"
+                f"Expected {expected_additional_profit:.1f}/turn, payback {payback_turns:.1f} turns"
             ),
         )
 

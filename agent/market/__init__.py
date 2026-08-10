@@ -1,4 +1,5 @@
 """Stage 2 — Market Intelligence module exports."""
+
 from __future__ import annotations
 
 from agent.market.demand_model import DemandHistory, DemandModel, DemandSignal

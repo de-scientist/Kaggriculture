@@ -5,6 +5,7 @@ actions against the current economic state. The planner never consumes future
 information: every step is derived from the supplied game state and candidate
 actions available at the current turn.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

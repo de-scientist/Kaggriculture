@@ -1,4 +1,5 @@
 """Stage 2 — Opportunity Cost Engine."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -106,9 +106,8 @@ class PerformanceBudget:
             )
         critical = self._failure_ms is not None and duration_ms >= self._failure_ms
         warning = (
-            (self._warning_ms is not None and duration_ms >= self._warning_ms)
-            or duration_ms > budget
-        )
+            self._warning_ms is not None and duration_ms >= self._warning_ms
+        ) or duration_ms > budget
         if critical:
             status = BudgetStatus.CRITICAL
         elif warning:

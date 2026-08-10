@@ -5,6 +5,7 @@ crop or animal investment from the current turn. All estimates are based on
 the static crop/animal parameter tables and the current day only — never on
 future market or game data.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

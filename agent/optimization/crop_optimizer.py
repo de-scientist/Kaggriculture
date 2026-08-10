@@ -112,7 +112,7 @@ class CropOptimizer:
             available_cash=available_cash,
             planted_tiles={},
         )
-        portfolio = recs[: max_plantings]
+        portfolio = recs[:max_plantings]
         self._portfolio = portfolio
         return portfolio
 

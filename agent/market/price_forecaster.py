@@ -31,7 +31,7 @@ class PriceForecaster:
         prices = history.prices_list()
         if len(prices) < 2:
             return None
-        recent = prices[-self._lookback:]
+        recent = prices[-self._lookback :]
         expected_price = mean(recent)
         trend = self._detect_trend(prices)
         confidence = self._compute_confidence(prices)

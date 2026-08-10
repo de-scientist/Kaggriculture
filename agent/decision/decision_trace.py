@@ -46,8 +46,7 @@ class DecisionTrace:
 
     def record_ranking(self, scored: list[Any]) -> None:
         self.expected_values = {
-            getattr(s.action, "id", str(i)): getattr(s, "score", 0.0)
-            for i, s in enumerate(scored)
+            getattr(s.action, "id", str(i)): getattr(s, "score", 0.0) for i, s in enumerate(scored)
         }
 
     def record_final(self, selected: Any) -> None:
