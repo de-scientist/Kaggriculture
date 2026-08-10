@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from agent.decision.candidate_actions import CandidateAction
+
 
 @dataclass(frozen=True)
 class ValidationResult:
