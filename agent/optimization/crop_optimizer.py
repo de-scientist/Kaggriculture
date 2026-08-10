@@ -6,6 +6,15 @@ from typing import Any
 from agent.economics.profit_model import ProfitabilityEstimate
 
 
+@dataclass
+class CropRecommendation:
+    crop_type: str
+    score: float
+    expected_profit: float = 0.0
+    expected_cost: float = 0.0
+    time_to_harvest: int = 0
+
+
 class CropOptimizer:
     """Optimizes crop portfolio selection.
 
