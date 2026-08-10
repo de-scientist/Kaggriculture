@@ -67,9 +67,9 @@ def get_strategy(name: str) -> Strategy:
 
 def evaluate_all(
     context: Any,
-    actions: list,
-) -> dict[str, list]:
-    results = {}
+    actions: list[Any],
+) -> dict[str, list[Any]]:
+    results: dict[str, list[Any]] = {}
     for name, cls in _STRATEGIES.items():
         strategy = cls()
         results[name] = strategy.evaluate(context, actions)
@@ -80,6 +80,6 @@ def list_strategies() -> list[str]:
     return list(_STRATEGIES.keys())
 
 
-def register_strategy(name: str, cls: type) -> None:
+def register_strategy(name: str, cls: type[Strategy]) -> None:
     _STRATEGIES[name] = cls
     register(name, cls)
