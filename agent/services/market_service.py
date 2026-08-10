@@ -52,7 +52,7 @@ def best_sell_option(market: Market, products: list[str]) -> tuple[str, Price] |
 
 def best_buy_option(market: Market, products: list[str]) -> tuple[str, Price] | None:
     best_product = None
-    best_price = Price(value=float("inf"))
+    best_price = Price(value=10**9)
     for product in products:
         price = market.current_price(product)
         if price < best_price:
