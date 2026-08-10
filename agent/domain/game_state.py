@@ -112,7 +112,7 @@ class GameState:
     def available_money(self) -> float:
         return self._farm.money
 
-    def available_workers(self) -> list:
+    def available_workers(self) -> list[object]:
         return self._farm.workers
 
     def current_market(self) -> Market:
