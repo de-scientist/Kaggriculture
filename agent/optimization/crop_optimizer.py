@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
-from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation
 from agent.economics.profit_model import ProfitabilityEstimate
 
 
