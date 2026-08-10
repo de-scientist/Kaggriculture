@@ -111,7 +111,10 @@ class LandOptimizer:
             remaining_turns=remaining_turns,
             can_afford=True,
             confidence=confidence,
-            reason=f"Expected {expected_additional_profit:.1f}/turn, payback {payback_turns:.1f} turns",
+            reason=(
+                f"Expected {expected_additional_profit:.1f}/turn, "
+                f"payback {payback_turns:.1f} turns"
+            ),
         )
 
     def set_land_data(self, land_type: str, data: dict) -> None:
