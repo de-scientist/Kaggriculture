@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agent.domain.animal import Animal
+from agent.domain.crop import Crop
 from agent.domain.position import Position
 
 
@@ -10,8 +12,8 @@ class Tile:
         self,
         position: Position,
         terrain: str = "PLAIN",
-        crop: object | None = None,
-        animal: object | None = None,
+        crop: Crop | None = None,
+        animal: Animal | None = None,
         fertility: float = 1.0,
         moisture: float = 0.0,
         owner: int = 0,
