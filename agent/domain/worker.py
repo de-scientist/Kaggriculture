@@ -14,7 +14,7 @@ class Worker:
     ) -> None:
         self._id = worker_id
         self._position = position
-        self._task = None
+        self._task: object | None = None
         self._available = True
         self._remaining_movement = max_movement
 

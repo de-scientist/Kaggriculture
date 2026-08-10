@@ -16,7 +16,7 @@ def serialize_game_state(state: object) -> str:
 
 
 def deserialize_game_state(data: str) -> dict[str, Any]:
-    return json.loads(data)
+    return dict(json.loads(data))
 
 
 def serialize_action(action: dict[str, Any]) -> str:
@@ -24,7 +24,7 @@ def serialize_action(action: dict[str, Any]) -> str:
 
 
 def deserialize_action(data: str) -> dict[str, Any]:
-    return json.loads(data)
+    return dict(json.loads(data))
 
 
 def serialize_market_order(order: list[Any]) -> str:
@@ -32,4 +32,4 @@ def serialize_market_order(order: list[Any]) -> str:
 
 
 def deserialize_market_order(data: str) -> list[Any]:
-    return json.loads(data)
+    return list(json.loads(data))

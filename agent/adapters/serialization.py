@@ -37,4 +37,4 @@ def serialize_action(action: dict[str, Any]) -> str:
 
 
 def deserialize_action(data: str) -> dict[str, Any]:
-    return json.loads(data)
+    return dict(json.loads(data))
