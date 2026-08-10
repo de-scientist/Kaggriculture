@@ -139,7 +139,7 @@ class CompetitiveDecisionMaker:
         self,
         my_state: Any,
         context: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         return {
             "action": "aggressive_production",
             "strategy": "profit",
@@ -151,7 +151,7 @@ class CompetitiveDecisionMaker:
         self,
         my_state: Any,
         context: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         return {
             "action": "balanced",
             "strategy": "balanced",
