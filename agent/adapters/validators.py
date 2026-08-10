@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 REQUIRED_OBSERVATION_FIELDS = [
     "player",
     "step",
@@ -12,18 +14,18 @@ REQUIRED_OBSERVATION_FIELDS = [
 ]
 
 
-def validate_observation_schema(obs: dict) -> None:
+def validate_observation_schema(obs: dict[str, Any]) -> None:
     for field in REQUIRED_OBSERVATION_FIELDS:
         if field not in obs:
             raise KeyError(f"Missing required observation field: {field}")
 
 
-def validate_observation_not_none(obs: dict) -> None:
+def validate_observation_not_none(obs: dict[str, Any] | None) -> None:
     if obs is None:
         raise ValueError("Observation cannot be None")
 
 
-def validate_player_index(obs: dict) -> None:
+def validate_player_index(obs: dict[str, Any]) -> None:
     player = obs.get("player")
     if not isinstance(player, int):
         raise TypeError(f"Player index must be int, got {type(player)}")
@@ -42,14 +44,14 @@ def validate_tile(tile: object, x: int, y: int) -> None:
     raise TypeError(f"Invalid tile type at ({x}, {y}): {type(tile)}")
 
 
-def validate_market_order(order: list) -> None:
+def validate_market_order(order: list[Any]) -> None:
     if not isinstance(order, list):
         raise TypeError(f"Market order must be a list, got {type(order)}")
     if len(order) < 1:
         raise ValueError("Market order cannot be empty")
 
 
-def validate_action_dict(action: dict) -> None:
+def validate_action_dict(action: dict[str, Any]) -> None:
     if not isinstance(action, dict):
         raise TypeError(f"Action must be a dict, got {type(action)}")
     for key in ("hands", "market"):
@@ -57,7 +59,7 @@ def validate_action_dict(action: dict) -> None:
             raise KeyError(f"Action missing required key: {key}")
 
 
-def validate_position(pos: list, board_size: int = 10) -> None:
+def validate_position(pos: list[int], board_size: int = 10) -> None:
     if not isinstance(pos, list) or len(pos) != 2:
         raise ValueError(f"Position must be a list of 2 ints, got {pos}")
     x, y = pos
