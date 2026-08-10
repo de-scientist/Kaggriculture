@@ -58,7 +58,7 @@ def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
         )
 
     # Harvest
-    for pos, tile in (farm or {}).items() if (farm or {}) else []:
+    for pos, tile in tiles.items():
         if isinstance(tile, dict) and tile.get("kind") == "PLANT":
             crop_age = context.day - tile.get("planted_day", context.day)
             if crop_age >= 2:
@@ -72,7 +72,7 @@ def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
                 )
 
     # Water
-    for pos, tile in (farm or {}).items() if (farm or {}) else []:
+    for pos, tile in tiles.items():
         if isinstance(tile, dict) and tile.get("kind") == "PLANT":
             if not tile.get("watered_today", False):
                 candidates.append(
@@ -86,7 +86,7 @@ def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
                 )
 
     # Fertilize
-    for pos, tile in (farm or {}).items() if (farm or {}) else []:
+    for pos, tile in tiles.items():
         if isinstance(tile, dict) and tile.get("kind") == "PLANT":
             if tile.get("consecutive_unwatered", 0) > 0 and tile.get("yield_units", 0) > 0:
                 candidates.append(
