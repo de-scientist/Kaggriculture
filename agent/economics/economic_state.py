@@ -51,9 +51,9 @@ class EconomicState:
     expected_costs: float
     expected_profit: float
     opportunity_costs: dict[str, float]
-    market_conditions: dict | str
+    market_conditions: dict[str, Any] | str
     remaining_turns: int
-    capital_requirements: float | dict
+    capital_requirements: float | dict[str, Any]
     risk_exposure: float
     net_worth: float
     expected_net_worth: float
@@ -64,17 +64,17 @@ class EconomicState:
     market: Market | None = field(default=None)
     town: Any | None = field(default=None)
     season: Season | None = field(default=None)
-    private: dict = field(default_factory=dict)
+    private: dict[str, Any] = field(default_factory=dict)
     unlocked_quadrants: list[str] = field(default_factory=list)
     hires_today: int = 0
     seeds: dict[str, int] = field(default_factory=dict)
     shed: dict[str, int] = field(default_factory=dict)
-    inventories: list[dict] = field(default_factory=list)
-    crops: list[dict] = field(default_factory=list)
-    animals: list[dict] = field(default_factory=list)
-    tiles: dict = field(default_factory=dict)
+    inventories: list[dict[str, Any]] = field(default_factory=list)
+    crops: list[dict[str, Any]] = field(default_factory=list)
+    animals: list[dict[str, Any]] = field(default_factory=list)
+    tiles: dict[Any, Any] = field(default_factory=dict)
     farmer: Any | None = field(default=None)
-    hands: list[list] = field(default_factory=list)
+    hands: list[list[Any]] = field(default_factory=list)
     inventory_value: float = 0.0
     expected_inventory_value: float = 0.0
 
@@ -133,7 +133,7 @@ class EconomicEvaluator:
     current GameState only.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._seed: int = 0
 
     def evaluate(self, game_state: Any) -> EconomicState:

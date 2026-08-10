@@ -9,6 +9,7 @@ future market or game data.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 TURNS_PER_DAY = 24
 
