@@ -43,11 +43,11 @@ class MarketIntelligenceEngine:
     Only observes data up to the current turn; forecasts never use future data.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._price_tracker = PriceTracker()
         self._price_forecaster = PriceForecaster()
         self._demand_model = DemandModel()
-        self._last_prices: dict[str, float] = {}
+        self._last_prices: dict[str, int] = {}
         self._last_inventory: dict[str, int] = {}
 
     def update(

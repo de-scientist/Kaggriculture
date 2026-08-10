@@ -49,16 +49,16 @@ class MarketAnalyzer:
         return 0.0
 
 
-def analyze_trend(snapshots: list) -> dict:
+def analyze_trend(snapshots: list[Any]) -> dict[str, Any]:
     analyzer = MarketAnalyzer()
     return analyzer.analyze_trend(snapshots)
 
 
-def compute_demand(product: str, snapshots: list) -> float:
+def compute_demand(product: str, snapshots: list[Any]) -> float:
     analyzer = MarketAnalyzer()
     return analyzer.compute_demand(product, snapshots)
 
 
-def compute_supply(product: str, snapshots: list) -> float:
+def compute_supply(product: str, snapshots: list[Any]) -> float:
     analyzer = MarketAnalyzer()
     return analyzer.compute_supply(product, snapshots)
