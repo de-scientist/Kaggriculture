@@ -163,7 +163,7 @@ class CompetitiveDecisionMaker:
         self,
         my_state: Any,
         context: Any,
-    ) -> dict:
+    ) -> dict[str, Any]:
         return {
             "action": "absolute",
             "strategy": "absolute_optimization",
