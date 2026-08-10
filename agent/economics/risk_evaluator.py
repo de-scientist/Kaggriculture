@@ -24,7 +24,7 @@ class RiskEvaluator:
     * Risk Penalty
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._risk_weights = {
             "high": 0.3,
             "medium": 0.15,
