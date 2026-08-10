@@ -6,28 +6,28 @@ from typing import Any
 
 @dataclass
 class EconomicEvaluation:
-    net_worth: float
-    expected_wealth: float
-    potential_wealth: float
-    cash: float
-    expected_revenue: float
-    expected_costs: float
-    expected_profit: float
-    opportunity_costs: dict[str, float]
-    market_conditions: str
-    remaining_turns: int
-    capital_requirements: float
-    risk_exposure: float
-    crop_portfolio: list[dict]
-    animal_portfolio: list[dict]
-    land_investment: list[dict]
-    worker_allocation: dict[str, int]
+    net_worth: float = 0.0
+    expected_wealth: float = 0.0
+    potential_wealth: float = 0.0
+    cash: float = 0.0
+    expected_revenue: float = 0.0
+    expected_costs: float = 0.0
+    expected_profit: float = 0.0
+    opportunity_costs: dict[str, float] = field(default_factory=dict)
+    market_conditions: str = "unknown"
+    remaining_turns: int = 0
+    capital_requirements: float = 0.0
+    risk_exposure: float = 0.0
+    crop_portfolio: list[dict[str, Any]] = field(default_factory=list)
+    animal_portfolio: list[dict[str, Any]] = field(default_factory=list)
+    land_investment: list[dict[str, Any]] = field(default_factory=list)
+    worker_allocation: dict[str, int] = field(default_factory=dict)
 
 
 class EconomicEvaluator:
     """Evaluates the economic state of the farm at a given turn."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._crop_optimizer = None
         self._animal_optimizer = None
         self._worker_optimizer = None
