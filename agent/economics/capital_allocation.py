@@ -68,7 +68,10 @@ class CapitalAllocator:
             if cost <= 0 or cash < cost:
                 continue
 
-            payback = cost / expected_profit_per_turn if expected_profit_per_turn > 0 else float("inf")
+            if expected_profit_per_turn > 0:
+                payback = cost / expected_profit_per_turn
+            else:
+                payback = float("inf")
             if payback > remaining_turns:
                 continue
 

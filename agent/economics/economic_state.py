@@ -206,7 +206,7 @@ class EconomicEvaluator:
         crop_capacity = 0
         animal_capacity = 0
         animal_count = 0
-        for pos, tile in tiles.items():
+        for tile in tiles.values():
             if tile is not None:
                 if isinstance(tile, dict):
                     if tile.get("kind") == "PLANT":
@@ -216,11 +216,15 @@ class EconomicEvaluator:
                         if tile.get("animal") is not None:
                             animal_count += 1
 
-        land_tiles = len(tiles) if tiles else len([q for q in unlocked_quadrants if q != "LOCKED"]) * 25
+        unlocked = [q for q in unlocked_quadrants if q != "LOCKED"]
+        land_tiles = len(tiles) if tiles else len(unlocked) * 25
         production_capacity = float(crop_capacity + animal_capacity)
         land_capacity = land_tiles
 
-        remaining_turns = season.remaining_turns if (season and hasattr(season, "remaining_turns")) else 720
+        if season and hasattr(season, "remaining_turns"):
+            remaining_turns = season.remaining_turns
+        else:
+            remaining_turns = 720
 
         net_worth = cash + inventory_value + shed_inventory_value + seed_inventory_value
         expected_net_worth = net_worth
