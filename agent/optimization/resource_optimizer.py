@@ -102,7 +102,10 @@ class ResourceOptimizer:
                 )
             )
 
-        if animal_capacity > 0 and animal_count / animal_capacity > self.ANIMAL_UTILIZATION_THRESHOLD:
+        if (
+            animal_capacity > 0
+            and animal_count / animal_capacity > self.ANIMAL_UTILIZATION_THRESHOLD
+        ):
             ratio = animal_count / animal_capacity
             bottlenecks.append(
                 Bottleneck(
@@ -160,11 +163,9 @@ class ResourceOptimizer:
         available_resources: dict[str, int],
     ) -> str | None:
         bottleneck = None
-        max_bottleneck = 0
         for resource, capacity in available_resources.items():
             if capacity < 10:
                 bottleneck = resource
-                max_bottleneck = capacity
                 break
         return bottleneck
 
