@@ -28,7 +28,7 @@ class DecisionTrace:
     planning_depth: int = 0
     search_nodes: int = 0
     selected_plan: Any = None
-    selected_action: dict | None = None
+    selected_action: dict[str, Any] | None = None
     confidence: float = 0.0
     execution_time_ms: float = 0.0
     timestamp: str = ""
