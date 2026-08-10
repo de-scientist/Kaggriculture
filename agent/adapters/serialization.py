@@ -1,5 +1,4 @@
 import json
-
 from typing import Any
 
 from agent.domain import game_state
