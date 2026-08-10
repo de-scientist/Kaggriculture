@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent.strategies.strategy import Strategy
+from agent.decision.candidate_actions import CandidateAction
+from agent.decision.decision_context import DecisionContext
+from agent.strategies.baseline_strategy import BaselineStrategy
+from agent.strategies.strategy import ScoredAction, Strategy
 
 
 class MarketAwareStrategy(Strategy):
@@ -16,7 +19,7 @@ class MarketAwareStrategy(Strategy):
     - Risk awareness
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._market_intel = None
         self._crop_opt = None
         self._animal_opt = None
@@ -27,7 +30,7 @@ class MarketAwareStrategy(Strategy):
     def evaluate(
         self,
         context: DecisionContext,
-        actions: list[Any],
+        actions: list[CandidateAction],
     ) -> list[ScoredAction]:
         try:
             return self._economic_evaluate(context, actions)
@@ -37,6 +40,6 @@ class MarketAwareStrategy(Strategy):
     def _economic_evaluate(
         self,
         context: DecisionContext,
-        actions: list[Any],
+        actions: list[CandidateAction],
     ) -> list[ScoredAction]:
         return BaselineStrategy().evaluate(context, actions)
