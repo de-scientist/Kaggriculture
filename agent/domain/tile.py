@@ -35,11 +35,11 @@ class Tile:
         return self._terrain
 
     @property
-    def crop(self) -> object | None:
+    def crop(self) -> Crop | None:
         return self._crop
 
     @property
-    def animal(self) -> object | None:
+    def animal(self) -> Animal | None:
         return self._animal
 
     @property
@@ -70,7 +70,7 @@ class Tile:
     def is_buildable(self) -> bool:
         return self.is_empty and self._terrain in ("PLAIN", "GRASS")
 
-    def with_crop(self, crop: object) -> Tile:
+    def with_crop(self, crop: Crop) -> Tile:
         return Tile(
             position=self._position,
             terrain=self._terrain,
@@ -81,7 +81,7 @@ class Tile:
             owner=self._owner,
         )
 
-    def with_animal(self, animal: object) -> Tile:
+    def with_animal(self, animal: Animal) -> Tile:
         return Tile(
             position=self._position,
             terrain=self._terrain,
