@@ -233,5 +233,5 @@ class EconomicStrategy(Strategy):
             return dict(market.prices)
         obs = context.obs
         if "market" in obs:
-            return obs.get("market", {}).get("prices", {})
+            return dict(obs.get("market", {}).get("prices", {}))
         return {}
