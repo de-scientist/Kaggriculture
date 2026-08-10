@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from agent.domain.farm import Farm
 from agent.domain.inventory import Inventory
 from agent.domain.market import Market
@@ -33,7 +35,7 @@ class GameState:
         season: Season | None = None,
         weather: Weather | None = None,
         opponent: Player | None = None,
-        private: dict | None = None,
+        private: dict[str, Any] | None = None,
         step: int = 0,
     ) -> None:
         self._player = player
@@ -92,7 +94,7 @@ class GameState:
         self._step = value
 
     @property
-    def private(self) -> dict:
+    def private(self) -> dict[str, Any]:
         return dict(self._private)
 
     def current_day(self) -> int:
