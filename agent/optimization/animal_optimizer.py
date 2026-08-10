@@ -28,7 +28,7 @@ class AnimalOptimizer:
 
     TURNS_PER_DAY = 24
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._animal_data: dict[str, dict[str, Any]] = {
             "GOOSE": {
                 "purchase_cost": 100.0,

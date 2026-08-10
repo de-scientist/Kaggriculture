@@ -116,5 +116,5 @@ class LandOptimizer:
             ),
         )
 
-    def set_land_data(self, land_type: str, data: dict) -> None:
+    def set_land_data(self, land_type: str, data: dict[str, float]) -> None:
         self._land_data[land_type] = data
