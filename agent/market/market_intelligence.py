@@ -66,7 +66,7 @@ class MarketIntelligenceEngine:
                 curr_prices=prices,
                 sales={},
             )
-        self._last_prices = {product: float(price) for product, price in prices.items()}
+        self._last_prices = dict(prices)
         self._last_inventory = dict(inventory)
 
     def get_intelligence(
@@ -114,9 +114,12 @@ class MarketIntelligenceEngine:
 
     def get_current_price(self, product: str) -> int:
         history = self._price_tracker.get_history(product)
-        if history is None or history.current_price() is None:
+        if history is None:
             return 1
-        return int(history.current_price())
+        current_price = history.current_price()
+        if current_price is None:
+            return 1
+        return int(current_price)
 
     def reset(self) -> None:
         self._price_tracker.reset()
