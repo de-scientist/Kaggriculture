@@ -23,6 +23,13 @@ def generate_candidates(context: DecisionContext) -> list[CandidateAction]:
     if not market:
         market = {}
 
+    tiles: dict = {}
+    if farm is not None:
+        if isinstance(farm, dict):
+            tiles = farm
+        else:
+            tiles = getattr(farm, "tiles", None) or {}
+
     # Market actions
     if market and hasattr(market, "prices"):
         prices = market.prices
