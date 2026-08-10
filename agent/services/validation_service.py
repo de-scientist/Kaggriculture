@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -9,13 +10,13 @@ class ValidationResult:
     errors: list[str]
 
 
-def validate(action: list, game_state: object | None) -> bool:
+def validate(action: list[Any], game_state: object | None) -> bool:
     if not isinstance(action, list) or len(action) == 0:
         return False
     return True
 
 
-def validate_action(action: list, game_state: object | None) -> ValidationResult:
+def validate_action(action: list[Any], game_state: object | None) -> ValidationResult:
     errors: list[str] = []
     if not isinstance(action, list) or len(action) == 0:
         errors.append("Action must be a non-empty list")

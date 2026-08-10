@@ -7,7 +7,7 @@ from typing import Any
 @dataclass
 class SimulationState:
     state: Any
-    action: dict
+    action: dict[str, Any]
     next_state: Any
     trajectory: list[Any]
     expected_profit: float
@@ -20,14 +20,14 @@ class SimulationState:
 class SimulationEngine:
     """Lightweight simulation engine for planning."""
 
-    def __init__(self, config: dict | None = None):
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         self.budget = config.get("budget", 10000) if config else 10000
         self.max_steps = config.get("max_steps", 100) if config else 100
 
     def simulate(
         self,
         initial_state: Any,
-        actions: list[dict],
+        actions: list[dict[str, Any]],
         horizon: int,
     ) -> list[SimulationState]:
         states: list[SimulationState] = []
@@ -45,13 +45,14 @@ class SimulationEngine:
     def _step(
         self,
         initial_state: Any,
-        action: dict | None,
+        action: dict[str, Any] | None,
         horizon: int,
     ) -> SimulationState:
         return SimulationState(
             state=initial_state,
             action=action,
             next_state=initial_state,
+            trajectory=[],
             expected_profit=0.0,
             risk=0.0,
             confidence=0.5,
