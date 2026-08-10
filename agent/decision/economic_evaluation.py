@@ -43,17 +43,7 @@ class EconomicEvaluator:
         farm = game_state.farm if hasattr(game_state, "farm") else None
         inventory = game_state.inventory if hasattr(game_state, "inventory") else None
         market = game_state.market if hasattr(game_state, "market") else None
-        town = game_state.town if hasattr(game_state, "town") else None
         season = game_state.season if hasattr(game_state, "season") else None
-        private = game_state.private if hasattr(game_state, "private") else {}
-        unlocked_quadrants = game_state.unlocked_quadrants if hasattr(game_state, "unlocked_quadrants") else []
-        hires_today = game_state.hires_today if hasattr(game_state, "hires_today") else 0
-        seeds = game_state.private.get("seeds", {}) if hasattr(game_state, "private") else {}
-        shed = game_state.private.get("shed", {}) if hasattr(game_state, "private") else {}
-        inventories = game_state.private.get("inventories", []) if hasattr(game_state, "private") else []
-        tiles = game_state.farm.tiles if hasattr(game_state, "farm") else {}
-        farmer = game_state.farm.farmer if hasattr(game_state, "farm") else None
-        hands = game_state.farm.hands if hasattr(game_state, "farm") else []
 
         cash = farm.money if farm else 3000.0
 
