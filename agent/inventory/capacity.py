@@ -4,7 +4,7 @@ SHEED_CAPACITY = 100
 
 
 def remaining(current: dict[str, Any]) -> int:
-    total = sum(current.values())
+    total = sum(int(v) for v in current.values())
     return max(0, SHEED_CAPACITY - total)
 
 
