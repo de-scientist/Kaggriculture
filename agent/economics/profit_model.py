@@ -47,7 +47,7 @@ class ProfitabilityEstimate:
 
 
 # Crop parameters (seed cost is ``price``; base sale price is ``sell_price``)
-CROP_PARAMS: dict[str, dict] = {
+CROP_PARAMS: dict[str, dict[str, Any]] = {
     "WHEAT": {
         "price": 10,
         "first_yield_day": 2,
@@ -87,7 +87,7 @@ CROP_PARAMS: dict[str, dict] = {
 
 # Animal parameters (purchase cost is ``price``; product base price is
 # ``product_base_price``)
-ANIMAL_PARAMS: dict[str, dict] = {
+ANIMAL_PARAMS: dict[str, dict[str, Any]] = {
     "GOOSE": {
         "price": 30,
         "product": "EGG",
