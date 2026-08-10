@@ -5,7 +5,6 @@ from typing import Any
 from agent.economics.profit_model import ProfitabilityEstimate
 
 
-@dataclass
 class AnimalRecommendation:
     animal_type: str
     score: float
