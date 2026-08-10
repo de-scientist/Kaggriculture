@@ -19,17 +19,17 @@ class RolloutResult:
 class RolloutEngine:
     """Rollout engine for estimating future outcomes of candidate plans."""
 
-    def __init__(self, config: dict | None = None):
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         self.max_rollouts = config.get("max_rollouts", 10) if config else 10
         self.max_branching = config.get("max_branching", 8) if config else 8
 
     def rollouts(
         self,
         current_state: Any,
-        candidate_actions: list[dict],
+        candidate_actions: list[dict[str, Any]],
         horizon: int,
     ) -> list[RolloutResult]:
-        results = []
+        results: list[RolloutResult] = []
         for _ in range(self.max_rollouts):
             result = self._simulate_rollout(
                 current_state=current_state,
@@ -42,7 +42,7 @@ class RolloutEngine:
     def _simulate_rollout(
         self,
         current_state: Any,
-        candidate_actions: list[dict],
+        candidate_actions: list[dict[str, Any]],
         horizon: int,
     ) -> RolloutResult:
         return RolloutResult(
