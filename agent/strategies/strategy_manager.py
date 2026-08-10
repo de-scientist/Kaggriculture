@@ -25,7 +25,7 @@ for name, cls in _STRATEGIES.items():
 class StrategyManager:
     """Manages strategy selection and lifecycle."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._active_strategies: dict[str, Strategy] = {}
         self._current_strategy: str = "baseline"
 

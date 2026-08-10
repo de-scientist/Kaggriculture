@@ -31,7 +31,8 @@ class AdaptiveStrategyController:
         remaining_turns: int,
     ) -> StrategyMode:
         mode = self._current_mode
-        conditions = self.modes.get(mode, {})
+        mode_entry = self.modes.get(mode)
+        conditions = mode_entry.conditions if mode_entry is not None else {}
 
         if remaining_turns < self._endgame_turns:
             mode = "endgame"
