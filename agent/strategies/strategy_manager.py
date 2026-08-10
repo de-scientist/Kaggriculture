@@ -46,7 +46,7 @@ class StrategyManager:
     def list_strategies(self) -> list[str]:
         return list(_STRATEGIES.keys())
 
-    def register_strategy(self, name: str, cls: type) -> None:
+    def register_strategy(self, name: str, cls: type[Strategy]) -> None:
         _STRATEGIES[name] = cls
         register(name, cls)
 
