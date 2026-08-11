@@ -91,6 +91,8 @@ def animal_value(animal: str, prices: Mapping[str, Any]) -> float:
 def plot_value(snapshot: GameSnapshot, settings: RuntimeSettings) -> float:
     """Expected profit of freeing/using one tile with the best crop today."""
     crop = best_crop(snapshot, settings)
+    if crop is None:
+        return 0.0
     day_value = crop_daily_value(crop, snapshot.prices(), snapshot.day)
     return day_value * min(cycle_days(crop), max(1, snapshot.days_left()))
 
@@ -117,7 +119,7 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
     """Build the best task for every owned unlocked tile."""
     tasks: list[Task] = []
     crop = best_crop(snapshot, settings)
-    plant_budget = snapshot.seed_count(crop)
+    plant_budget = snapshot.seed_count(crop) if crop is not None else 0
     prices = snapshot.prices()
 
     cow_pending = _cows_pending(snapshot, settings)
