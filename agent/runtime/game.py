@@ -88,15 +88,23 @@ class GameSnapshot:
         step = _as_int(step_raw, 0)
         day = _as_int(day_raw, 0)
         hour = _as_int(hour_raw, 0)
+        if isinstance(obs, Mapping):
+            tpd = _as_int(obs.get("turnsPerDay", TURNS_PER_DAY_DEFAULT), TURNS_PER_DAY_DEFAULT)
+            steps = _as_int(obs.get("episodeSteps", EPISODE_STEPS_DEFAULT), EPISODE_STEPS_DEFAULT)
+            board = _as_int(obs.get("boardSize", BOARD_SIZE_DEFAULT), BOARD_SIZE_DEFAULT)
+        else:
+            tpd = TURNS_PER_DAY_DEFAULT
+            steps = EPISODE_STEPS_DEFAULT
+            board = BOARD_SIZE_DEFAULT
         return cls(
             obs=obs,
             player=player,
             step=step,
             day=day,
             hour=hour,
-            turns_per_day=_as_int(obs.get("turnsPerDay", TURNS_PER_DAY_DEFAULT), TURNS_PER_DAY_DEFAULT),
-            episode_steps=_as_int(obs.get("episodeSteps", EPISODE_STEPS_DEFAULT), EPISODE_STEPS_DEFAULT),
-            board_size=_as_int(obs.get("boardSize", BOARD_SIZE_DEFAULT), BOARD_SIZE_DEFAULT),
+            turns_per_day=tpd,
+            episode_steps=steps,
+            board_size=board,
             farms=farms,
             market=market,
             town=town,
