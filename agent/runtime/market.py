@@ -90,16 +90,17 @@ def plan_market_orders(snapshot: GameSnapshot, settings: RuntimeSettings) -> lis
     # 3) Buy seeds for the crop we plan to plant (melon gate adapts to the
     #    opponent's melon plantings).
     crop = _planned_crop(snapshot, settings)
-    empty = len(snapshot.empty_tiles())
-    have = snapshot.seed_count(crop)
-    want = min(max(0, empty - have), settings.max_market_buy_seed_units)
-    if want > 0 and len(orders) < cap:
-        seed_cost = int(_planned_crop_seed_cost(crop))
-        affordable = max(0, int((money - reserve) // seed_cost)) if seed_cost > 0 else 0
-        buy = min(want, affordable)
-        if buy > 0:
-            orders.append(["BUY_SEED", crop, buy])
-            money -= seed_cost * buy
+    if crop is not None:
+        empty = len(snapshot.empty_tiles())
+        have = snapshot.seed_count(crop)
+        want = min(max(0, empty - have), settings.max_market_buy_seed_units)
+        if want > 0 and len(orders) < cap:
+            seed_cost = int(_planned_crop_seed_cost(crop))
+            affordable = max(0, int((money - reserve) // seed_cost)) if seed_cost > 0 else 0
+            buy = min(want, affordable)
+            if buy > 0:
+                orders.append(["BUY_SEED", crop, buy])
+                money -= seed_cost * buy
 
     # 4) Animal procurement (opt-in).
     if settings.enable_animals:
