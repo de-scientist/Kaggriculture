@@ -54,6 +54,61 @@
       },
       "note": "smoke test",
       "created_at": 1786485430.1020825
+    },
+    {
+      "model_id": "m1786489001-5be91f",
+      "status": "challenger",
+      "feature_version": 1,
+      "dataset_version": "d1",
+      "metrics": {
+        "value_train_rmse": 1337.0586275876158,
+        "value_val_rmse": 1789.2616068372456,
+        "value_train_r2": 0.930973788032168,
+        "value_val_r2": 0.8518163195759023,
+        "value_train_mae": 941.2757399099936,
+        "value_val_mae": 1392.5967074864955,
+        "value_alpha": 1.0,
+        "policy_train_acc": 0.4722531293463143,
+        "policy_val_acc": 0.47913769123783034,
+        "policy_best_step": 99,
+        "policy_lr": 0.5,
+        "policy_reg": 0.0001,
+        "policy_epochs": 400,
+        "value_test_rmse": 1403.3804257416296,
+        "value_test_r2": 0.8940668899344622,
+        "value_test_mae": 1085.1727597890226,
+        "policy_test_acc": 0.4803894297635605,
+        "policy_test_mean_confidence": 0.4231796951297227,
+        "dataset_version": "d1",
+        "n_episodes_train": 20,
+        "n_episodes_val": 4,
+        "n_episodes_test": 5,
+        "n_rows_train": 14380,
+        "n_rows_val": 2876,
+        "n_rows_test": 3595,
+        "policy_classes": [
+          "water",
+          "harvest",
+          "plant",
+          "dig",
+          "pass",
+          "water_bonus"
+        ],
+        "class_distribution_train": {
+          "dig": 1377,
+          "harvest": 3772,
+          "pass": 973,
+          "plant": 3349,
+          "water": 4144,
+          "water_bonus": 765
+        },
+        "train_time_s": 10.72,
+        "ood_train_distance": 0.614896835346633,
+        "feature_version": 1,
+        "seed": 0
+      },
+      "note": "champion experiences: 20 games vs random/pass/starter/self-play",
+      "created_at": 1786489001.9173362
     }
   ]
 }

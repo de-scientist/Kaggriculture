@@ -21,8 +21,9 @@ import json
 import os
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 if str(ROOT) not in sys.path:
@@ -100,7 +101,7 @@ def main() -> None:
                 deltas.append(delta)
                 print(
                     f"{policy} vs {opponent} s{seed}: p0={rewards[0]:.0f} "
-                    f"p1={rewards[1]:.0f} Δ={delta:+.0f}"
+                    f"p1={rewards[1]:.0f} diff={delta:+.0f}"
                 )
             results[f"{policy} vs {opponent}"] = {
                 "rewards": deltas,

@@ -17,8 +17,9 @@ import argparse
 import json
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 if str(ROOT) not in sys.path:
@@ -85,13 +86,11 @@ def _run_managed(
 
         return agent
 
+    agents: list[Callable[[Any, Any], dict[str, Any]] | str]
     if opponent == "champion":
         agents = [make_agent(0), make_agent(1)]
     else:
-        agents: list[Callable[[Any, Any], dict[str, Any]] | str] = [
-            make_agent(0),
-            opponent,
-        ]
+        agents = [make_agent(0), opponent]
 
     env.run(agents)
     final = env.steps[-1]
