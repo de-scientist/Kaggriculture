@@ -47,6 +47,41 @@ def bfs_path(src: Position, dst: Position, board_size: int, prefer_unlocked: set
     return path
 
 
+_dist_cache: dict[int, list[int]] = {}
+
+
+def _dist_matrix(board_size: int) -> list[int]:
+    cached = _dist_cache.get(board_size)
+    if cached is not None:
+        return cached
+    n = board_size * board_size
+    matrix = [0] * (n * n)
+    for y in range(board_size):
+        for x in range(board_size):
+            src = (x, y)
+            src_idx = y * board_size + x
+            queue: deque[Position] = deque([src])
+            seen: dict[Position, int] = {src: 0}
+            while queue:
+                cur = queue.popleft()
+                cur_idx = cur[1] * board_size + cur[0]
+                matrix[src_idx * n + cur_idx] = seen[cur]
+                for nb in _neighbors(cur, board_size):
+                    if nb not in seen:
+                        seen[nb] = seen[cur] + 1
+                        queue.append(nb)
+    _dist_cache[board_size] = matrix
+    return matrix
+
+
+def distance(src: Position, dst: Position, board_size: int) -> int:
+    if src == dst:
+        return 0
+    matrix = _dist_matrix(board_size)
+    n = board_size * board_size
+    return matrix[(src[1] * board_size + src[0]) * n + dst[1] * board_size + dst[0]]
+
+
 def next_step(src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> Position | None:
     path = bfs_path(src, dst, board_size, prefer_unlocked)
     if len(path) < 2:
@@ -57,8 +92,9 @@ def next_step(src: Position, dst: Position, board_size: int, prefer_unlocked: se
 def distance(src: Position, dst: Position, board_size: int) -> int:
     if src == dst:
         return 0
-    path = bfs_path(src, dst, board_size)
-    return len(path) - 1
+    matrix = _dist_matrix(board_size)
+    n = board_size * board_size
+    return matrix[(src[1] * board_size + src[0]) * n + dst[1] * board_size + dst[0]]
 
 
 def nearest_shed_tile(pos: Position, board_size: int) -> Position:
