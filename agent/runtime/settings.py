@@ -58,8 +58,8 @@ class RuntimeSettings:
     wheat_switch_day: int = 21
 
     # Land expansion: buy quadrant when money >= cost * ratio and day < latest.
-    land_budget_ratio: float = 1.5
-    land_latest_day: tuple[int, int, int] = (24, 18, 12)
+    land_budget_ratio: float = 2.0
+    land_latest_day: tuple[int, int, int] = (22, 16, 10)
 
     # Animals (opt-in; the module is only active when enable_animals is true).
     enable_animals: bool = False

@@ -17,7 +17,7 @@ from .game import GameSnapshot, Position, count_plants_by_crop
 from .paths import distance, nearest_shed_tile, next_step, move_op_for_next_step
 from .settings import RuntimeSettings
 
-STEP_COST = 12.0
+STEP_COST = 3.0
 
 TILE_OPS = {
     "WATER",
