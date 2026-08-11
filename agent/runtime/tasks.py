@@ -129,9 +129,23 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
     for y in range(snapshot.board_size):
         for x in range(snapshot.board_size):
             tile = snapshot.tile_at(x, y)
-            if tile is None or tile == "LOCKED":
+            if tile == "LOCKED":
                 continue
             pos = (x, y)
+            if tile is None:
+                if plant_budget > 0:
+                    tasks.append(Task(pos, "PLANT", crop, plot_value(snapshot, settings), "plant", "empty"))
+                    plant_budget -= 1
+                elif settings.enable_animals:
+                    if cow_pending > 0 and _count_structures(snapshot, "PASTURE") < cow_pending:
+                        tasks.append(
+                            Task(pos, "BUILD_PASTURE", None, animal_value("COW", prices) * 0.6, "build_pasture", "animal")
+                        )
+                    elif goose_pending > 0 and _count_structures(snapshot, "COOP") < goose_pending:
+                        tasks.append(
+                            Task(pos, "BUILD_COOP", None, animal_value("GOOSE", prices) * 0.6, "build_coop", "animal")
+                        )
+                continue
             if not isinstance(tile, dict):
                 continue
             kind = tile.get("kind")
@@ -150,19 +164,6 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
                     elif kind == "PASTURE" and cow_pending > 0:
                         tasks.append(
                             Task(pos, "PLACE", "COW", animal_value("COW", prices) * 0.8, "place", "cow_place")
-                        )
-            elif tile is None:
-                if plant_budget > 0:
-                    tasks.append(Task(pos, "PLANT", crop, plot_value(snapshot, settings), "plant", "empty"))
-                    plant_budget -= 1
-                elif settings.enable_animals:
-                    if cow_pending > 0 and _count_structures(snapshot, "PASTURE") < cow_pending:
-                        tasks.append(
-                            Task(pos, "BUILD_PASTURE", None, animal_value("COW", prices) * 0.6, "build_pasture", "animal")
-                        )
-                    elif goose_pending > 0 and _count_structures(snapshot, "COOP") < goose_pending:
-                        tasks.append(
-                            Task(pos, "BUILD_COOP", None, animal_value("GOOSE", prices) * 0.6, "build_coop", "animal")
                         )
     tasks.sort(key=lambda t: -t.value)
     return tasks
