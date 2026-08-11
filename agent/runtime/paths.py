@@ -83,10 +83,19 @@ def distance(src: Position, dst: Position, board_size: int) -> int:
 
 
 def next_step(src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> Position | None:
-    path = bfs_path(src, dst, board_size, prefer_unlocked)
-    if len(path) < 2:
+    if src == dst:
         return None
-    return path[1]
+    matrix = _dist_matrix(board_size)
+    n = board_size * board_size
+    d_src = matrix[(src[1] * board_size + src[0]) * n + dst[1] * board_size + dst[0]]
+    best: Position | None = None
+    best_d = d_src
+    for nb in _neighbors(src, board_size, prefer_unlocked):
+        d = matrix[(nb[1] * board_size + nb[0]) * n + dst[1] * board_size + dst[0]]
+        if d < best_d:
+            best_d = d
+            best = nb
+    return best
 
 
 def distance(src: Position, dst: Position, board_size: int) -> int:
