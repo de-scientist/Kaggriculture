@@ -101,18 +101,15 @@ def _water_value(snapshot: GameSnapshot, tile: Mapping[str, Any]) -> float:
         return 0.0
     price = snapshot.price(crop)
     yield_units = _int(tile.get("yield_units"), 0)
-    if is_ongoing(crop):
-        if _int(tile.get("consecutive_unwatered"), 0) >= 1:
-            remaining = max(1, _int(CROPS[crop]["max_yield"]) - yield_units)
-            return remaining * price * 0.6
-        return price * 0.25
     max_yield = _int(CROPS[crop]["max_yield"])
+    if _int(tile.get("consecutive_unwatered"), 0) >= 1:
+        # Becoming a weed tonight would lose the plant and all its potential.
+        return max_yield * price * 0.9
+    if is_ongoing(crop):
+        return price * 0.25
     if snapshot.in_window(tile) and yield_units < max_yield:
         bonus = 2 if _int(tile.get("fertilized_until_day"), -1) >= snapshot.day else 1
         return min(bonus, max_yield - yield_units) * price
-    if _int(tile.get("consecutive_unwatered"), 0) >= 1:
-        remaining = max(1, max_yield - yield_units)
-        return remaining * price * 0.6
     return price * 0.5
 
 
@@ -262,24 +259,30 @@ def _job_distance(unit: Unit, task: Task, snapshot: GameSnapshot) -> float:
 
 
 def assign_units(units: list[Unit], tasks: list[Task], snapshot: GameSnapshot) -> dict[int, Job]:
-    """Greedily assign each task to the closest free unit (one job per unit)."""
+    """Greedily pair tasks to units by globally-best (value - distance) score."""
     jobs: dict[int, Job] = {}
-    assigned: set[int] = set()
-    for task in tasks:
+    assigned_units: set[int] = set()
+    remaining = list(tasks)
+    while remaining:
         best_unit: Unit | None = None
+        best_task: Task | None = None
         best_score = float("-inf")
-        for unit in units:
-            if unit.id in assigned:
-                continue
-            d = _job_distance(unit, task, snapshot)
-            score = task.value - d * STEP_COST
-            if score > best_score:
-                best_score = score
-                best_unit = unit
-        if best_unit is not None and best_score > 0:
-            need = item_required(task, best_unit, snapshot)
-            jobs[best_unit.id] = Job(task=task, pickup_item=need, pickup_count=1)
-            assigned.add(best_unit.id)
+        for task in remaining:
+            for unit in units:
+                if unit.id in assigned_units:
+                    continue
+                d = _job_distance(unit, task, snapshot)
+                score = task.value - d * STEP_COST
+                if score > best_score:
+                    best_score = score
+                    best_unit = unit
+                    best_task = task
+        if best_unit is None or best_task is None or best_score <= 0:
+            break
+        need = item_required(best_task, best_unit, snapshot)
+        jobs[best_unit.id] = Job(task=best_task, pickup_item=need, pickup_count=1)
+        assigned_units.add(best_unit.id)
+        remaining.remove(best_task)
     return jobs
 
 
