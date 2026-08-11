@@ -9,6 +9,7 @@ not require code edits.  The learning layer may adjust a subset of these knobs
 from __future__ import annotations
 
 import os
+import dataclasses
 from dataclasses import dataclass, fields
 from typing import Any
 
