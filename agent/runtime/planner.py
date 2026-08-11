@@ -9,9 +9,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
-from .game import GameSnapshot, Position
+from .game import GameSnapshot
 from .settings import RuntimeSettings
-from .tasks import Task, Unit, assign_units, job_to_op
+from .tasks import Job, Task, Unit, assign_units, build_tasks, job_to_op
 from .market import plan_market_orders
 from .policies import Policy
 
@@ -90,7 +90,3 @@ def _action_type(farmer_op: list[Any], job: Job | None) -> str:
     if op in ("NORTH", "SOUTH", "EAST", "WEST"):
         return "move"
     return "pass"
-
-
-from .tasks import Job as Job
-from .tasks import build_tasks
