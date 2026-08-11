@@ -65,14 +65,29 @@ class GameSnapshot:
 
     @classmethod
     def from_obs(cls, obs: Mapping[str, Any]) -> "GameSnapshot":
-        farms_raw = _get_mapping(obs, "farms")
-        if isinstance(farms_raw, Mapping):
-            farms_raw = list(farms_raw.values())  # type: ignore[list-item]
-        farms: Sequence[Mapping[str, Any]] = list(farms_raw) if isinstance(farms_raw, Iterable) else []
-        player = _as_int(obs.get("player", 0), 0)
-        step = _as_int(obs.get("step", 0), 0)
-        day = _as_int(obs.get("day", 0), 0)
-        hour = _as_int(obs.get("hour", 0), 0)
+        if isinstance(obs, Mapping):
+            farms_raw = obs.get("farms", [])
+            step_raw = obs.get("step", 0)
+            day_raw = obs.get("day", 0)
+            hour_raw = obs.get("hour", 0)
+            player_raw = obs.get("player", 0)
+            market = _get_mapping(obs, "market")
+            town = _get_mapping(obs, "town")
+            private = _get_mapping(obs, "private")
+        else:
+            farms_raw = getattr(obs, "farms", [])
+            step_raw = getattr(obs, "step", 0)
+            day_raw = getattr(obs, "day", 0)
+            hour_raw = getattr(obs, "hour", 0)
+            player_raw = getattr(obs, "player", 0)
+            market = _get_mapping(obs, "market")
+            town = _get_mapping(obs, "town")
+            private = _get_mapping(obs, "private")
+        farms: Sequence[Mapping[str, Any]] = [f for f in farms_raw if isinstance(f, Mapping)] if isinstance(farms_raw, list) else []
+        player = _as_int(player_raw, 0)
+        step = _as_int(step_raw, 0)
+        day = _as_int(day_raw, 0)
+        hour = _as_int(hour_raw, 0)
         return cls(
             obs=obs,
             player=player,
@@ -83,9 +98,9 @@ class GameSnapshot:
             episode_steps=_as_int(obs.get("episodeSteps", EPISODE_STEPS_DEFAULT), EPISODE_STEPS_DEFAULT),
             board_size=_as_int(obs.get("boardSize", BOARD_SIZE_DEFAULT), BOARD_SIZE_DEFAULT),
             farms=farms,
-            market=_get_mapping(obs, "market"),
-            town=_get_mapping(obs, "town"),
-            private=_get_mapping(obs, "private"),
+            market=market,
+            town=town,
+            private=private,
         )
 
     # -- players ---------------------------------------------------------
