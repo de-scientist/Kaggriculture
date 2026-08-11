@@ -54,7 +54,10 @@ def main() -> None:
         "action_distribution": dict(
             sorted(
                 Counter(
-                    label for group in split.values() for ep in group for label in ep.policy_labels
+                    row.get("farmer_action_type", "pass")
+                    for group in split.values()
+                    for ep in group
+                    for row in ep.rows
                 ).items()
             )
         ),

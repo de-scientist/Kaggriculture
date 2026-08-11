@@ -88,7 +88,10 @@ def _run_managed(
     if opponent == "champion":
         agents = [make_agent(0), make_agent(1)]
     else:
-        agents = [make_agent(0), opponent]
+        agents: list[Callable[[Any, Any], dict[str, Any]] | str] = [
+            make_agent(0),
+            opponent,
+        ]
 
     env.run(agents)
     final = env.steps[-1]

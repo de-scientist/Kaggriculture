@@ -49,6 +49,13 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _plan_agent(planner: TurnPlanner) -> Callable[[Any, Any], dict[str, Any]]:
+    def agent(obs: Any, configuration: Any = None) -> dict[str, Any]:
+        return planner.plan(GameSnapshot.from_obs(obs)).action
+
+    return agent
+
+
 def _run_game(planner: TurnPlanner, opponent: str, seed: int) -> dict[int, float]:
     env = make(
         "kaggriculture",
@@ -57,15 +64,9 @@ def _run_game(planner: TurnPlanner, opponent: str, seed: int) -> dict[int, float
     )
     agents: list[Callable[[Any, Any], dict[str, Any]] | str]
     if opponent == "champion":
-        agents = [
-            lambda obs, configuration=None: planner.plan(GameSnapshot.from_obs(obs)).action,
-            lambda obs, configuration=None: planner.plan(GameSnapshot.from_obs(obs)).action,
-        ]
+        agents = [_plan_agent(planner), _plan_agent(planner)]
     else:
-        agents = [
-            lambda obs, configuration=None: planner.plan(GameSnapshot.from_obs(obs)).action,
-            opponent,
-        ]
+        agents = [_plan_agent(planner), opponent]
     env.run(agents)
     final = env.steps[-1]
     return {i: float(s.reward) for i, s in enumerate(final)}
