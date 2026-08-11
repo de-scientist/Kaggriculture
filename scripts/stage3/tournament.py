@@ -85,7 +85,7 @@ def main() -> None:
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    results: dict[str, dict] = {}
+    results: dict[str, dict[str, Any]] = {}
     started = time.time()
 
     for policy in policies:
