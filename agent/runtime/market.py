@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any
 
 from .constants import ANIMALS, LAND_ORDER, LAND_PRICES, MARKET, SHED_CAPACITY, hire_cost
-from .game import GameSnapshot, count_plants_by_crop
+from .game import GameSnapshot
 from .settings import RuntimeSettings
 from .tasks import target_hands
 
