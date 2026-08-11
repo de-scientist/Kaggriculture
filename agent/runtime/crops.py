@@ -91,7 +91,8 @@ def best_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str:
         return "CARROT"
     if remaining < 10:
         return "CARROT"
-    if remaining < 13:
+    if day < settings.melon_start_day:
+        # Early cash-building phase: quick, price-stable carrots.
         return "CARROT"
 
     # Melon is only worth the price-crash risk when the opponent is not
