@@ -25,4 +25,16 @@ SALEABLE_PRODUCTS = ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON", "EGG", 
 ANIMALS = ["GOOSE", "COW", "SHEEP"]
 
 # Action types the champion planner can emit for the main farmer.
-ACTION_TYPES = ["plant", "harvest", "water", "water_bonus", "dig", "feed", "care", "collect", "place", "pass", "move"]
+ACTION_TYPES = [
+    "plant",
+    "harvest",
+    "water",
+    "water_bonus",
+    "dig",
+    "feed",
+    "care",
+    "collect",
+    "place",
+    "pass",
+    "move",
+]

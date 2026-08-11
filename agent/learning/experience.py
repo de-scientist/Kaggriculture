@@ -24,8 +24,9 @@ import logging
 import threading
 import time
 import uuid
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from ..runtime.game import GameSnapshot
 from ..runtime.settings import RuntimeSettings
@@ -104,17 +105,25 @@ class ExperienceRecorder:
         self._rows = 0
         self._last_money = 0.0
 
-    def end_episode(self, meta: Mapping[str, Any] | None = None, outcome: float | None = None) -> None:
+    def end_episode(
+        self, meta: Mapping[str, Any] | None = None, outcome: float | None = None
+    ) -> None:
         """Finalize the open episode and write its manifest row."""
         if self._episode_id is None:
             return
         merged = dict(self._episode_meta)
         merged.update(meta or {})
+        if outcome is None:
+            outcome = merged.get("outcome_money", self._last_money)
+            try:
+                outcome = float(outcome)
+            except (TypeError, ValueError):
+                outcome = self._last_money
         merged.update(
             {
                 "episode_id": self._episode_id,
                 "rows": self._rows,
-                "outcome_money": outcome if outcome is not None else self._last_money,
+                "outcome_money": outcome,
                 "finished_at": time.time(),
             }
         )
@@ -134,8 +143,7 @@ class ExperienceRecorder:
     # -- recording --------------------------------------------------------
     def observe(self, snapshot: GameSnapshot, plan: Any) -> None:
         """Record one turn.  ``plan`` is a runtime ``TurnPlan``."""
-        if self._episode_id is None:
-            self._auto_begin(snapshot)
+        self._auto_begin(snapshot)
         assert self._episode_id is not None
 
         info = getattr(plan, "info", {})

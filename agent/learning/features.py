@@ -15,9 +15,10 @@ refused at load time when their feature version differs from the current one.
 from __future__ import annotations
 
 import math
-from typing import Any, Mapping, Sequence
+from collections.abc import Mapping
+from typing import Any
 
-from ..runtime.constants import CROPS, MARKET, SALEABLE_PRODUCTS
+from ..runtime.constants import CROPS, MARKET
 from ..runtime.game import GameSnapshot, count_plants_by_crop
 from .schema import CROPS as _FEATURE_CROPS
 from .schema import SALEABLE_PRODUCTS as _FEATURE_PRODUCTS
@@ -137,7 +138,8 @@ def build_features(snapshot: GameSnapshot) -> list[float]:
 
 def build_features_from_state(state: Mapping[str, Any]) -> list[float]:
     """Feature vector computed from a :func:`compact_state` dict."""
-    season_days = max(1, _int(state.get("episode_steps"), 720) // max(1, _int(state.get("turns_per_day"), 24)))
+    steps_per_day = max(1, _int(state.get("turns_per_day"), 24))
+    season_days = max(1, _int(state.get("episode_steps"), 720) // steps_per_day)
     day = _int(state.get("day"), 0)
     hour = _int(state.get("hour"), 0)
     remaining = max(0, _int(state.get("remaining_days"), 0))
@@ -149,7 +151,11 @@ def build_features_from_state(state: Mapping[str, Any]) -> list[float]:
     plants = state.get("plants", {}) if isinstance(state.get("plants"), Mapping) else {}
     opp_plants = state.get("opp_plants", {}) if isinstance(state.get("opp_plants"), Mapping) else {}
     prices = state.get("prices", {}) if isinstance(state.get("prices"), Mapping) else {}
-    market_inv = state.get("market_inventory", {}) if isinstance(state.get("market_inventory"), Mapping) else {}
+    market_inv = (
+        state.get("market_inventory", {})
+        if isinstance(state.get("market_inventory"), Mapping)
+        else {}
+    )
 
     f: list[float] = [
         day / max(1, season_days),

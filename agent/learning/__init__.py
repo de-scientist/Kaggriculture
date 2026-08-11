@@ -18,9 +18,9 @@ and inferred with pure Python so the competition runtime stays dependency-free.
 
 from __future__ import annotations
 
-from .bundle import LearnedBundle
 from .experience import ExperienceRecorder
 from .features import FEATURE_VERSION, build_features
+from .models.bundle import LearnedBundle
 from .registry import load_latest_bundle
 
 __all__ = [

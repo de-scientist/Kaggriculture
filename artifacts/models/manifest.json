@@ -1,0 +1,59 @@
+{
+  "entries": [
+    {
+      "model_id": "m1786485429-98dac4",
+      "status": "experimental",
+      "feature_version": 1,
+      "dataset_version": "d-smoke",
+      "metrics": {
+        "value_train_rmse": 4.264505427110286,
+        "value_val_rmse": 4.264505427110286,
+        "value_train_r2": 0.9438703501918114,
+        "value_val_r2": 0.9438703501918114,
+        "value_train_mae": 2.852492786795168,
+        "value_val_mae": 2.852492786795168,
+        "value_alpha": 1.0,
+        "policy_train_acc": 0.5493741307371349,
+        "policy_val_acc": 0.5493741307371349,
+        "policy_best_step": 384,
+        "policy_lr": 0.5,
+        "policy_reg": 0.0001,
+        "policy_epochs": 400,
+        "value_test_rmse": 419.2384687921387,
+        "value_test_r2": -0.23662935583291955,
+        "value_test_mae": 400.2962186340397,
+        "policy_test_acc": 0.4422809457579972,
+        "policy_test_mean_confidence": 0.5139219964989401,
+        "dataset_version": "d-smoke",
+        "n_episodes_train": 2,
+        "n_episodes_val": 0,
+        "n_episodes_test": 2,
+        "n_rows_train": 1438,
+        "n_rows_val": 0,
+        "n_rows_test": 1438,
+        "policy_classes": [
+          "water",
+          "plant",
+          "harvest",
+          "dig",
+          "water_bonus",
+          "pass"
+        ],
+        "class_distribution_train": {
+          "dig": 196,
+          "harvest": 336,
+          "pass": 73,
+          "plant": 356,
+          "water": 397,
+          "water_bonus": 80
+        },
+        "train_time_s": 3.99,
+        "ood_train_distance": 0.5764044253313234,
+        "feature_version": 1,
+        "seed": 0
+      },
+      "note": "smoke test",
+      "created_at": 1786485430.1020825
+    }
+  ]
+}
