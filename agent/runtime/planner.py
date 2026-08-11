@@ -83,6 +83,11 @@ class TurnPlanner:
             return self.settings, {}
         return self.policy.adjust(snapshot, self.settings)
 
+    def _rank_tasks(self, snapshot: GameSnapshot, tasks: list[Task], settings: RuntimeSettings) -> list[Task]:
+        if self.policy is None:
+            return tasks
+        return self.policy.rank_tasks(snapshot, tasks, settings)
+
 
 def _action_type(farmer_op: list[Any], job: Job | None) -> str:
     if job is not None:
