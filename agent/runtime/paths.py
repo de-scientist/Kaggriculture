@@ -49,9 +49,9 @@ def bfs_path(src: Position, dst: Position, board_size: int, prefer_unlocked: set
 
 def next_step(src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> Position | None:
     path = bfs_path(src, dst, board_size, prefer_unlocked)
-    if not path:
+    if len(path) < 2:
         return None
-    return path[0]
+    return path[1]
 
 
 def distance(src: Position, dst: Position, board_size: int) -> int:
