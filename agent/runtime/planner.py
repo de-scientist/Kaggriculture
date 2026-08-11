@@ -51,6 +51,7 @@ class TurnPlanner:
     def plan(self, snapshot: GameSnapshot) -> TurnPlan:
         eff_settings, adjustments = self._apply_policy(snapshot)
         tasks = build_tasks(snapshot, eff_settings)
+        tasks = self._rank_tasks(snapshot, tasks, eff_settings)
         orders = plan_market_orders(snapshot, eff_settings)
         units = _units(snapshot)
         jobs = assign_units(units, tasks, snapshot)
