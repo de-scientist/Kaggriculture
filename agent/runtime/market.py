@@ -121,7 +121,7 @@ def plan_market_orders(snapshot: GameSnapshot, settings: RuntimeSettings) -> lis
     return orders[:cap]
 
 
-def _planned_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str:
+def _planned_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str | None:
     from .crops import best_crop
 
     return best_crop(snapshot, settings)
