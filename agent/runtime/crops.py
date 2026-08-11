@@ -79,16 +79,19 @@ def can_mature(crop: str, day: int) -> bool:
     return day + int(cd["max_yield_day"]) <= 29
 
 
-def best_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str:
-    """Pick the crop the champion should plant on free tiles this turn."""
+def best_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str | None:
+    """Pick the crop the champion should plant on free tiles this turn.
+
+    Returns ``None`` when the season is too short for any crop to mature.
+    """
     day = snapshot.day
     money = snapshot.money()
     remaining = 29 - day
 
-    if remaining < 3:
+    if remaining < 2:
+        return None
+    if remaining < 5:
         return "WHEAT"
-    if remaining < 6:
-        return "CARROT"
     if remaining < 10:
         return "CARROT"
     if day < settings.melon_start_day:
@@ -101,8 +104,7 @@ def best_crop(snapshot: GameSnapshot, settings: RuntimeSettings) -> str:
     opp_melons = count_plants_by_crop(snapshot.opp(), "MELON")
     my_melons = count_plants_by_crop(snapshot.me(), "MELON")
     if (
-        day >= settings.melon_start_day
-        and opp_melons < settings.melon_opp_gate
+        opp_melons < settings.melon_opp_gate
         and my_melons < settings.melon_max_tiles
         and money >= settings.reserve_money + int(CROPS["MELON"]["seed"])
     ):
