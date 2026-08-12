@@ -59,8 +59,14 @@ def main() -> int:  # pragma: no cover - manual entry point
 
     matches = load(ART / "CHAMPION_TOURNAMENT_RESULTS.json")
     no_endgame = load(ART / "no_endgame_baseline.json")
-    # Merge no_endgame into the canonical results file.
-    all_matches = matches + no_endgame
+    # Merge no_endgame into the canonical results file (dedup by episode_id).
+    seen: set[str] = set()
+    all_matches: list[MatchMetrics] = []
+    for m in matches + no_endgame:
+        if m.episode_id in seen:
+            continue
+        seen.add(m.episode_id)
+        all_matches.append(m)
     (ART / "CHAMPION_TOURNAMENT_RESULTS.json").write_text(
         json.dumps([m.to_dict() for m in all_matches], indent=2), encoding="utf-8"
     )
@@ -71,6 +77,7 @@ def main() -> int:  # pragma: no cover - manual entry point
         return BenchmarkSummary(candidate=name, matches=ms)
 
     champ = summary("champion-v1.0")
+    champ_baseline = summary("champion-v1.0", exclude={"no_endgame", "champion"})
     champ_noend = summary("no_endgame")
     c01 = summary("C01")
     c02 = summary("C02")
@@ -129,20 +136,20 @@ def main() -> int:  # pragma: no cover - manual entry point
         "",
         f"- Version: champion-v1.0",
         f"- Commit: {commit}",
-        f"- Average Final Coins: {defmt(champ.avg_coins(), 1)}",
-        f"- Median Final Coins: {defmt(champ.median_coins(), 1)}",
-        f"- Best Final Coins: {defmt(champ.best_coins(), 1)}",
-        f"- Worst Final Coins: {defmt(champ.worst_coins(), 1)}",
-        f"- Wins: {champ.total_wins()}  Losses: {champ.total_losses()}  Ties: {champ.total_ties()}",
-        f"- Win Rate: {defmt(champ.overall_win_rate() * 100, 1)}%",
-        f"- Average Runtime/turn (ms): {defmt(champ.avg_decision_ms(), 3)}",
-        f"- Maximum Runtime/turn (ms): {defmt(champ.max_decision_ms(), 3)}",
+        f"- Average Final Coins: {defmt(champ_baseline.avg_coins(), 1)}",
+        f"- Median Final Coins: {defmt(champ_baseline.median_coins(), 1)}",
+        f"- Best Final Coins: {defmt(champ_baseline.best_coins(), 1)}",
+        f"- Worst Final Coins: {defmt(champ_baseline.worst_coins(), 1)}",
+        f"- Wins: {champ_baseline.total_wins()}  Losses: {champ_baseline.total_losses()}  Ties: {champ_baseline.total_ties()}",
+        f"- Win Rate: {defmt(champ_baseline.overall_win_rate() * 100, 1)}%",
+        f"- Average Runtime/turn (ms): {defmt(champ_baseline.avg_decision_ms(), 3)}",
+        f"- Maximum Runtime/turn (ms): {defmt(champ_baseline.max_decision_ms(), 3)}",
         f"- Invalid Actions: 0 (planner emits legal actions)",
-        f"- Fallback Activations: {champ.total_fallbacks()}",
+        f"- Fallback Activations: {champ_baseline.total_fallbacks()}",
         "",
         "### Per-opponent",
         "",
-        match_table(champ),
+        match_table(champ_baseline),
         "",
         "### Known Strengths",
         "- Wins 20/21 vs diverse heuristic opponents.",
