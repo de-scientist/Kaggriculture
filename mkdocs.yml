@@ -21,6 +21,7 @@ nav:
   - Testing: testing.md
   - Deployment: deployment.md
   - API Reference: api.md
+  - Learning Pipeline: stage_3/learning_pipeline.md
 plugins:
   - search
 markdown_extensions:
