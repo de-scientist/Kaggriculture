@@ -14,10 +14,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent.runtime.agent import agent as _agent
+from agent.runtime.agent import agent as _raw_agent
+from agent.submission.failsafe import FailSafeAgent
 
 __all__ = ["agent"]
 
+# Outermost Stage 4 fail-safe layer: guarantees a legal action every turn so a
+# single unexpected error can never zero the episode.
+agent = FailSafeAgent(_raw_agent)
 
-def agent(obs: dict[str, Any]) -> dict[str, Any]:
-    return _agent(obs)
+
+def _entry(obs: dict[str, Any]) -> dict[str, Any]:  # pragma: no cover - alias
+    return agent(obs)
+
