@@ -65,7 +65,7 @@ class TestScoring:
 
     def test_score_profit_action(self) -> None:
         action = _make_action("sell", "sell", estimated_reward=20.0)
-        score, explanation = score_action(action)
+        score, _ = score_action(action)
         assert score > 0
 
     def test_score_cost_penalty(self) -> None:

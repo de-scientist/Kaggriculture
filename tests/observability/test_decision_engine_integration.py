@@ -111,7 +111,7 @@ def test_decide_fallback_returns_pass_on_failure(monkeypatch) -> None:
         raise ValueError("candidate generation exploded")
 
     monkeypatch.setattr(de.action_generator, "generate_candidates", boom)
-    decision_engine.decide(_context())
+    action = decision_engine.decide(_context())
     assert action == {"farmer": ["PASS"], "hands": [], "market": []}
     assert "ValueError" in get_telemetry().snapshot().exception_counts
     assert get_metrics().counter("decision_count") == 1.0

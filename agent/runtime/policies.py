@@ -106,7 +106,9 @@ class LearnedPolicy(Policy, _LearnedMixin):
                 adjusted = self._sell_pressure_adjust(snapshot, adjusted, bundle, feats)
         if bundle.policy is not None:
             probs = bundle.policy.predict_proba(bundle.scaler.transform(feats))
-            info["policy_probs"] = {at: float(p) for at, p in zip(bundle.action_types, probs, strict=True)}
+            info["policy_probs"] = {
+                at: float(p) for at, p in zip(bundle.action_types, probs, strict=True)
+            }
         return adjusted, info
 
     def _sell_pressure_adjust(

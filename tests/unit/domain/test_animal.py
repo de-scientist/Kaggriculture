@@ -73,19 +73,19 @@ class TestAnimalProduction:
     def test_produce_with_feed_returns_no_bonus(self) -> None:
         animal = Animal(animal_type="GOOSE")
         fed = animal.feed()
-        result, bonus = fed.produce()
+        _, bonus = fed.produce()
         assert bonus == 0
 
     def test_produce_with_feed_and_care_returns_bonus(self) -> None:
         animal = Animal(animal_type="GOOSE")
         cared = animal.feed().care()
-        result, bonus = cared.produce()
+        _, bonus = cared.produce()
         assert bonus == 1
 
     def test_produce_clears_care_bonus(self) -> None:
         animal = Animal(animal_type="GOOSE")
         cared = animal.feed().care()
-        result, bonus = cared.produce()
+        result, _ = cared.produce()
         assert result.pending_care_bonus == 0
         assert result.cared_today is False
 
