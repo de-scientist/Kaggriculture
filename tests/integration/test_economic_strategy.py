@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 from agent.decision.decision_context import DecisionContext
 from agent.decision.decision_engine import decide
 from agent.domain.game_state import GameState

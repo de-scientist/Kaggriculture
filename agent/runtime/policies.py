@@ -106,7 +106,7 @@ class LearnedPolicy(Policy, _LearnedMixin):
                 adjusted = self._sell_pressure_adjust(snapshot, adjusted, bundle, feats)
         if bundle.policy is not None:
             probs = bundle.policy.predict_proba(bundle.scaler.transform(feats))
-            info["policy_probs"] = {at: float(p) for at, p in zip(bundle.action_types, probs)}
+            info["policy_probs"] = {at: float(p) for at, p in zip(bundle.action_types, probs, strict=True)}
         return adjusted, info
 
     def _sell_pressure_adjust(
@@ -133,7 +133,7 @@ class LearnedPolicy(Policy, _LearnedMixin):
         if bundle.ood is not None and bundle.ood.is_ood(feats, OOD_ADJUST_THRESHOLD):
             return tasks
         probs = bundle.policy.predict_proba(bundle.scaler.transform(feats))
-        prob_by_type = {at: float(p) for at, p in zip(bundle.action_types, probs)}
+        prob_by_type = {at: float(p) for at, p in zip(bundle.action_types, probs, strict=True)}
         ranked = list(tasks)
         ranked.sort(
             key=lambda t: -(t.value + self.rank_weight * prob_by_type.get(t.action_type, 0.0))
@@ -161,7 +161,7 @@ class HybridPolicy(LearnedPolicy):
         if bundle.ood is not None and bundle.ood.is_ood(feats, OOD_ADJUST_THRESHOLD):
             return tasks
         probs = bundle.policy.predict_proba(bundle.scaler.transform(feats))
-        prob_by_type = {at: float(p) for at, p in zip(bundle.action_types, probs)}
+        prob_by_type = {at: float(p) for at, p in zip(bundle.action_types, probs, strict=True)}
         ranked = list(tasks)
         ranked.sort(
             key=lambda t: -(t.value * 2.0 + self.rank_weight * prob_by_type.get(t.action_type, 0.0))

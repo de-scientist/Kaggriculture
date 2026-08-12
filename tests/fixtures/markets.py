@@ -30,6 +30,6 @@ def wheat_market() -> Market:
 
 def stratified_market() -> Market:
     return Market(
-        inventory={"WHEAT": 10000, "STRAWBERRY": 5000, "MELON": 2000, "MILK": 1000, "WHEAT": 100},
+        inventory={"WHEAT": 10000, "STRAWBERRY": 5000, "MELON": 2000, "MILK": 1000},
         prices={"WHEAT": 25, "STRAWBERRY": 75, "MELON": 100, "MILK": 50},
     )

@@ -75,10 +75,6 @@ def pickup_action(item: str = "WHEAT", quantity: int = 1) -> dict:
     return {"farmer": ["PICKUP", item, quantity], "hands": [], "market": []}
 
 
-def dig_action() -> dict:
-    return {"farmer": ["DIG"], "hands": [], "market": []}
-
-
 def drop_action() -> dict:
     return {"farmer": ["DROP"], "hands": [], "market": []}
 
