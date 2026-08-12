@@ -1,0 +1,14 @@
+{
+  "agent_version": "champion-v1.1",
+  "git_commit": "1f9356f8ef917c90996e59fef6906c166b7f4695",
+  "policy_configuration": {
+    "policy": "ChampionPolicy",
+    "endgame": "disabled"
+  },
+  "model_versions": "none (model-free champion)",
+  "dependency_versions": "kaggle-environments (see environment)",
+  "test_results": "721 passed (pre-stage4b); re-run required after champion change",
+  "mypy_result": "agent/ strict clean (198 files) \u2014 re-run required",
+  "runtime_benchmark": "avg 1.912 ms/turn, max 142.011 ms/turn",
+  "720_turn_result": "champion-v1.1 avg 22184.1 coins, win rate 100.0%"
+}

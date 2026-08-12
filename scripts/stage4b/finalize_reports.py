@@ -108,16 +108,16 @@ def main() -> int:  # pragma: no cover - manual entry point
 
     # --- Tournament report ------------------------------------------------
     report = ["# Champion Tournament Report (Stage 4B)", ""]
-    report.append("## Final Champion candidate: champion-v1.1 (pure ChampionPolicy, no endgame)", "")
+    report.append("## Final Champion candidate: champion-v1.1 (pure ChampionPolicy, no endgame)")
     report.append(tournament_report_markdown(champ_noend, "champion-v1.1 vs diverse opponents"))
-    report.append("## Previous champion: champion-v1.0 (EndgamePolicy)", "")
+    report.append("## Previous champion: champion-v1.0 (EndgamePolicy)")
     report.append(tournament_report_markdown(champ, "champion-v1.0 vs diverse opponents"))
-    report.append("## EndgamePolicy ablation (champion-v1.0 vs no_endgame self-play)", "")
+    report.append("## EndgamePolicy ablation (champion-v1.0 vs no_endgame self-play)")
     report.append("- Matches: 3 (seeds 0,1,2). champion-v1.0 wins: 0, losses: 3.")
     report.append("- no_endgame avg coins: ~12.2k vs champion-v1.0 ~10.5k -> liquidation reduced terminal cash.")
-    report.append("## Challengers", "")
+    report.append("## Challengers")
     for cid, s in [("C01", c01), ("C02", c02), ("C08", c08)]:
-        report.append(f"### {cid}  ({chreg.get(cid).decision})", "")
+        report.append(f"### {cid}  ({chreg.get(cid).decision})")
         report.append(tournament_report_markdown(s, f"{cid} vs suite"))
     (DOCS / "CHAMPION_TOURNAMENT_REPORT.md").write_text("\n".join(report), encoding="utf-8")
 

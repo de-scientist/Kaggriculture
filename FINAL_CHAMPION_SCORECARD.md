@@ -1,45 +1,27 @@
 # Final Champion Scorecard
 
-**Submission champion:** `champion_endgame` — `EndgamePolicy`
-(`agent/runtime/policies.py:56`), selected via `ChampionArena`
-(`agent/submission/championship.py`).
+**Submission champion:** `champion-v1.1` — `ChampionPolicy` (no EndgamePolicy), wrapped in `FailSafeAgent`.
+**Commit:** 1f9356f8ef917c90996e59fef6906c166b7f4695
 
 ## Champion profile
-
 | Attribute | Value |
 | --- | --- |
-| Planner | `agent.runtime.planner.TurnPlanner` (champion heuristic) |
-| Policy | `EndgamePolicy` (wind-down day 22, liquidation day 26) |
-| Fail-safe | `FailSafeAgent` (`agent/submission/failsafe.py`) — guaranteed legal action |
-| Entry point | `main.agent` (delegates to `agent.runtime.agent`) |
-| Determinism | Deterministic; no runtime training |
-| Model dependency | None (learned layer optional, degrades to champion) |
+| Planner | TurnPlanner (champion heuristic) |
+| Policy | ChampionPolicy (endgame disabled; market.py still liquidates shed at endgame_sell_day) |
+| Fail-safe | FailSafeAgent (2-arg Kaggle-safe) |
+| Entry point | main.agent |
+| Determinism | Deterministic; model-free |
 
-## Behaviour by season phase
+## Performance scorecard (Stage 4B, 3 seeds/opponent, 720 turns)
+- Win rate: 100.0% (42/42)
+- Average final coins: 22184.1
+- Median final coins: 22745.0
+- Best: 24297.0  Worst: 17509.0
+- Avg/max decision time: 1.912 / 142.011 ms
+- Fallback activations: 0
 
-| Phase | Day range | Behaviour |
-| --- | --- | --- |
-| Growth | 0–21 | Pure champion planner (plant, water, harvest, hire, expand) |
-| Wind-down | 22–25 | Stops land/animals, tapers hiring to 2; keeps short crops |
-| Liquidation | 26–29 | Stops planting; market endgame logic sells the shed; hands released |
+## Evolution
+- champion-v1.0 (EndgamePolicy): 20/21 wins, ~21k avg coins; lost to market opponent and lost all self-play to no_endgame.
+- champion-v1.1 (pure ChampionPolicy): 21/21 wins, ~22.5k avg coins; beats market opponent 3/3.
 
-## Performance scorecard (local validation)
-
-| Opponent | Our coins | Result |
-| --- | --- | --- |
-| `random` | ~20,700 | Win |
-| `starter` | ~20,000 | Win |
-| self (mirror) | ~10,400 | Tie (expected) |
-
-## Robustness scorecard
-
-| Check | Result |
-| --- | --- |
-| Imports & callable | PASS |
-| Sample observation → legal action | PASS |
-| Fail-safe wrapper present | PASS |
-| Full validation episode (no error) | PASS (reward > 0, status DONE) |
-| mypy `strict` on `agent/` | PASS (198 files) |
-
-See `COMPETITION_COMPLIANCE_CHECKLIST.md` for the machine-generated checklist and
-`FINAL_SUBMISSION_MANIFEST.md` for the file inventory.
+See COMPETITION_COMPLIANCE_CHECKLIST.md and CHAMPION_TOURNAMENT_REPORT.md.
