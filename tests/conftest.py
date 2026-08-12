@@ -8,6 +8,8 @@ so the autouse fixtures here are safe for the whole suite.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+
 import pytest
 
 from agent.config import reset_config
@@ -21,7 +23,7 @@ from agent.observability.profiler import reset_profiler
 
 
 @pytest.fixture(autouse=True)
-def _reset_operational_singletons():
+def _reset_operational_singletons() -> Iterator[None]:
     # Order matters: metrics must reset before telemetry, because Telemetry
     # binds to the current MetricsCollector at construction time.
     reset_metrics()

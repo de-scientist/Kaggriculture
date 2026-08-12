@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+from collections.abc import Iterator
 
 import pytest
 
@@ -17,9 +18,11 @@ from agent.logging import (
 )
 from agent.logging.handlers import InMemoryHandler, get_in_memory_handler
 
+IsolatedLogger = tuple[StructuredLogger, InMemoryHandler]
+
 
 @pytest.fixture
-def isolated_logger():
+def isolated_logger() -> Iterator[IsolatedLogger]:
     """Provide a structured logger writing to a dedicated in-memory handler."""
     name = "test.isolated"
     logger = get_logger(name, propagate=False)
@@ -45,7 +48,7 @@ def test_bind_merges_context() -> None:
     assert logger._context == {}
 
 
-def test_emits_json_with_bound_fields(isolated_logger) -> None:
+def test_emits_json_with_bound_fields(isolated_logger: IsolatedLogger) -> None:
     logger, handler = isolated_logger
     child = logger.bind(
         turn=7,
@@ -71,7 +74,7 @@ def test_emits_json_with_bound_fields(isolated_logger) -> None:
     assert payload["component"] == "Test"
 
 
-def test_json_formatter_skips_none_fields(isolated_logger) -> None:
+def test_json_formatter_skips_none_fields(isolated_logger: IsolatedLogger) -> None:
     logger, handler = isolated_logger
     logger.info("simple")
     formatted = json.loads(handler.format(handler.records[0]))
@@ -118,7 +121,7 @@ def test_configure_logging_idempotent_without_force() -> None:
     assert count_after_first == count_after_second
 
 
-def test_performance_helper_emits_metric(isolated_logger) -> None:
+def test_performance_helper_emits_metric(isolated_logger: IsolatedLogger) -> None:
     logger, handler = isolated_logger
     logger.performance("DecisionEngine", 12.5, turn=1, day=0, player=0)
     formatted = json.loads(handler.format(handler.records[0]))
@@ -126,7 +129,7 @@ def test_performance_helper_emits_metric(isolated_logger) -> None:
     assert formatted["execution_time_ms"] == 12.5
 
 
-def test_exception_logs_with_traceback(isolated_logger) -> None:
+def test_exception_logs_with_traceback(isolated_logger: IsolatedLogger) -> None:
     logger, handler = isolated_logger
     try:
         raise ValueError("inner")
