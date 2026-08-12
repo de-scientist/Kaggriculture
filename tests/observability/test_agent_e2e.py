@@ -53,7 +53,7 @@ def test_agent_returns_valid_action_dict() -> None:
 def test_agent_records_observability_for_first_turn() -> None:
     reset_config()
     logging.disable(logging.CRITICAL)
-    action = agent(OBS)
+    agent(OBS)
     logging.disable(logging.NOTSET)
     assert get_telemetry().decisions >= 1
     assert get_metrics().counter("decision_count") >= 1.0

@@ -70,14 +70,14 @@ def test_decide_records_telemetry_metrics_replay() -> None:
     metrics = get_metrics()
     replay = get_replay_store()
     assert telem.decisions == 0
-    action = decision_engine.decide(_context())
+    decision_engine.decide(_context())
     assert telem.decisions == 1
     assert metrics.counter("decision_count") == 1.0
     assert len(replay.records()) == 1
 
 
 def test_decide_records_trace_spans() -> None:
-    action = decision_engine.decide(_context())
+    decision_engine.decide(_context())
     rec = get_replay_store().records()[0]
     span_names = [s.get("name") for s in rec.trace.get("spans", [])]
     for expected in (
@@ -91,14 +91,14 @@ def test_decide_records_trace_spans() -> None:
 
 
 def test_decide_records_strategy_scores() -> None:
-    action = decision_engine.decide(_context())
+    decision_engine.decide(_context())
     rec = get_replay_store().records()[0]
     assert rec.strategy_scores
     assert rec.decision_id == "d-1"
 
 
 def test_decide_records_execution_time_in_replay() -> None:
-    action = decision_engine.decide(_context())
+    decision_engine.decide(_context())
     rec = get_replay_store().records()[0]
     assert rec.execution_time_ms >= 0.0
 
@@ -111,7 +111,7 @@ def test_decide_fallback_returns_pass_on_failure(monkeypatch) -> None:
         raise ValueError("candidate generation exploded")
 
     monkeypatch.setattr(de.action_generator, "generate_candidates", boom)
-    action = decision_engine.decide(_context())
+    decision_engine.decide(_context())
     assert action == {"farmer": ["PASS"], "hands": [], "market": []}
     assert "ValueError" in get_telemetry().snapshot().exception_counts
     assert get_metrics().counter("decision_count") == 1.0
