@@ -24,6 +24,3 @@ __all__ = ["agent"]
 agent = FailSafeAgent(_raw_agent)
 
 
-def _entry(obs: dict[str, Any]) -> dict[str, Any]:  # pragma: no cover - alias
-    return agent(obs)
-
