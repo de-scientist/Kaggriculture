@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from agent.domain.position import Position
 
 
@@ -11,7 +13,7 @@ class Farm:
         tiles: dict[Position, object] | None = None,
         quadrants: list[str] | None = None,
         buildings: list[str] | None = None,
-        workers: list[object] | None = None,
+        workers: Sequence[object] | None = None,
         money: float = 3000.0,
     ) -> None:
         self._tiles = dict(tiles or {})

@@ -8,6 +8,7 @@ documented in the Kaggle environment README.
 from __future__ import annotations
 
 from copy import deepcopy
+from typing import Any
 
 _TILE_NW = [
     [None] * 10,
@@ -18,7 +19,7 @@ _TILE_NW = [
 ]
 
 
-def minimal_observation() -> dict:
+def minimal_observation() -> dict[str, Any]:
     return {
         "player": 0,
         "step": 0,
@@ -32,7 +33,7 @@ def minimal_observation() -> dict:
     }
 
 
-def _empty_farm() -> dict:
+def _empty_farm() -> dict[str, Any]:
     return {
         "money": 3000.0,
         "tiles": [[None for _ in range(10)] for _ in range(10)],
@@ -43,7 +44,7 @@ def _empty_farm() -> dict:
     }
 
 
-def observation_with_crop(crop: str = "WHEAT", planted_day: int = 0) -> dict:
+def observation_with_crop(crop: str = "WHEAT", planted_day: int = 0) -> dict[str, Any]:
     obs = minimal_observation()
     farm = deepcopy(obs["farms"][0])
     y, x = 0, 0
@@ -61,26 +62,26 @@ def observation_with_crop(crop: str = "WHEAT", planted_day: int = 0) -> dict:
     return obs
 
 
-def observation_with_money(money: float) -> dict:
+def observation_with_money(money: float) -> dict[str, Any]:
     obs = minimal_observation()
     obs["farms"][0]["money"] = money
     obs["farms"][1]["money"] = 5000.0
     return obs
 
 
-def observation_with_seeds(seeds: dict[str, int]) -> dict:
+def observation_with_seeds(seeds: dict[str, int]) -> dict[str, Any]:
     obs = minimal_observation()
     obs["private"]["seeds"] = dict(seeds)
     return obs
 
 
-def observation_with_shed(shed: dict[str, int]) -> dict:
+def observation_with_shed(shed: dict[str, int]) -> dict[str, Any]:
     obs = minimal_observation()
     obs["private"]["shed"] = dict(shed)
     return obs
 
 
-def observation_with_hands(n_hands: int) -> dict:
+def observation_with_hands(n_hands: int) -> dict[str, Any]:
     obs = minimal_observation()
     hands = [[x, 0] for x in range(1, n_hands + 1)]
     obs["farms"][0]["hands"] = hands
@@ -88,7 +89,7 @@ def observation_with_hands(n_hands: int) -> dict:
     return obs
 
 
-def observation_with_animal(animal_type: str = "GOOSE") -> dict:
+def observation_with_animal(animal_type: str = "GOOSE") -> dict[str, Any]:
     obs = minimal_observation()
     farm = deepcopy(obs["farms"][0])
     y, x = 0, 5
@@ -109,29 +110,29 @@ def observation_with_animal(animal_type: str = "GOOSE") -> dict:
 
 def observation_with_market(
     prices: dict[str, int], inventory: dict[str, int] | None = None
-) -> dict:
+) -> dict[str, Any]:
     obs = minimal_observation()
     obs["market"] = {"inventory": dict(inventory or {}), "prices": dict(prices)}
     return obs
 
 
-def observation_with_town(shops: list[str]) -> dict:
+def observation_with_town(shops: list[str]) -> dict[str, Any]:
     obs = minimal_observation()
     obs["town"] = {"unlocked_shops": list(shops)}
     return obs
 
 
-def observation_with_quadrant(quadrant: str = "NE") -> dict:
+def observation_with_quadrant(quadrant: str = "NE") -> dict[str, Any]:
     obs = minimal_observation()
     obs["farms"][0]["unlocked_quadrants"] = ["NW", quadrant]
     return obs
 
 
-def observation_malformed() -> dict:
+def observation_malformed() -> dict[str, Any]:
     return {"player": 0}
 
 
-def observation_partial() -> dict:
+def observation_partial() -> dict[str, Any]:
     return {
         "player": 0,
         "step": 0,
@@ -142,7 +143,7 @@ def observation_partial() -> dict:
     }
 
 
-def observation_advanced(day: int = 5, money: float = 4500.0) -> dict:
+def observation_advanced(day: int = 5, money: float = 4500.0) -> dict[str, Any]:
     obs = minimal_observation()
     obs["day"] = day
     obs["step"] = day * 24
