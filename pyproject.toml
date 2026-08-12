@@ -49,11 +49,7 @@ target-version = ["py311"]
 python_version = "3.11"
 strict = true
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["numpy", "numpy.*"]
-follow_imports = "skip"
-ignore_errors = true
+no_site_packages = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
