@@ -68,13 +68,20 @@ def agent(obs: Mapping[str, Any]) -> dict[str, Any]:
     return _runtime.act(obs)
 
 
-def make_runtime_agent(policy: Policy | str | None = "auto") -> AgentFn:
+def make_runtime_agent(
+    policy: Policy | str | None = "auto",
+    settings: RuntimeSettings | None = None,
+) -> AgentFn:
     """Build a fresh, policy-parameterised submission agent callable.
 
-    Used by the champion/challenger arena to instantiate candidate agents that
-    share the production planner but differ in their policy wrapper.
+    Used by the champion/challenger arena and the benchmark opponent suite to
+    instantiate candidate agents that share the production planner but differ in
+    their policy wrapper and/or planner settings.
     """
     rt = _AgentRuntime(policy)
+    if settings is not None:
+        rt.settings = settings
+        rt.planner = TurnPlanner(settings=settings, policy=rt.policy)
     return lambda obs: rt.act(obs)
 
 
