@@ -104,14 +104,6 @@ def next_step(
     return best
 
 
-def distance(src: Position, dst: Position, board_size: int) -> int:
-    if src == dst:
-        return 0
-    matrix = _dist_matrix(board_size)
-    n = board_size * board_size
-    return matrix[(src[1] * board_size + src[0]) * n + dst[1] * board_size + dst[0]]
-
-
 def nearest_shed_tile(pos: Position, board_size: int) -> Position:
     best: Position = (0, 0)
     best_len = 10**9

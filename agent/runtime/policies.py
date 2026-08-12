@@ -11,7 +11,6 @@ state is out-of-distribution, they degrade to the champion exactly.
 from __future__ import annotations
 
 import logging
-from abc import ABC
 from dataclasses import replace
 from typing import Any
 
@@ -26,7 +25,7 @@ LEARNED_RANK_WEIGHT = 25.0
 OOD_ADJUST_THRESHOLD = 2.25
 
 
-class Policy(ABC):
+class Policy:
     """Interface for policies that wrap the champion plan."""
 
     name = "policy"
