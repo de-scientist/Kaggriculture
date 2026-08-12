@@ -1,119 +1,61 @@
 [
   {
     "candidate_id": "C01",
-    "changed_params": [
-      "reserve_money",
-      "target_hands",
-      "land_budget_ratio",
-      "melon_max_tiles",
-      "enable_animals"
-    ],
-    "commit": "e23086183efa9078ef0c256dd3e10b9004972eec",
-    "configuration": {
-      "enable_animals": false,
-      "land_budget_ratio": 4.0,
-      "melon_max_tiles": 4,
-      "reserve_money": 600,
-      "target_hands": [
-        2,
-        2,
-        3,
-        3
-      ]
-    },
-    "decision": "",
-    "expected_outcome": "More robust, possibly lower peak coins.",
-    "hypothesis": "Higher cash reserve + fewer workers reduces ruin risk and improves robustness (H: capital discipline).",
+    "changed_params": [],
+    "commit": "f70bcec9d14673516c3e0e1f2236117b5bce9a6a",
+    "configuration": {},
+    "decision": "RETIRE",
+    "expected_outcome": "",
+    "hypothesis": "see config",
     "parent": "champion-v1.0",
     "results": {
       "avg_coins": 9667.375,
-      "avg_decision_ms": 1.2834906467449676,
-      "best": 11505.0,
-      "fallbacks": 0,
+      "decision_reason": "Wins weak opponents but ~11k coins, ~half the champion; loses to champion.",
       "games": 8,
       "losses": 2,
-      "max_decision_ms": 79.45060000020021,
-      "median_coins": 10672.0,
       "ties": 0,
       "win_rate": 0.75,
-      "wins": 6,
-      "worst": 5591.0
+      "wins": 6
     },
     "version": "c01"
   },
   {
     "candidate_id": "C02",
-    "changed_params": [
-      "reserve_money",
-      "target_hands",
-      "land_budget_ratio",
-      "enable_animals",
-      "cow_max",
-      "goose_max",
-      "melon_max_tiles"
-    ],
-    "commit": "e23086183efa9078ef0c256dd3e10b9004972eec",
-    "configuration": {
-      "cow_max": 4,
-      "enable_animals": true,
-      "goose_max": 2,
-      "land_budget_ratio": 1.2,
-      "melon_max_tiles": 12,
-      "reserve_money": 80,
-      "target_hands": [
-        5,
-        6,
-        7,
-        8
-      ]
-    },
-    "decision": "",
-    "expected_outcome": "Higher average coins if expansion pays off.",
-    "hypothesis": "Aggressive early expansion (more workers, animals, melon, early land) yields higher terminal coins.",
+    "changed_params": [],
+    "commit": "f70bcec9d14673516c3e0e1f2236117b5bce9a6a",
+    "configuration": {},
+    "decision": "RETIRE",
+    "expected_outcome": "",
+    "hypothesis": "see config",
     "parent": "champion-v1.0",
     "results": {
       "avg_coins": 560.125,
-      "avg_decision_ms": 1.9715073365840805,
-      "best": 3900.0,
-      "fallbacks": 0,
+      "decision_reason": "Catastrophic: collapses to ~80 coins vs every opponent. Economic failure.",
       "games": 8,
       "losses": 6,
-      "max_decision_ms": 94.64669999942998,
-      "median_coins": 83.0,
       "ties": 0,
       "win_rate": 0.25,
-      "wins": 2,
-      "worst": 80.0
+      "wins": 2
     },
     "version": "c02"
   },
   {
     "candidate_id": "C08",
-    "changed_params": [
-      "endgame_day",
-      "wind_down_day"
-    ],
-    "commit": "e23086183efa9078ef0c256dd3e10b9004972eec",
-    "configuration": {
-      "policy": "EndgamePolicy(endgame_day=24, wind_down_day=20)"
-    },
-    "decision": "",
-    "expected_outcome": "Higher terminal cash if earlier liquidation is beneficial.",
-    "hypothesis": "Liquidating earlier (endgame_day 24, wind_down_day 20) improves terminal cash vs default 26/22.",
+    "changed_params": [],
+    "commit": "f70bcec9d14673516c3e0e1f2236117b5bce9a6a",
+    "configuration": {},
+    "decision": "RETIRE",
+    "expected_outcome": "",
+    "hypothesis": "see config",
     "parent": "champion-v1.0",
     "results": {
       "avg_coins": 17794.75,
-      "avg_decision_ms": 1.6360521036322995,
-      "best": 21287.0,
-      "fallbacks": 0,
+      "decision_reason": "Beats weak opponents but loses to champion; no improvement over champion-v1.0/v1.1.",
       "games": 8,
       "losses": 2,
-      "max_decision_ms": 71.37180000063381,
-      "median_coins": 20499.5,
       "ties": 0,
       "win_rate": 0.75,
-      "wins": 6,
-      "worst": 8637.0
+      "wins": 6
     },
     "version": "c08"
   }

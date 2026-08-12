@@ -192,13 +192,23 @@ def main_cli() -> int:  # pragma: no cover - manual entry point
     )
     hyp_reg = HypothesisRegistry()
     for hid, hyp in [
-        ("H-A", "Stopping land expansion late improves final liquidity.", "endgame"),
-        ("H-B", "Stopping animal purchases late improves terminal wealth.", "endgame"),
-        ("H-C", "Tapering hiring from ~day 22 improves profitability.", "endgame"),
-        ("H-D", "Stopping planting from ~day 26 improves terminal cash.", "endgame"),
-        ("H-E", "Late inventory liquidation improves final score.", "endgame"),
+        ("H-A", "Stopping land expansion late improves final liquidity."),
+        ("H-B", "Stopping animal purchases late improves terminal wealth."),
+        ("H-C", "Tapering hiring from ~day 22 improves profitability."),
+        ("H-D", "Stopping planting from ~day 26 improves terminal cash."),
+        ("H-E", "Late inventory liquidation improves final score."),
     ]:
-        hyp_reg.add(Hypothesis(id=hid, date="stage4b", hypothesis=hyp, reason="Endgame optimization", affected_component="EndgamePolicy", expected_effect="higher terminal cash", experiment="ablation vs no_endgame"))
+        hyp_reg.add(
+            Hypothesis(
+                id=hid,
+                date="stage4b",
+                hypothesis=hyp,
+                reason="Endgame optimization",
+                affected_component="EndgamePolicy",
+                expected_effect="higher terminal cash",
+                experiment="ablation vs no_endgame",
+            )
+        )
 
     # --- Reports ----------------------------------------------------------
     champ_summary = BenchmarkSummary(candidate="champion-v1.0", matches=[m for m in all_matches if m.our_agent == "champion-v1.0" and m.opponent != "champion"])

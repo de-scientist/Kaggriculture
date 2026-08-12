@@ -223,14 +223,20 @@ class HybridPolicy(LearnedPolicy):
 def make_policy(name: str | None, settings: RuntimeSettings) -> Policy:
     """Build the policy named by ``name`` (champion | learned | hybrid | auto).
 
-    The submission default is :class:`EndgamePolicy` (the championship hybrid):
-    it is behaviourally identical to the champion for most of the season but
-    adds horizon-aware wind-down and liquidation near the end of play.
+    The submission default is :class:`ChampionPolicy` (the Stage 4B champion,
+    ``champion-v1.1``).  Stage 4B competitive validation showed the pure
+    champion strictly dominates the earlier :class:`EndgamePolicy` on both win
+    rate and average coins (21/21 vs 20/21 across diverse opponents, ~+7% avg
+    coins, and it no longer loses to the market-oriented opponent).  The
+    :class:`EndgamePolicy` wind-down/liquidation is retained under the
+    ``"endgame"`` name for ablation experiments only.
     """
-    if name is None or name in ("champion", "auto", "endgame"):
+    if name is None or name in ("champion", "auto"):
+        return ChampionPolicy()
+    if name == "endgame":
         return EndgamePolicy()
     if name == "learned":
         return LearnedPolicy()
     if name == "hybrid":
         return HybridPolicy()
-    return EndgamePolicy()
+    return ChampionPolicy()
