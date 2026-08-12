@@ -54,7 +54,7 @@ def git_commit() -> str:
 
 
 def champion_agent() -> Any:
-    return main.agent
+    return FailSafeAgent(make_runtime_agent("auto"))
 
 
 def save_incremental(matches: list[MatchMetrics]) -> None:
@@ -104,7 +104,7 @@ def main_cli() -> int:  # pragma: no cover - manual entry point
     # --- Champion baseline -------------------------------------------------
     champ = champion_agent()
     baseline_opps = {o: build_opponent(o) for o in BASELINE_OPPONENTS}
-    baseline_opps["champion"] = champ  # self-play reference
+    baseline_opps["champion"] = FailSafeAgent(make_runtime_agent("auto"))  # self-play reference
     run_suite(champ, "champion-v1.0", baseline_opps, tuple(range(args.baseline_seeds)), all_matches)
 
     # --- EndgamePolicy ablation ------------------------------------------

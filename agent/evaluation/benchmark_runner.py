@@ -112,10 +112,10 @@ class BenchmarkRunner:
         return self.simulator if self.simulator is not None else _kaggle_simulator(self.configuration)
 
     def run_match(self, opponent_name: str, opponent: Agent, seed: int) -> MatchMetrics:
-        from agent.submission.failsafe import FailSafeAgent
-
-        stats: dict[str, int] = {}
-        fs_agent = FailSafeAgent(self.our_agent, stats=stats)
+        if isinstance(self.our_agent, FailSafeAgent):
+            fs_agent = self.our_agent
+        else:
+            fs_agent = FailSafeAgent(self.our_agent, stats={})
         instrumented = MetricsAgent(fs_agent)
         started = time.perf_counter()
         result = self._sim()(instrumented, opponent)
@@ -136,7 +136,7 @@ class BenchmarkRunner:
             avg_decision_ms=avg,
             p95_decision_ms=percentile(instrumented.latencies, 95.0),
             max_decision_ms=instrumented.max_ms,
-            fallback_count=stats.get("fallback", 0),
+            fallback_count=fs_agent._stats.get("fallback", 0),
             invalid_actions=0,
             episode_completed=result.completed,
             errors=1 if result.status == "ERROR" else 0,
