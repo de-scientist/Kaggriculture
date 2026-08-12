@@ -10,25 +10,30 @@ from __future__ import annotations
 import logging
 import os
 import time
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Any
 
 from .game import GameSnapshot
 from .planner import TurnPlanner
-from .policies import make_policy
+from .policies import Policy, make_policy
 from .settings import RuntimeSettings
 
 logger = logging.getLogger(__name__)
 
 _POLICY_ENV = os.environ.get("KAG_RUNTIME_POLICY", "auto")
 
+AgentFn = Callable[[Mapping[str, Any]], dict[str, Any]]
+
 
 class _AgentRuntime:
     """Cached planner + optional experience recorder for the process."""
 
-    def __init__(self) -> None:
+    def __init__(self, policy: Policy | str | None = None) -> None:
         self.settings = RuntimeSettings.from_env()
-        self.policy = make_policy(_POLICY_ENV, self.settings)
+        if isinstance(policy, Policy):
+            self.policy = policy
+        else:
+            self.policy = make_policy(policy if policy is not None else _POLICY_ENV, self.settings)
         self.planner = TurnPlanner(settings=self.settings, policy=self.policy)
         self.recorder = None
         if self.settings.record_experience:
@@ -61,6 +66,16 @@ def agent(obs: Mapping[str, Any]) -> dict[str, Any]:
     if _runtime is None:
         _runtime = _AgentRuntime()
     return _runtime.act(obs)
+
+
+def make_runtime_agent(policy: Policy | str | None = "auto") -> AgentFn:
+    """Build a fresh, policy-parameterised submission agent callable.
+
+    Used by the champion/challenger arena to instantiate candidate agents that
+    share the production planner but differ in their policy wrapper.
+    """
+    rt = _AgentRuntime(policy)
+    return lambda obs: rt.act(obs)
 
 
 def get_runtime() -> _AgentRuntime:

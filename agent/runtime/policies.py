@@ -11,7 +11,7 @@ state is out-of-distribution, they degrade to the champion exactly.
 from __future__ import annotations
 
 import logging
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from typing import Any
 
 from .crops import best_crop
@@ -50,6 +50,55 @@ class ChampionPolicy(Policy):
         self, snapshot: GameSnapshot, settings: RuntimeSettings
     ) -> tuple[RuntimeSettings, dict[str, Any]]:
         return settings, {"crop": best_crop(snapshot, settings), "mode": "champion"}
+
+
+@dataclass
+class EndgamePolicy(ChampionPolicy):
+    """Champion planner plus horizon-aware wind-down and liquidation.
+
+    Early in the season this is identical to :class:`ChampionPolicy`.  As the
+    season closes it progressively (a) stops land/animals/hiring, (b) stops
+    planting crops that cannot mature, and (c) lets the existing market endgame
+    logic liquidate the shed into coins.  This is the default submission policy
+    and implements the Stage 4 endgame optimisation (horizon-dependent strategy
+    switching) without changing any early-game behaviour.
+    """
+
+    name = "endgame"
+    wind_down_day: int = 22
+    endgame_day: int = 26
+
+    def adjust(
+        self, snapshot: GameSnapshot, settings: RuntimeSettings
+    ) -> tuple[RuntimeSettings, dict[str, Any]]:
+        base_settings, info = super().adjust(snapshot, settings)
+        day = snapshot.day
+        info["mode"] = "champion"
+        if day >= self.endgame_day or snapshot.is_final_day():
+            # Liquidate: no new planting, no expansion, shed is already sold by
+            # the market endgame logic.  Keep hands only if they are free.
+            adjusted = replace(
+                base_settings,
+                plant_enabled=False,
+                enable_animals=False,
+                target_hands=(0, 0, 0, 0),
+                land_latest_day=(0, 0, 0),
+                sell_min_ratio=min(1.0, base_settings.sell_min_ratio + 0.1),
+            )
+            info["mode"] = "endgame_liquidate"
+            return adjusted, info
+        if day >= self.wind_down_day:
+            # Wind-down: stop buying land/animals and taper hiring, but keep
+            # planting short crops for the remaining days.
+            adjusted = replace(
+                base_settings,
+                enable_animals=False,
+                land_latest_day=(0, 0, 0),
+                target_hands=(2, 2, 2, 2),
+            )
+            info["mode"] = "endgame_wind_down"
+            return adjusted, info
+        return base_settings, info
 
 
 class _LearnedMixin:
@@ -172,11 +221,16 @@ class HybridPolicy(LearnedPolicy):
 
 
 def make_policy(name: str | None, settings: RuntimeSettings) -> Policy:
-    """Build the policy named by ``name`` (champion | learned | hybrid | auto)."""
-    if name is None or name in ("champion", "auto"):
-        return ChampionPolicy()
+    """Build the policy named by ``name`` (champion | learned | hybrid | auto).
+
+    The submission default is :class:`EndgamePolicy` (the championship hybrid):
+    it is behaviourally identical to the champion for most of the season but
+    adds horizon-aware wind-down and liquidation near the end of play.
+    """
+    if name is None or name in ("champion", "auto", "endgame"):
+        return EndgamePolicy()
     if name == "learned":
         return LearnedPolicy()
     if name == "hybrid":
         return HybridPolicy()
-    return ChampionPolicy()
+    return EndgamePolicy()
