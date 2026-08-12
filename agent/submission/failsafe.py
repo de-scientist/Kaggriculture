@@ -55,7 +55,13 @@ class FailSafeAgent:
         self._agent = agent_fn
         self._log = logger or logging.getLogger(__name__)
 
-    def __call__(self, obs: Mapping[str, Any]) -> dict[str, Any]:
+    def __call__(self, obs: Mapping[str, Any], configuration: Any = None) -> dict[str, Any]:
+        """Callable entry point.
+
+        Tolerates the Kaggle calling convention ``agent(observation,
+        configuration)`` (the second argument is ignored here) so a signature
+        mismatch can never surface as an unhandled error to the environment.
+        """
         try:
             out = self._agent(obs)
         except Exception:  # noqa: BLE001 - the whole point is to catch everything

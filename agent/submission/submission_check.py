@@ -144,12 +144,24 @@ def check_validation_episode() -> CheckResult:
     try:
         agent = _load_agent()
         env = make("kaggriculture", configuration={"episodeSteps": 720})
-        env.run([agent, "random"])
+        env.run([agent, "starter"])
         final = env.steps[-1]
-        rewards = [float(s.reward or 0.0) for s in final]
-        if any(r <= 0 for r in rewards):
-            return CheckResult("validation_episode", False, f"episode ended with reward {rewards}")
-        return CheckResult("validation_episode", True, f"full episode vs random: rewards={rewards}")
+        ours = final[0]
+        reward = float(ours.reward or 0.0)
+        status = getattr(ours, "status", None)
+        if status == "ERROR":
+            return CheckResult("validation_episode", False, "agent errored during the episode")
+        if reward <= 0:
+            return CheckResult(
+                "validation_episode",
+                False,
+                f"episode ended with non-positive reward {reward} (status={status})",
+            )
+        return CheckResult(
+            "validation_episode",
+            True,
+            f"full episode vs starter: our reward={reward}, status={status}",
+        )
     except Exception as exc:  # noqa: BLE001
         return CheckResult("validation_episode", False, f"validation episode crashed: {exc}")
 
