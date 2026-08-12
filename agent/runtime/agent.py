@@ -61,7 +61,7 @@ class _AgentRuntime:
 _runtime: _AgentRuntime | None = None
 
 
-def agent(obs: Mapping[str, Any]) -> dict[str, Any]:
+def agent(obs: Mapping[str, Any], configuration: Any = None) -> dict[str, Any]:
     global _runtime
     if _runtime is None:
         _runtime = _AgentRuntime()
@@ -82,7 +82,7 @@ def make_runtime_agent(
     if settings is not None:
         rt.settings = settings
         rt.planner = TurnPlanner(settings=settings, policy=rt.policy)
-    return lambda obs: rt.act(obs)
+    return lambda obs, configuration=None: rt.act(obs)
 
 
 def get_runtime() -> _AgentRuntime:
