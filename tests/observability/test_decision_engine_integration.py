@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from agent.adapters import ObservationAdapter
 from agent.config import load_config
-from agent.decision import decision_context, decision_engine
+from agent.decision import action_generator, decision_context, decision_engine
 from agent.observability import get_metrics, get_replay_store, get_telemetry
 
 SAMPLE_OBS = {
@@ -39,7 +41,9 @@ SAMPLE_OBS = {
 }
 
 
-def _context(config=None, game_state=None):
+def _context(
+    config: Any | None = None, game_state: Any | None = None
+) -> decision_context.DecisionContext:
     settings = config or load_config("development")
     if game_state is None:
         game_state = ObservationAdapter().parse(SAMPLE_OBS)
@@ -103,26 +107,28 @@ def test_decide_records_execution_time_in_replay() -> None:
     assert rec.execution_time_ms >= 0.0
 
 
-def test_decide_fallback_returns_pass_on_failure(monkeypatch) -> None:
+def test_decide_fallback_returns_pass_on_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     """When a pipeline phase raises, decide returns PASS and records the error."""
     import agent.decision.decision_engine as de
 
-    def boom(_ctx):
+    def boom(_ctx: Any) -> Any:
         raise ValueError("candidate generation exploded")
 
-    monkeypatch.setattr(de.action_generator, "generate_candidates", boom)
+    monkeypatch.setattr(action_generator, "generate_candidates", boom)
     action = decision_engine.decide(_context())
     assert action == {"farmer": ["PASS"], "hands": [], "market": []}
     assert "ValueError" in get_telemetry().snapshot().exception_counts
     assert get_metrics().counter("decision_count") == 1.0
 
 
-def test_decision_performance_budget_strategy_error_propagates(monkeypatch) -> None:
+def test_decision_performance_budget_strategy_error_propagates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """A StrategyError mentioning 'Performance budget' is not swallowed by decide."""
     from agent.exceptions.strategy import StrategyError
 
     class _Budget:
-        def check(self, *a, **k):
+        def check(self, *a: Any, **k: Any) -> Any:
             raise StrategyError("Performance budget exceeded for DecisionEngine")
 
     monkeypatch.setattr(decision_engine, "_budget", lambda config: _Budget())

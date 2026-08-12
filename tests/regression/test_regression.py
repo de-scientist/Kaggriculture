@@ -6,6 +6,9 @@ returns silently.  A bug fixed once must never return.
 
 from __future__ import annotations
 
+from typing import Any
+
+from agent.decision import action_generator
 from agent.decision.decision_context import DecisionContext
 from agent.decision.decision_engine import decide
 from agent.domain.position import Position
@@ -43,6 +46,7 @@ class TestRegressionCropHarvest:
         planted = crop_service.plant(tile, "WHEAT", day=0)
         watered = crop_service.water(planted)
         harvested = crop_service.harvest(watered, current_day=2)
+        assert harvested.crop is not None
         assert harvested.crop.is_harvested is True
 
 
@@ -74,17 +78,15 @@ class TestRegressionDecisionFallbackMetrics:
         obs = minimal_observation()
         context = DecisionContext(obs=obs, player=0, step=1, day=0)
 
-        def boom(_ctx):
+        def boom(_ctx: Any) -> Any:
             raise ValueError("test error")
 
-        import agent.decision.decision_engine as de
-
-        original = de.action_generator.generate_candidates
-        de.action_generator.generate_candidates = boom
+        original = action_generator.generate_candidates
+        action_generator.generate_candidates = boom
         try:
             action = decide(context)
         finally:
-            de.action_generator.generate_candidates = original
+            action_generator.generate_candidates = original
 
         assert action["farmer"] == ["PASS"]
         assert metrics.counter("decision_count") == before + 1.0
