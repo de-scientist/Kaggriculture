@@ -72,5 +72,16 @@
     "frozen_at": "stage4b",
     "notes": "Stage 4B promotion: pure champion beats EndgamePolicy on win rate (21/21 vs 20/21) and avg coins (~+7%), and fixes the market-opponent loss.",
     "version": "champion-v1.1"
+  },
+  {
+    "commit": "27940965d847da43924dee259b946873d868055a",
+    "config": {
+      "endgame_day": 26,
+      "policy": "EndgamePolicy",
+      "wind_down_day": 22
+    },
+    "frozen_at": "stage4b",
+    "notes": "Stage 4 champion: EndgamePolicy + FailSafeAgent.",
+    "version": "champion-v1.0"
   }
 ]

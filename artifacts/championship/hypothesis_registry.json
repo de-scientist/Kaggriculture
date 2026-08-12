@@ -2,61 +2,61 @@
   {
     "affected_component": "EndgamePolicy",
     "date": "stage4b",
-    "decision": "RETIRE",
+    "decision": "",
     "expected_effect": "higher terminal cash",
-    "experiment": "champion vs no_endgame",
+    "experiment": "ablation vs no_endgame",
     "hypothesis": "Stopping land expansion late improves final liquidity.",
     "id": "H-A",
-    "metrics": "win rate, avg coins",
-    "reason": "Endgame optimization ablation",
-    "result": "Refuted: no_endgame (no land cutoff) won all 21 diverse games at higher coins."
+    "metrics": "",
+    "reason": "Endgame optimization",
+    "result": ""
   },
   {
     "affected_component": "EndgamePolicy",
     "date": "stage4b",
-    "decision": "RETIRE",
+    "decision": "",
     "expected_effect": "higher terminal cash",
-    "experiment": "champion vs no_endgame",
+    "experiment": "ablation vs no_endgame",
     "hypothesis": "Stopping animal purchases late improves terminal wealth.",
     "id": "H-B",
-    "metrics": "win rate, avg coins",
-    "reason": "Endgame optimization ablation",
-    "result": "Not isolated; full EndgamePolicy lost to no_endgame. Inconclusive -> no benefit."
+    "metrics": "",
+    "reason": "Endgame optimization",
+    "result": ""
   },
   {
     "affected_component": "EndgamePolicy",
     "date": "stage4b",
-    "decision": "RETIRE",
+    "decision": "",
     "expected_effect": "higher terminal cash",
-    "experiment": "champion vs no_endgame",
+    "experiment": "ablation vs no_endgame",
     "hypothesis": "Tapering hiring from ~day 22 improves profitability.",
     "id": "H-C",
-    "metrics": "win rate, avg coins",
-    "reason": "Endgame optimization ablation",
-    "result": "Refuted: no_endgame (no hiring taper) won all diverse games at higher coins."
+    "metrics": "",
+    "reason": "Endgame optimization",
+    "result": ""
   },
   {
     "affected_component": "EndgamePolicy",
     "date": "stage4b",
-    "decision": "RETIRE",
+    "decision": "",
     "expected_effect": "higher terminal cash",
-    "experiment": "champion vs no_endgame",
+    "experiment": "ablation vs no_endgame",
     "hypothesis": "Stopping planting from ~day 26 improves terminal cash.",
     "id": "H-D",
-    "metrics": "win rate, avg coins",
-    "reason": "Endgame optimization ablation",
-    "result": "Refuted: champion WITH endgame lost all 3 self-play games to no_endgame (avg 10.5k vs 12.2k)."
+    "metrics": "",
+    "reason": "Endgame optimization",
+    "result": ""
   },
   {
     "affected_component": "EndgamePolicy",
     "date": "stage4b",
-    "decision": "RETIRE",
+    "decision": "",
     "expected_effect": "higher terminal cash",
-    "experiment": "champion vs no_endgame",
+    "experiment": "ablation vs no_endgame",
     "hypothesis": "Late inventory liquidation improves final score.",
     "id": "H-E",
-    "metrics": "win rate, avg coins",
-    "reason": "Endgame optimization ablation",
-    "result": "Refuted: liquidation reduced terminal cash; market.py sell logic already liquidates."
+    "metrics": "",
+    "reason": "Endgame optimization",
+    "result": ""
   }
 ]
