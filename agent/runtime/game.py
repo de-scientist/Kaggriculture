@@ -284,17 +284,18 @@ class GameSnapshot:
 
     # -- market / town ---------------------------------------------------
     def prices(self) -> Mapping[str, Any]:
-        return self.market.get("prices", {})
+        return cast(Mapping[str, Any], self.market.get("prices", {}))
 
     def price(self, product: str) -> float:
-        value = self.prices().get(product, MARKET.get(product, {}).get("base", 0))
+        default: object = MARKET.get(product, {}).get("base", 0)
+        value = self.prices().get(product, default)
         try:
             return float(value)
         except (TypeError, ValueError):
             return 0.0
 
     def market_inventory(self) -> Mapping[str, Any]:
-        return self.market.get("inventory", {})
+        return cast(Mapping[str, Any], self.market.get("inventory", {}))
 
     def market_level(self, product: str) -> float:
         value = self.market_inventory().get(product, 0)

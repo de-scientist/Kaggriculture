@@ -82,7 +82,7 @@ class RuntimeSettings:
             merged.update(overrides)
         for f in fields(cls):
             default = f.default
-            if default is dataclasses.MISSING:  # type: ignore[name-defined]
+            if default is dataclasses.MISSING:
                 continue
             env_value: Any = None
             env_key = "KAG_RUNTIME_" + f.name.upper()

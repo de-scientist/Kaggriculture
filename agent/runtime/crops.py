@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from typing import Any
 
 from .constants import CROPS, MARKET, window_end_day, window_start_day
 from .game import GameSnapshot, count_plants_by_crop
@@ -51,7 +52,7 @@ def cycle_days(crop: str) -> int:
     return _CYCLE_DAYS.get(crop, 5)
 
 
-def crop_daily_value(crop: str, prices: Mapping[str, object], day: int) -> float:
+def crop_daily_value(crop: str, prices: Mapping[str, Any], day: int) -> float:
     """Estimated net coins per day per tile for planting ``crop`` today."""
     cd = CROPS[crop]
     base = int(MARKET[crop]["base"])
