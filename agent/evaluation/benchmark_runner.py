@@ -15,7 +15,7 @@ from __future__ import annotations
 import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, cast
 
 from agent.evaluation.metrics import (
     BenchmarkSummary,
@@ -65,7 +65,7 @@ class MetricsAgent:
         self.latencies.append(dt)
         if out == EMERGENCY_ACTION:
             self.fallbacks += 1
-        return out
+        return cast("dict[str, Any]", out)
 
 
 def _kaggle_simulator(configuration: Mapping[str, Any] | None) -> Callable[..., _SimResult]:
