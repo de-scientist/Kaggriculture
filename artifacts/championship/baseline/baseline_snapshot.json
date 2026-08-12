@@ -1,6 +1,6 @@
 {
   "agent_version": "champion-v1.1",
-  "git_commit": "018492be61e1773e1739caba10140ee930ccca0e",
+  "git_commit": "3045af6b305aeebf04c6c001801f18c8990b8b32",
   "policy_configuration": {
     "policy": "ChampionPolicy",
     "endgame": "disabled"

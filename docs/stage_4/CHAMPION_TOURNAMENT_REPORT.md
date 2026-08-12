@@ -31,28 +31,28 @@
 
 - Candidate: **champion-v1.0**
 - Matches: 27
-- Overall win rate: 74.1%
-- Total W/L/T: 20/4/3
-- Avg final coins: 17755.00
-- Median final coins: 20798.00
-- Best / worst: 22243.00 / 8193.00
-- Avg decision (ms): 1.607
-- Max decision (ms): 345.325
+- Overall win rate: 77.8%
+- Total W/L/T: 21/1/5
+- Avg final coins: 19476.07
+- Median final coins: 22438.00
+- Best / worst: 24379.00 / 10623.00
+- Avg decision (ms): 1.964
+- Max decision (ms): 108.845
 - Total fallbacks: 0
 
 ## Per-opponent
 
 | Opponent | Games | Wins | Losses | Ties | Win Rate | Avg Coins | Avg Margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| aggressive | 3 | 3 | 0 | 0 | 100.0% (100-100) | 21267.33 | 19385.33 |
-| champion | 3 | 0 | 0 | 3 | 0.0% (0-0) | 10036.67 | 0.00 |
-| conservative | 3 | 3 | 0 | 0 | 100.0% (100-100) | 20913.67 | 18039.00 |
-| expansion | 3 | 3 | 0 | 0 | 100.0% (100-100) | 21056.00 | 20474.67 |
-| market | 3 | 2 | 1 | 0 | 66.7% (13-100) | 13406.00 | 3006.67 |
-| no_endgame | 3 | 0 | 3 | 0 | 0.0% (0-0) | 9889.00 | -2355.67 |
-| production | 3 | 3 | 0 | 0 | 100.0% (100-100) | 21002.33 | 17250.33 |
-| random | 3 | 3 | 0 | 0 | 100.0% (100-100) | 21424.67 | 21421.33 |
-| starter | 3 | 3 | 0 | 0 | 100.0% (100-100) | 20799.33 | 17423.67 |
+| aggressive | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22970.33 | 17916.33 |
+| champion | 3 | 1 | 0 | 2 | 33.3% (0-87) | 12422.67 | 206.67 |
+| conservative | 3 | 3 | 0 | 0 | 100.0% (100-100) | 23365.33 | 20183.00 |
+| expansion | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22264.67 | 18561.67 |
+| market | 3 | 2 | 1 | 0 | 66.7% (13-100) | 13693.33 | 3067.00 |
+| no_endgame | 3 | 0 | 0 | 3 | 0.0% (0-0) | 12359.33 | 0.00 |
+| production | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22899.33 | 17532.33 |
+| random | 3 | 3 | 0 | 0 | 100.0% (100-100) | 21988.33 | 21988.33 |
+| starter | 3 | 3 | 0 | 0 | 100.0% (100-100) | 23321.33 | 19996.67 |
 
 ## EndgamePolicy ablation (champion-v1.0 vs no_endgame self-play)
 - Matches: 3 (seeds 0,1,2). champion-v1.0 wins: 0, losses: 3.
@@ -63,46 +63,46 @@
 
 - Candidate: **C01**
 - Matches: 8
-- Overall win rate: 75.0%
-- Total W/L/T: 6/2/0
-- Avg final coins: 9667.38
-- Median final coins: 10672.00
-- Best / worst: 11505.00 / 5591.00
-- Avg decision (ms): 1.283
-- Max decision (ms): 79.451
+- Overall win rate: 87.5%
+- Total W/L/T: 7/1/0
+- Avg final coins: 10432.88
+- Median final coins: 11378.00
+- Best / worst: 11641.00 / 5727.00
+- Avg decision (ms): 1.306
+- Max decision (ms): 47.047
 - Total fallbacks: 0
 
 ## Per-opponent
 
 | Opponent | Games | Wins | Losses | Ties | Win Rate | Avg Coins | Avg Margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| aggressive | 2 | 2 | 0 | 0 | 100.0% (100-100) | 10672.00 | 8571.50 |
-| champion | 2 | 0 | 2 | 0 | 0.0% (0-0) | 5652.50 | -10274.50 |
-| conservative | 2 | 2 | 0 | 0 | 100.0% (100-100) | 11433.00 | 8357.50 |
-| starter | 2 | 2 | 0 | 0 | 100.0% (100-100) | 10912.00 | 7460.00 |
+| aggressive | 2 | 2 | 0 | 0 | 100.0% (100-100) | 11300.50 | 9864.00 |
+| champion | 2 | 1 | 1 | 0 | 50.0% (0-100) | 7413.00 | -5637.50 |
+| conservative | 2 | 2 | 0 | 0 | 100.0% (100-100) | 11514.50 | 7842.00 |
+| starter | 2 | 2 | 0 | 0 | 100.0% (100-100) | 11503.50 | 8182.50 |
 
 ### C02  (RETIRE)
 # C02 vs suite
 
 - Candidate: **C02**
 - Matches: 8
-- Overall win rate: 25.0%
-- Total W/L/T: 2/6/0
-- Avg final coins: 560.12
-- Median final coins: 83.00
-- Best / worst: 3900.00 / 80.00
-- Avg decision (ms): 1.972
-- Max decision (ms): 94.647
+- Overall win rate: 12.5%
+- Total W/L/T: 1/7/0
+- Avg final coins: 1775.12
+- Median final coins: 453.00
+- Best / worst: 6492.00 / 80.00
+- Avg decision (ms): 1.793
+- Max decision (ms): 80.847
 - Total fallbacks: 0
 
 ## Per-opponent
 
 | Opponent | Games | Wins | Losses | Ties | Win Rate | Avg Coins | Avg Margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| aggressive | 2 | 2 | 0 | 0 | 100.0% (100-100) | 87.00 | 36.00 |
-| champion | 2 | 0 | 2 | 0 | 0.0% (0-0) | 1990.00 | -18885.00 |
-| conservative | 2 | 0 | 2 | 0 | 0.0% (0-0) | 80.00 | -3042.00 |
-| starter | 2 | 0 | 2 | 0 | 0.0% (0-0) | 83.50 | -3236.00 |
+| aggressive | 2 | 1 | 1 | 0 | 50.0% (0-100) | 702.00 | 224.00 |
+| champion | 2 | 0 | 2 | 0 | 0.0% (0-0) | 6022.50 | -16354.50 |
+| conservative | 2 | 0 | 2 | 0 | 0.0% (0-0) | 88.00 | -3397.00 |
+| starter | 2 | 0 | 2 | 0 | 0.0% (0-0) | 288.00 | -3052.00 |
 
 ### C08  (RETIRE)
 # C08 vs suite
@@ -111,18 +111,18 @@
 - Matches: 8
 - Overall win rate: 75.0%
 - Total W/L/T: 6/2/0
-- Avg final coins: 17794.75
-- Median final coins: 20499.50
-- Best / worst: 21287.00 / 8637.00
-- Avg decision (ms): 1.636
-- Max decision (ms): 71.372
+- Avg final coins: 18163.00
+- Median final coins: 20871.50
+- Best / worst: 21436.00 / 8527.00
+- Avg decision (ms): 1.581
+- Max decision (ms): 99.851
 - Total fallbacks: 0
 
 ## Per-opponent
 
 | Opponent | Games | Wins | Losses | Ties | Win Rate | Avg Coins | Avg Margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| aggressive | 2 | 2 | 0 | 0 | 100.0% (100-100) | 20955.50 | 17943.50 |
-| champion | 2 | 0 | 2 | 0 | 0.0% (0-0) | 8839.50 | -313.50 |
-| conservative | 2 | 2 | 0 | 0 | 100.0% (100-100) | 20893.00 | 17942.00 |
-| starter | 2 | 2 | 0 | 0 | 100.0% (100-100) | 20491.00 | 17075.50 |
+| aggressive | 2 | 2 | 0 | 0 | 100.0% (100-100) | 21088.50 | 18192.50 |
+| champion | 2 | 0 | 2 | 0 | 0.0% (0-0) | 9591.50 | -2525.00 |
+| conservative | 2 | 2 | 0 | 0 | 100.0% (100-100) | 20887.00 | 17051.50 |
+| starter | 2 | 2 | 0 | 0 | 100.0% (100-100) | 21085.00 | 17704.50 |

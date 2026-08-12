@@ -1,7 +1,7 @@
 # Final Submission Manifest
 
 - Champion version: champion-v1.1 (ChampionPolicy, no endgame)
-- Commit hash: 018492be61e1773e1739caba10140ee930ccca0e
+- Commit hash: 3045af6b305aeebf04c6c001801f18c8990b8b32
 - Configuration: RuntimeSettings defaults; policy=champion
 - Model version: none (model-free)
 - Dependency versions: kaggle-environments (see environment)

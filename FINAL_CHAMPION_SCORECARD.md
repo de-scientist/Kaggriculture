@@ -1,7 +1,7 @@
 # Final Champion Scorecard
 
 **Submission champion:** `champion-v1.1` — `ChampionPolicy` (no EndgamePolicy), wrapped in `FailSafeAgent`.
-**Commit:** 018492be61e1773e1739caba10140ee930ccca0e
+**Commit:** 3045af6b305aeebf04c6c001801f18c8990b8b32
 
 ## Champion profile
 | Attribute | Value |

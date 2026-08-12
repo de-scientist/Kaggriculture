@@ -2,8 +2,8 @@
 
 ## 1. Starting Champion
 - Version: champion-v1.0
-- Commit: 018492be61e1773e1739caba10140ee930ccca0e
-- Baseline Result: 17755.0 avg coins, 20W/4L/3T vs diverse.
+- Commit: 3045af6b305aeebf04c6c001801f18c8990b8b32
+- Baseline Result: 19476.1 avg coins, 21W/1L/5T vs diverse.
 
 ## 2. Evaluation
 - Total Games: 72
@@ -24,7 +24,7 @@
 ## 5. Final Champion
 - Name: champion-v1.1
 - Version: v1.1
-- Commit: 018492be61e1773e1739caba10140ee930ccca0e
+- Commit: 3045af6b305aeebf04c6c001801f18c8990b8b32
 
 ## 6. Final Metrics
 - Win Rate: 100.0%
