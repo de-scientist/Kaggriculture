@@ -56,7 +56,9 @@ class TestFullPipeline:
         assert "hands" in kaggle_action
         assert "market" in kaggle_action
 
-    def test_advanced_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_advanced_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = observation_advanced(day=10, money=5000.0)
         game_state = adapter.parse(obs)
         context = DecisionContext(
@@ -73,7 +75,9 @@ class TestFullPipeline:
         kaggle_action = action_adapter.convert(domain_action)
         assert isinstance(kaggle_action["farmer"], list)
 
-    def test_with_crop_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_with_crop_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = observation_with_crop("WHEAT", planted_day=2)
         game_state = adapter.parse(obs)
         context = DecisionContext(
@@ -90,7 +94,9 @@ class TestFullPipeline:
         kaggle_action = action_adapter.convert(domain_action)
         assert isinstance(kaggle_action["farmer"], list)
 
-    def test_with_seeds_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_with_seeds_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = observation_with_seeds({"WHEAT": 5})
         game_state = adapter.parse(obs)
         context = DecisionContext(
@@ -109,7 +115,9 @@ class TestFullPipeline:
 
 
 class TestPipelineWithMarket:
-    def test_market_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_market_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = observation_with_market(
             {"WHEAT": 25, "CARROT": 35, "STRAWBERRY": 75},
             {"WHEAT": 5000, "CARROT": 3000, "STRAWBERRY": 1000},
@@ -131,7 +139,9 @@ class TestPipelineWithMarket:
 
 
 class TestPipelineWithAnimals:
-    def test_animal_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_animal_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = observation_with_animal("GOOSE")
         game_state = adapter.parse(obs)
         context = DecisionContext(
@@ -150,7 +160,9 @@ class TestPipelineWithAnimals:
 
 
 class TestPipelineObservability:
-    def test_decision_records_metrics(self, adapter, action_adapter) -> None:
+    def test_decision_records_metrics(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         metrics = get_metrics()
         initial_count = metrics.counter("decision_count")
         obs = minimal_observation()
