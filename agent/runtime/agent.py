@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 _POLICY_ENV = os.environ.get("KAG_RUNTIME_POLICY", "auto")
 
-AgentFn = Callable[[Mapping[str, Any]], dict[str, Any]]
+AgentFn = Callable[..., dict[str, Any]]
 
 
 class _AgentRuntime:

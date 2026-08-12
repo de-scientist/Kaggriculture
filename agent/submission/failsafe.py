@@ -16,7 +16,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-AgentFn = Callable[[Mapping[str, Any]], dict[str, Any]]
+AgentFn = Callable[..., dict[str, Any]]
 
 EMERGENCY_ACTION: dict[str, Any] = {"farmer": ["PASS"], "hands": [], "market": []}
 

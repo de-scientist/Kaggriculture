@@ -54,16 +54,18 @@ class MetricsAgent:
 
     def __call__(self, obs: Mapping[str, Any], configuration: Any = None) -> dict[str, Any]:
         started = time.perf_counter()
+        raised = False
         try:
             out = self._agent(obs, configuration)
         except Exception:  # noqa: BLE001 - capture fallback, never propagate
             out = dict(EMERGENCY_ACTION)
+            raised = True
         dt = (time.perf_counter() - started) * 1000.0
         self.calls += 1
         self.total_ms += dt
         self.max_ms = max(self.max_ms, dt)
         self.latencies.append(dt)
-        if out == EMERGENCY_ACTION:
+        if raised:
             self.fallbacks += 1
         return cast("dict[str, Any]", out)
 
