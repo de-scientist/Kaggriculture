@@ -25,7 +25,7 @@ def test_neighboring_quadrants() -> None:
 
 def test_available_land() -> None:
     class FakeFarm:
-        def __init__(self, quadrants):
+        def __init__(self, quadrants: list[str]) -> None:
             self.quadrants = quadrants
 
     farm = FakeFarm(["NW"])
@@ -38,7 +38,7 @@ def test_available_land() -> None:
 
 def test_expandable() -> None:
     class FakeFarm:
-        def __init__(self, quadrants):
+        def __init__(self, quadrants: list[str]) -> None:
             self.quadrants = quadrants
 
     farm = FakeFarm(["NW"])
@@ -50,7 +50,7 @@ def test_expandable() -> None:
 
 def test_expandable_limited_funds() -> None:
     class FakeFarm:
-        def __init__(self, quadrants):
+        def __init__(self, quadrants: list[str]) -> None:
             self.quadrants = quadrants
 
     farm = FakeFarm(["NW"])

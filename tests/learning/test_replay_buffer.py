@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 from agent.learning.replay_buffer import PrioritizedReplayBuffer
 
 
-def _rows(n: int) -> list[dict]:
+def _rows(n: int) -> list[dict[str, Any]]:
     return [{"step": i, "day": i // 24, "money": 3000.0 + i * 10} for i in range(n)]
 
 

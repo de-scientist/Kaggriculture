@@ -16,6 +16,7 @@ def test_task_queue() -> None:
 def test_next_task() -> None:
     tasks = [{"name": "plant"}, {"name": "water"}]
     result = planning_service.next_task(tasks)
+    assert result is not None
     assert result["name"] == "plant"
 
 

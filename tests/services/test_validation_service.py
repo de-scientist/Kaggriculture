@@ -10,7 +10,7 @@ def test_validate_empty_action() -> None:
 
 
 def test_validate_non_list() -> None:
-    assert validation_service.validate("PASS", None) is False
+    assert validation_service.validate("PASS", None) is False  # type: ignore[arg-type]
 
 
 def test_validate_action_valid() -> None:

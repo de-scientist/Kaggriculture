@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from agent.domain.animal import Animal
 from agent.domain.crop import Crop
 from agent.domain.position import Position
 from agent.domain.tile import Tile
@@ -44,7 +45,7 @@ class TestTileOccupancy:
         assert tile.is_buildable is False
 
     def test_tile_with_animal(self) -> None:
-        tile = Tile(position=Position(0, 0), animal=object())
+        tile = Tile(position=Position(0, 0), animal=Animal(animal_type="GOOSE"))
         assert tile.is_empty is False
         assert tile.is_occupied is True
 
@@ -71,8 +72,8 @@ class TestTileBuilders:
         assert new_tile.crop is not crop1
 
     def test_with_animal_replaces_existing(self) -> None:
-        animal1 = object()
-        animal2 = object()
+        animal1 = Animal(animal_type="GOOSE")
+        animal2 = Animal(animal_type="COW")
         tile = Tile(position=Position(0, 0), animal=animal1)
         new_tile = tile.with_animal(animal2)
         assert new_tile.animal is animal2
@@ -84,7 +85,7 @@ class TestTileBuilders:
         assert empty.crop is None
 
     def test_remove_animal(self) -> None:
-        tile = Tile(position=Position(0, 0), animal=object())
+        tile = Tile(position=Position(0, 0), animal=Animal(animal_type="GOOSE"))
         empty = tile.remove_animal()
         assert empty.animal is None
 
