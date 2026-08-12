@@ -141,7 +141,7 @@ def default_candidates() -> list[Candidate]:
             name="learned",
             description="Stage 3 LearnedPolicy (value + policy signals).",
             policy="learned",
-            tags=("learned"),
+            tags=("learned",),
         ),
     ]
 

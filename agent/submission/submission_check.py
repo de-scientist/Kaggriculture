@@ -23,7 +23,7 @@ from typing import Any
 try:  # pragma: no cover - import path differs when run as a script
     from tests.fixtures.observations import minimal_observation
 except Exception:  # pragma: no cover - fallback keeps the module importable
-    def minimal_observation() -> dict[str, Any]:  # type: ignore[no-redef]
+    def minimal_observation() -> dict[str, Any]:
         return {
             "player": 0,
             "step": 0,
