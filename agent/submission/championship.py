@@ -93,18 +93,17 @@ class ChampionArena:
         standings = self.ranked(result)
         if not standings:
             raise ValueError("no candidates participated in the arena")
-        top_name, top_wins, top_avg = standings[0]
+        top_name, _top_wins, top_avg = standings[0]
         if current_champion is None:
             return top_name
-        champ_wins = result.wins(current_champion)
-        champ_avg = result.avg_reward(current_champion)
         if top_name == current_champion:
             return current_champion
-        # Challenger must clearly beat the incumbent.  An exact tie (or a win
-        # smaller than ``win_margin``) keeps the reigning champion.
-        if top_wins > champ_wins:
-            return top_name
-        if top_wins == champ_wins and (top_avg - champ_avg) > self.config.win_margin:
+        champ_avg = result.avg_reward(current_champion)
+        # The challenger only dethrones the reigning champion when it is clearly
+        # better: its average reward must exceed the incumbent's by more than
+        # ``win_margin``.  A mere win (or an exact tie) keeps the champion, so
+        # self-play noise cannot flip the submission.
+        if (top_avg - champ_avg) > self.config.win_margin:
             return top_name
         return current_champion
 
