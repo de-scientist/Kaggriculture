@@ -51,9 +51,16 @@ class FailSafeAgent:
     Baseline -> Emergency Fallback``.
     """
 
-    def __init__(self, agent_fn: AgentFn, *, logger: logging.Logger | None = None) -> None:
+    def __init__(
+        self,
+        agent_fn: AgentFn,
+        *,
+        logger: logging.Logger | None = None,
+        stats: dict[str, int] | None = None,
+    ) -> None:
         self._agent = agent_fn
         self._log = logger or logging.getLogger(__name__)
+        self._stats = stats if stats is not None else {}
 
     def __call__(self, obs: Mapping[str, Any], configuration: Any = None) -> dict[str, Any]:
         """Callable entry point.
@@ -63,9 +70,10 @@ class FailSafeAgent:
         mismatch can never surface as an unhandled error to the environment.
         """
         try:
-            out = self._agent(obs)
+            out = self._agent(obs, configuration)
         except Exception:  # noqa: BLE001 - the whole point is to catch everything
             self._log.exception("agent raised; returning emergency fallback action")
+            self._stats["fallback"] = self._stats.get("fallback", 0) + 1
             return dict(EMERGENCY_ACTION)
         return legalize(out)
 
