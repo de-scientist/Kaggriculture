@@ -7,6 +7,8 @@ validity, state progression, and absence of fatal exceptions.
 
 from __future__ import annotations
 
+from typing import Any
+
 from agent.agent import agent
 from agent.observability import get_metrics, get_telemetry
 from tests.fixtures.observations import (
@@ -17,7 +19,7 @@ from tests.fixtures.observations import (
 )
 
 
-def _run_episode(observations: list[dict]) -> list[dict]:
+def _run_episode(observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
     actions = []
     for obs in observations:
         action = agent(obs)
@@ -26,7 +28,7 @@ def _run_episode(observations: list[dict]) -> list[dict]:
 
 
 class TestFullEpisode:
-    def test_agent_initializes(self, reset_singletons) -> None:
+    def test_agent_initializes(self, reset_singletons: Any) -> None:
         obs = minimal_observation()
         action = agent(obs)
         assert isinstance(action, dict)
@@ -34,7 +36,7 @@ class TestFullEpisode:
         assert "hands" in action
         assert "market" in action
 
-    def test_first_decision_is_valid(self, reset_singletons) -> None:
+    def test_first_decision_is_valid(self, reset_singletons: Any) -> None:
         obs = minimal_observation()
         action = agent(obs)
         assert isinstance(action["farmer"], list)
@@ -60,7 +62,7 @@ class TestFullEpisode:
             "DROP",
         )
 
-    def test_no_crashes_over_episode(self, reset_singletons) -> None:
+    def test_no_crashes_over_episode(self, reset_singletons: Any) -> None:
         observations = []
         for step in range(50):
             obs = minimal_observation()
@@ -76,7 +78,7 @@ class TestFullEpisode:
             assert "hands" in action
             assert "market" in action
 
-    def test_advanced_episode(self, reset_singletons) -> None:
+    def test_advanced_episode(self, reset_singletons: Any) -> None:
         observations = []
         for step in range(24):
             obs = observation_advanced(day=1, money=3500.0)
@@ -89,7 +91,7 @@ class TestFullEpisode:
         for action in actions:
             assert "farmer" in action
 
-    def test_full_720_turn_episode_completes(self, reset_singletons) -> None:
+    def test_full_720_turn_episode_completes(self, reset_singletons: Any) -> None:
         observations = []
         for step in range(720):
             obs = minimal_observation()
@@ -101,7 +103,7 @@ class TestFullEpisode:
         actions = _run_episode(observations)
         assert len(actions) == 720
 
-    def test_episode_records_observability(self, reset_singletons) -> None:
+    def test_episode_records_observability(self, reset_singletons: Any) -> None:
         obs = minimal_observation()
         obs["step"] = 0
         agent(obs)
@@ -112,18 +114,18 @@ class TestFullEpisode:
 
 
 class TestEpisodeLifecycle:
-    def test_crop_lifecycle_observation(self, reset_singletons) -> None:
+    def test_crop_lifecycle_observation(self, reset_singletons: Any) -> None:
         obs = observation_with_crop("WHEAT", planted_day=2)
         action = agent(obs)
         assert "farmer" in action
 
-    def test_seed_purchase_observation(self, reset_singletons) -> None:
+    def test_seed_purchase_observation(self, reset_singletons: Any) -> None:
         obs = observation_with_seeds({"WHEAT": 0})
         obs["farms"][0]["money"] = 5000.0
         action = agent(obs)
         assert "farmer" in action
 
-    def test_malformed_observation_falls_back(self, reset_singletons) -> None:
+    def test_malformed_observation_falls_back(self, reset_singletons: Any) -> None:
         obs = {"player": 0}
         action = agent(obs)
         assert action == {"farmer": ["PASS"], "hands": [], "market": []}

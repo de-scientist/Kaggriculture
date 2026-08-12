@@ -35,7 +35,9 @@ def action_adapter() -> ActionAdapter:
 
 
 class TestFullPipeline:
-    def test_observation_to_action(self, adapter, action_adapter) -> None:
+    def test_observation_to_action(
+        self, adapter: ObservationAdapter, action_adapter: ActionAdapter
+    ) -> None:
         obs = minimal_observation()
         game_state = adapter.parse(obs)
         context = DecisionContext(

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from agent.decision.decision_context import DecisionContext
 from agent.decision.decision_engine import decide
@@ -11,7 +11,7 @@ from agent.strategies.economic_strategy import EconomicStrategy
 from agent.strategies.strategy_manager import get_strategy
 
 
-def _minimal_obs() -> dict:
+def _minimal_obs() -> dict[str, Any]:
     return {
         "player": 0,
         "step": 0,
@@ -97,10 +97,10 @@ class TestEconomicStrategyEvaluation:
 
         class BrokenGameState:
             @property
-            def farm(self):
+            def farm(self) -> Any:
                 raise RuntimeError("Simulated error")
 
-            private: ClassVar[dict] = {}
+            private: ClassVar[dict[str, Any]] = {}
             market: ClassVar = None
             season: ClassVar = None
 

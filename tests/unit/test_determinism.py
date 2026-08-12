@@ -7,6 +7,8 @@ multiple runs.
 
 from __future__ import annotations
 
+from typing import Any
+
 from agent.agent import agent
 from tests.fixtures.observations import minimal_observation
 
@@ -35,7 +37,7 @@ class TestDeterminism:
             assert results[i] == results[0], f"Run {i} diverged from run 0"
 
     def test_full_episode_deterministic(self) -> None:
-        def run_episode() -> list[dict]:
+        def run_episode() -> list[dict[str, Any]]:
             actions = []
             for step in range(50):
                 obs = dict(minimal_observation())

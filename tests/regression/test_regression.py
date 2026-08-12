@@ -82,7 +82,7 @@ class TestRegressionDecisionFallbackMetrics:
             raise ValueError("test error")
 
         original = action_generator.generate_candidates
-        action_generator.generate_candidates = boom
+        action_generator.generate_candidates = boom  # type: ignore[assignment]
         try:
             action = decide(context)
         finally:
