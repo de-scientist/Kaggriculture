@@ -31,6 +31,7 @@ decisions where they are confident and on-distribution.
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 from agent.decision.candidate_actions import CandidateAction
@@ -189,7 +190,7 @@ class HybridStrategy(Strategy):
         if not values:
             return []
         peak = max(values)
-        exps = [float("e") ** (v - peak) for v in values]
+        exps = [math.e ** (v - peak) for v in values]
         total = sum(exps)
         if total == 0.0:
             return [1.0 / len(values)] * len(values)
