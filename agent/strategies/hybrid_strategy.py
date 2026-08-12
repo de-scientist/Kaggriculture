@@ -87,9 +87,9 @@ class HybridStrategy(Strategy):
             return champion_scored
 
         try:
-            scaled = bundle.scaler.transform(features)  # type: ignore[union-attr]
-            proba = bundle.policy.predict_proba(scaled)  # type: ignore[union-attr]
-            classes = list(bundle.policy.classes)  # type: ignore[union-attr]
+            scaled = bundle.scaler.transform(features)
+            proba = bundle.policy.predict_proba(scaled)
+            classes = list(bundle.policy.classes)
         except Exception:
             self.last_decision = {
                 "mode": "champion",

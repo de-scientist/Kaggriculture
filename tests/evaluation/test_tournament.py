@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 from agent.evaluation.tournament import (
@@ -11,7 +12,9 @@ from agent.evaluation.tournament import (
 )
 
 
-def _stub_simulator(wins_a: float, wins_b: float):
+def _stub_simulator(
+    wins_a: float, wins_b: float
+) -> Callable[[Agent, Agent], tuple[float, float]]:
     def _run(agent_a: Agent, agent_b: Agent) -> tuple[float, float]:
         return wins_a, wins_b
 
