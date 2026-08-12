@@ -6,6 +6,8 @@ instances for use across unit and integration tests.
 
 from __future__ import annotations
 
+from typing import cast
+
 from agent.domain.animal import Animal
 from agent.domain.crop import Crop
 from agent.domain.farm import Farm
@@ -64,8 +66,9 @@ def game_state_with_crop(crop_type: str = "WHEAT", planted_day: int = 0) -> Game
 def game_state_with_mature_crop(crop_type: str = "WHEAT", planted_day: int = 0) -> GameState:
     state = game_state_with_crop(crop_type, planted_day)
     pos = Position(0, 0)
-    tile = state.farm.tile_at(pos)
-    mature_tile = tile.with_crop(tile.crop)
+    tile = cast(Tile, state.farm.tile_at(pos))
+    crop = cast(Crop, tile.crop)
+    mature_tile = tile.with_crop(crop)
     farm = state.farm.set_tile(pos, mature_tile)
     return GameState(
         player=state.player,
