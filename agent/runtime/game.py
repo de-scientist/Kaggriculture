@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from .constants import (
     ANIMAL_PRODUCTS,
@@ -287,7 +287,10 @@ class GameSnapshot:
         return cast(Mapping[str, Any], self.market.get("prices", {}))
 
     def price(self, product: str) -> float:
-        default: object = MARKET.get(product, {}).get("base", 0)
+        default: object = 0
+        market_entry = MARKET.get(product)
+        if isinstance(market_entry, Mapping):
+            default = market_entry.get("base", 0)
         value = self.prices().get(product, default)
         try:
             return float(value)
