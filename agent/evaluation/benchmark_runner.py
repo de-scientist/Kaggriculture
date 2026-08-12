@@ -26,7 +26,6 @@ from agent.evaluation.metrics import (
 from agent.submission.failsafe import EMERGENCY_ACTION
 
 Agent = Any
-SimResult = Any  # placeholder; replaced by _SimResult below
 
 
 @dataclass
