@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import pytest
+from collections.abc import Callable
+from typing import Any
 
 from agent.learning.features import (
     FEATURE_NAMES,
@@ -74,7 +76,7 @@ def test_feature_names_unique_and_stable() -> None:
         lambda: observation_with_shed({"WHEAT": 5}),
     ],
 )
-def test_features_cover_varied_states(builder) -> None:
+def test_features_cover_varied_states(builder: Callable[[], dict[str, Any]]) -> None:
     obs = builder()
     feats = build_features(GameSnapshot.from_obs(obs))
     assert len(feats) == NUM_FEATURES

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+from typing import Any
 
 from agent.decision.candidate_actions import CandidateAction
 from agent.decision.decision_context import DecisionContext
@@ -26,7 +27,7 @@ def context() -> DecisionContext:
     )
 
 
-def _make_action(action_id: str, action_type: str, **kwargs) -> CandidateAction:
+def _make_action(action_id: str, action_type: str, **kwargs: Any) -> CandidateAction:
     return CandidateAction(id=action_id, action_type=action_type, **kwargs)
 
 
