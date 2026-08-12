@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import FrozenInstanceError
+
 import pytest
 
 from agent.config import (
@@ -125,7 +127,7 @@ def test_env_coerces_types() -> None:
 def test_settings_is_frozen_and_immutable() -> None:
     reset_config()
     settings = load_config("development")
-    with pytest.raises(Exception):
+    with pytest.raises(FrozenInstanceError):
         settings.strategy_name = "other"  # type: ignore[misc]
 
 

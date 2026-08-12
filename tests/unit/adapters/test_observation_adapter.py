@@ -57,7 +57,7 @@ class TestObservationAdapterParse:
 
     def test_parse_sets_hands(self, adapter: ObservationAdapter) -> None:
         obs = observation_with_hands(3)
-        state = adapter.parse(obs)
+        adapter.parse(obs)
         assert obs["farms"][0]["hires_today"] == 3
 
     def test_parse_advanced_observation(self, adapter: ObservationAdapter) -> None:
@@ -85,13 +85,13 @@ class TestObservationAdapterParse:
 
 class TestObservationAdapterEdgeCases:
     def test_parse_malformed_observation_raises(self, adapter: ObservationAdapter) -> None:
-        with pytest.raises(Exception):
+        with pytest.raises(KeyError):
             adapter.parse(observation_malformed())
 
     def test_parse_partial_observation_raises(self, adapter: ObservationAdapter) -> None:
-        with pytest.raises(Exception):
+        with pytest.raises(KeyError):
             adapter.parse(observation_partial())
 
     def test_parse_none_raises(self, adapter: ObservationAdapter) -> None:
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             adapter.parse(None)  # type: ignore[arg-type]
