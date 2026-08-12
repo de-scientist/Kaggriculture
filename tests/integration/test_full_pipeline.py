@@ -1,7 +1,8 @@
 """Integration tests for the full decision pipeline (chapter 9).
 
 These tests verify the chain:
-  Observation → ObservationAdapter → GameState → DecisionEngine → Strategy → Validation → ActionAdapter → KaggleAction
+  Observation → ObservationAdapter → GameState → DecisionEngine → Strategy
+  → Validation → ActionAdapter → KaggleAction
 """
 
 from __future__ import annotations

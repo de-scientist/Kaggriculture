@@ -100,9 +100,9 @@ class TestEconomicStrategyEvaluation:
             def farm(self):
                 raise RuntimeError("Simulated error")
 
-            private = {}
-            market = None
-            season = None
+            private: ClassVar[dict] = {}
+            market: ClassVar = None
+            season: ClassVar = None
 
         context = DecisionContext(
             obs=_minimal_obs(),
