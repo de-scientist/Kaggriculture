@@ -28,7 +28,9 @@ def test_water_crop() -> None:
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
     result = crop_service.water(planted)
-    assert result.crop.watered_today is True
+    crop = result.crop
+    assert crop is not None
+    assert crop.watered_today is True
 
 
 def test_water_harvested_crop_raises() -> None:
@@ -48,7 +50,9 @@ def test_fertilize_crop() -> None:
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
     result = crop_service.fertilize(planted, day=0)
-    assert result.crop.fertilized_until_day == 3
+    crop = result.crop
+    assert crop is not None
+    assert crop.fertilized_until_day == 3
 
 
 def test_harvest_crop() -> None:
@@ -57,7 +61,9 @@ def test_harvest_crop() -> None:
     planted = crop_service.plant(tile, "WHEAT", day=0)
     watered = crop_service.water(planted)
     result = crop_service.harvest(watered, current_day=2)
-    assert result.crop.is_harvested is True
+    crop = result.crop
+    assert crop is not None
+    assert crop.is_harvested is True
 
 
 def test_harvest_immature_crop_raises() -> None:

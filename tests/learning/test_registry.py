@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from pathlib import Path
 
 from agent.learning.model_registry import ModelRegistry
@@ -35,7 +36,9 @@ def test_active_prefers_champion(tmp_path: Path) -> None:
     _register_two(reg)
     reg.set_status("m1", "challenger")
     reg.set_status("m2", "validated")
-    assert reg.active().model_id == "m2"  # newest validated beats challenger
+    active = reg.active()
+    assert active is not None
+    assert active.model_id == "m2"  # newest validated beats challenger
 
 
 def test_set_status_promotes_to_champion_and_demotes_old(tmp_path: Path) -> None:
@@ -43,8 +46,12 @@ def test_set_status_promotes_to_champion_and_demotes_old(tmp_path: Path) -> None
     _register_two(reg)
     reg.set_status("m1", "champion")
     reg.set_status("m2", "champion")
-    assert reg.active().model_id == "m2"
-    assert reg.get("m1").status == "deprecated"
+    active = reg.active()
+    assert active is not None
+    assert active.model_id == "m2"
+    deprecated = reg.get("m1")
+    assert deprecated is not None
+    assert deprecated.status == "deprecated"
 
 
 def test_rollback_promotes_given_model_to_champion(tmp_path: Path) -> None:
@@ -53,8 +60,12 @@ def test_rollback_promotes_given_model_to_champion(tmp_path: Path) -> None:
     reg.set_status("m1", "champion")
     reg.set_status("m2", "challenger")
     reg.rollback("m2")
-    assert reg.active().model_id == "m2"
-    assert reg.get("m1").status == "deprecated"
+    active = reg.active()
+    assert active is not None
+    assert active.model_id == "m2"
+    deprecated = reg.get("m1")
+    assert deprecated is not None
+    assert deprecated.status == "deprecated"
 
 
 def test_bundle_path(tmp_path: Path) -> None:
@@ -65,7 +76,9 @@ def test_bundle_path(tmp_path: Path) -> None:
     assert str(path).startswith(str(tmp_path))
 
 
-def test_load_latest_bundle_placeholder_when_empty(tmp_path: Path, monkeypatch) -> None:
+def test_load_latest_bundle_placeholder_when_empty(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     import agent.learning.registry as registry_mod
     from agent.learning.models.bundle import LearnedBundle
     from agent.learning.registry import default_model_dir
@@ -78,7 +91,9 @@ def test_load_latest_bundle_placeholder_when_empty(tmp_path: Path, monkeypatch) 
     assert default_model_dir() == tmp_path / "nope"
 
 
-def test_load_latest_bundle_after_promote(tmp_path: Path, monkeypatch) -> None:
+def test_load_latest_bundle_after_promote(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("KAG_RUNTIME_MODEL_DIR", str(tmp_path))
     reg = ModelRegistry(tmp_path)
     reg.register(model_id="m1", status="experimental", feature_version=1)
@@ -96,7 +111,9 @@ def test_load_latest_bundle_after_promote(tmp_path: Path, monkeypatch) -> None:
     assert loaded.model_id == "m1"
 
 
-def test_active_bundle_path_returns_none_when_inactive(tmp_path: Path, monkeypatch) -> None:
+def test_active_bundle_path_returns_none_when_inactive(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("KAG_RUNTIME_MODEL_DIR", str(tmp_path))
     reg = ModelRegistry(tmp_path)
     reg.register(model_id="m1", status="experimental", feature_version=1)

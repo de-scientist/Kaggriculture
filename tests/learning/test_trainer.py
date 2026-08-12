@@ -83,6 +83,7 @@ def test_fit_and_register_end_to_end(tmp_path: Path) -> None:
 
     reg = ModelRegistry(model_dir)
     entry = reg.get(model_id)
+    assert entry is not None
     assert entry.status == "experimental"
     assert entry.feature_version == FEATURE_VERSION
 

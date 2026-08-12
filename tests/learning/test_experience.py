@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 from agent.learning.experience import ExperienceRecorder, ExperienceStore
 from agent.learning.schema import EXPERIENCE_SCHEMA_VERSION
@@ -17,7 +18,7 @@ def _plan_stub(action_type: str = "plant") -> object:
             self.farmer_op = ["PLANT", "WHEAT"]
             self.hands_ops = [["WATER"]]
             self.market_orders = [["BUY_SEED", "WHEAT", 1]]
-            self.candidates = []
+            self.candidates: list[Any] = []
             self.farmer_action_type = action_type
             self.info = {
                 "adjustments": {"mode": "champion", "crop": "WHEAT"},
