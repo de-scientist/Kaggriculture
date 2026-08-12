@@ -54,3 +54,23 @@ def test_failsafe_catches_exception() -> None:
 def test_wrap_module_alias() -> None:
     wrapped = wrap_module(_boom_agent)
     assert wrapped({}) == EMERGENCY_ACTION
+
+
+def test_failsafe_accepts_kaggle_two_arg_convention() -> None:
+    # The Kaggle environment calls agent(observation, configuration).  A
+    # signature mismatch must not surface as an unhandled error.
+    wrapped = FailSafeAgent(_ok_agent)
+    assert wrapped({}, {"episodeSteps": 720}) == {
+        "farmer": ["PASS"],
+        "hands": [],
+        "market": [],
+    }
+
+
+def test_submission_agent_survives_two_arg_call() -> None:
+    import main
+
+    obs = {"player": 0, "step": 0, "day": 0}
+    out = main.agent(obs, {"episodeSteps": 720})
+    assert isinstance(out, dict)
+    assert out["farmer"]
