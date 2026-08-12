@@ -100,10 +100,11 @@ class ChampionArena:
         champ_avg = result.avg_reward(current_champion)
         if top_name == current_champion:
             return current_champion
-        # Challenger must clearly beat the incumbent.
+        # Challenger must clearly beat the incumbent.  An exact tie (or a win
+        # smaller than ``win_margin``) keeps the reigning champion.
         if top_wins > champ_wins:
             return top_name
-        if top_wins == champ_wins and (top_avg - champ_avg) >= self.config.win_margin:
+        if top_wins == champ_wins and (top_avg - champ_avg) > self.config.win_margin:
             return top_name
         return current_champion
 
