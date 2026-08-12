@@ -33,10 +33,15 @@ class Candidate:
     tags: tuple[str, ...] = ()
 
     def build(self) -> Agent:
-        if isinstance(self.policy, str) or isinstance(self.policy, Policy):
-            return make_runtime_agent(self.policy)
+        policy = self.policy
+        if isinstance(policy, str):
+            return make_runtime_agent(policy)
+        if isinstance(policy, Policy):
+            return make_runtime_agent(policy)
+        if policy is None:
+            return make_runtime_agent(None)
         # A ready-made agent factory callable.
-        return self.policy()  # type: ignore[return-value]
+        return policy()
 
 
 @dataclass
