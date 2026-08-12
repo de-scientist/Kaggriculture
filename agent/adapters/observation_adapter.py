@@ -21,15 +21,15 @@ logger = get_logger("agent.adapters.observation")
 class ObservationAdapter:
     def parse(self, obs: dict[str, Any]) -> gs_domain.GameState:
         start = time.perf_counter()
+        validators.validate_observation_not_none(obs)
+        validators.validate_observation_schema(obs)
+        normalize_observation(obs)
+
         logger.info(
             "Parsing observation for player %s at step %s",
             obs.get("player"),
             obs.get("step"),
         )
-
-        validators.validate_observation_not_none(obs)
-        validators.validate_observation_schema(obs)
-        normalize_observation(obs)
 
         player = obs["player"]
         farm_data = obs["farms"][player]
