@@ -30,9 +30,7 @@ def _int(value: Any, default: int = 0) -> int:
         return default
 
 
-def sell_amounts(
-    snapshot: GameSnapshot, settings: RuntimeSettings
-) -> dict[str, int]:
+def sell_amounts(snapshot: GameSnapshot, settings: RuntimeSettings) -> dict[str, int]:
     """How many units of each product to sell this turn, product -> count."""
     shed = snapshot.shed()
     prices = snapshot.prices()

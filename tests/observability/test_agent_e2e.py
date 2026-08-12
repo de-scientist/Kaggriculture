@@ -1,4 +1,5 @@
 """End-to-end test: the public ``agent(obs)`` entry point."""
+
 from __future__ import annotations
 
 import logging

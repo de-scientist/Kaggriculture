@@ -1,4 +1,5 @@
 """Unit tests for Price Tracker (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.market.price_tracker import PriceHistory, PriceSnapshot, PriceTracker

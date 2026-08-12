@@ -1,4 +1,5 @@
 """Unit tests for the Strategy layer (chapter 9)."""
+
 from __future__ import annotations
 
 import pytest
@@ -30,20 +31,23 @@ def _make_action(action_id: str, action_type: str, **kwargs) -> CandidateAction:
 
 
 class TestPriorities:
-    @pytest.mark.parametrize("action_type,expected", [
-        ("harvest", 1),
-        ("collect", 2),
-        ("feed", 3),
-        ("water", 4),
-        ("fertilize", 5),
-        ("plant", 6),
-        ("sell", 7),
-        ("buy", 8),
-        ("hire", 9),
-        ("expand", 10),
-        ("pass", 11),
-        ("unknown", 11),
-    ])
+    @pytest.mark.parametrize(
+        "action_type,expected",
+        [
+            ("harvest", 1),
+            ("collect", 2),
+            ("feed", 3),
+            ("water", 4),
+            ("fertilize", 5),
+            ("plant", 6),
+            ("sell", 7),
+            ("buy", 8),
+            ("hire", 9),
+            ("expand", 10),
+            ("pass", 11),
+            ("unknown", 11),
+        ],
+    )
     def test_get_priority(self, action_type: str, expected: int) -> None:
         assert get_priority(action_type) == expected
 
@@ -83,6 +87,7 @@ class TestBaselineStrategy:
     def test_is_strategy_subclass(self) -> None:
         s = baseline_strategy.BaselineStrategy()
         from agent.strategies.strategy import Strategy
+
         assert isinstance(s, Strategy)
 
     def test_evaluate_returns_scored_actions(self, context: DecisionContext) -> None:

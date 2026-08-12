@@ -10,4 +10,4 @@ from .game import GameSnapshot
 from .planner import TurnPlanner
 from .settings import RuntimeSettings
 
-__all__ = ["agent", "GameSnapshot", "TurnPlanner", "RuntimeSettings"]
+__all__ = ["GameSnapshot", "RuntimeSettings", "TurnPlanner", "agent"]

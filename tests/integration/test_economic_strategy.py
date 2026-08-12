@@ -1,7 +1,6 @@
 """Integration tests for Stage 2 economic strategy (Stage 2)."""
-from __future__ import annotations
 
-import pytest
+from __future__ import annotations
 
 from agent.decision.decision_context import DecisionContext
 from agent.decision.decision_engine import decide
@@ -44,6 +43,7 @@ def _minimal_obs() -> dict:
 class TestEconomicStrategyRegistration:
     def test_economic_strategy_registered(self) -> None:
         from agent.strategies.strategy_manager import _STRATEGIES
+
         assert "economic" in _STRATEGIES
 
     def test_get_economic_strategy(self) -> None:
@@ -53,6 +53,7 @@ class TestEconomicStrategyRegistration:
     def test_unknown_strategy_falls_back(self) -> None:
         strategy = get_strategy("nonexistent")
         from agent.strategies.baseline_strategy import BaselineStrategy
+
         assert isinstance(strategy, BaselineStrategy)
 
 
@@ -61,6 +62,7 @@ class TestEconomicStrategyEvaluation:
         strategy = EconomicStrategy()
         state = GameState(player=0, step=0)
         from agent.config import get_config
+
         settings = get_config()
         context = DecisionContext(
             obs=_minimal_obs(),
@@ -75,9 +77,12 @@ class TestEconomicStrategyEvaluation:
         )
 
         from agent.decision.candidate_actions import CandidateAction
+
         actions = [
             CandidateAction(id="1", action_type="pass"),
-            CandidateAction(id="2", action_type="plant", estimated_reward=10.0, estimated_cost=10.0),
+            CandidateAction(
+                id="2", action_type="plant", estimated_reward=10.0, estimated_cost=10.0
+            ),
         ]
 
         scored = strategy.evaluate(context, actions)
@@ -105,6 +110,7 @@ class TestEconomicStrategyEvaluation:
         )
 
         from agent.decision.candidate_actions import CandidateAction
+
         actions = [CandidateAction(id="1", action_type="pass")]
         scored = strategy.evaluate(context, actions)
         assert len(scored) > 0
@@ -114,6 +120,7 @@ class TestEconomicStrategyWithDecisionEngine:
     def test_decision_engine_with_economic_strategy(self) -> None:
         """Verify the decision engine works with the economic strategy."""
         from agent.config import get_config, reset_config
+
         reset_config()
         settings = get_config()
 

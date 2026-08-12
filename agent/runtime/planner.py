@@ -7,13 +7,13 @@ tasks -> unit assignment -> farmer/hand ops -> market orders.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Mapping
+from typing import Any
 
 from .game import GameSnapshot
-from .settings import RuntimeSettings
-from .tasks import Job, Task, Unit, assign_units, build_tasks, job_to_op
 from .market import plan_market_orders
 from .policies import Policy
+from .settings import RuntimeSettings
+from .tasks import Job, Task, Unit, assign_units, build_tasks, job_to_op
 
 
 @dataclass
@@ -44,7 +44,9 @@ def _units(snapshot: GameSnapshot) -> list[Unit]:
 class TurnPlanner:
     """Runs the champion plan, optionally wrapped by a learning policy."""
 
-    def __init__(self, settings: RuntimeSettings | None = None, policy: Policy | None = None) -> None:
+    def __init__(
+        self, settings: RuntimeSettings | None = None, policy: Policy | None = None
+    ) -> None:
         self.settings = settings if settings is not None else RuntimeSettings.from_env()
         self.policy = policy
 
@@ -83,7 +85,9 @@ class TurnPlanner:
             return self.settings, {}
         return self.policy.adjust(snapshot, self.settings)
 
-    def _rank_tasks(self, snapshot: GameSnapshot, tasks: list[Task], settings: RuntimeSettings) -> list[Task]:
+    def _rank_tasks(
+        self, snapshot: GameSnapshot, tasks: list[Task], settings: RuntimeSettings
+    ) -> list[Task]:
         if self.policy is None:
             return tasks
         return self.policy.rank_tasks(snapshot, tasks, settings)

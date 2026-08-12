@@ -1,4 +1,5 @@
 """Tests for the tracing layer."""
+
 from __future__ import annotations
 
 from agent.observability import reset_default_tracer

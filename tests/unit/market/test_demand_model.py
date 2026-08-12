@@ -1,4 +1,5 @@
 """Unit tests for Demand Model (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.market.demand_model import DemandHistory, DemandModel, DemandSignal
@@ -7,17 +8,20 @@ from agent.market.demand_model import DemandHistory, DemandModel, DemandSignal
 class TestDemandHistory:
     def test_add_signal(self) -> None:
         history = DemandHistory(product="WHEAT")
-        signal = DemandSignal(turn=0, product="WHEAT", inventory_change=-5,
-                              price_change=2.0, sales_volume=3)
+        signal = DemandSignal(
+            turn=0, product="WHEAT", inventory_change=-5, price_change=2.0, sales_volume=3
+        )
         history.add(signal)
         assert len(history.signals) == 1
 
     def test_recent_signals(self) -> None:
         history = DemandHistory(product="WHEAT")
         for i in range(15):
-            history.add(DemandSignal(turn=i, product="WHEAT",
-                                     inventory_change=-1, price_change=0.5,
-                                     sales_volume=1))
+            history.add(
+                DemandSignal(
+                    turn=i, product="WHEAT", inventory_change=-1, price_change=0.5, sales_volume=1
+                )
+            )
         recent = history.recent_signals(10)
         assert len(recent) == 10
         assert recent[-1].turn == 14

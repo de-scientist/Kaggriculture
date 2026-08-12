@@ -13,7 +13,7 @@ from __future__ import annotations
 import logging
 from abc import ABC
 from dataclasses import replace
-from typing import Any, Mapping
+from typing import Any
 
 from .crops import best_crop
 from .game import GameSnapshot
@@ -31,7 +31,9 @@ class Policy(ABC):
 
     name = "policy"
 
-    def adjust(self, snapshot: GameSnapshot, settings: RuntimeSettings) -> tuple[RuntimeSettings, dict[str, Any]]:
+    def adjust(
+        self, snapshot: GameSnapshot, settings: RuntimeSettings
+    ) -> tuple[RuntimeSettings, dict[str, Any]]:
         """Return (effective settings, diagnostics) before the turn is planned."""
         return settings, {}
 
@@ -45,7 +47,9 @@ class Policy(ABC):
 class ChampionPolicy(Policy):
     name = "champion"
 
-    def adjust(self, snapshot: GameSnapshot, settings: RuntimeSettings) -> tuple[RuntimeSettings, dict[str, Any]]:
+    def adjust(
+        self, snapshot: GameSnapshot, settings: RuntimeSettings
+    ) -> tuple[RuntimeSettings, dict[str, Any]]:
         return settings, {"crop": best_crop(snapshot, settings), "mode": "champion"}
 
 
@@ -78,14 +82,18 @@ class LearnedPolicy(Policy, _LearnedMixin):
         self.rank_weight = rank_weight
         self._bundle_cache: Any = None
 
-    def adjust(self, snapshot: GameSnapshot, settings: RuntimeSettings) -> tuple[RuntimeSettings, dict[str, Any]]:
+    def adjust(
+        self, snapshot: GameSnapshot, settings: RuntimeSettings
+    ) -> tuple[RuntimeSettings, dict[str, Any]]:
         bundle = self._bundle()
         info: dict[str, Any] = {"mode": "learned"}
         if bundle is None or not bundle.is_ready():
             info["mode"] = "champion_fallback"
             return settings, info
         feats = self._features(snapshot)
-        info["ood"] = bool(bundle.ood is not None and bundle.ood.is_ood(feats, OOD_ADJUST_THRESHOLD))
+        info["ood"] = bool(
+            bundle.ood is not None and bundle.ood.is_ood(feats, OOD_ADJUST_THRESHOLD)
+        )
 
         adjusted = settings
         if bundle.value is not None:
@@ -128,7 +136,9 @@ class LearnedPolicy(Policy, _LearnedMixin):
         probs = bundle.policy.predict_proba(bundle.scaler.transform(feats))
         prob_by_type = {at: float(p) for at, p in zip(bundle.action_types, probs)}
         ranked = list(tasks)
-        ranked.sort(key=lambda t: -(t.value + self.rank_weight * prob_by_type.get(t.action_type, 0.0)))
+        ranked.sort(
+            key=lambda t: -(t.value + self.rank_weight * prob_by_type.get(t.action_type, 0.0))
+        )
         return ranked
 
 

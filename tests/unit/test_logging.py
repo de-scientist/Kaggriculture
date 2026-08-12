@@ -1,4 +1,5 @@
 """Tests for the structured logging layer."""
+
 from __future__ import annotations
 
 import json
@@ -46,9 +47,16 @@ def test_bind_merges_context() -> None:
 
 def test_emits_json_with_bound_fields(isolated_logger) -> None:
     logger, handler = isolated_logger
-    child = logger.bind(turn=7, day=2, player=1, strategy="baseline",
-                       correlation_id="c-1234", decision_id="d-7",
-                       component="Test", action="decide")
+    child = logger.bind(
+        turn=7,
+        day=2,
+        player=1,
+        strategy="baseline",
+        correlation_id="c-1234",
+        decision_id="d-7",
+        component="Test",
+        action="decide",
+    )
     child.info("hello %s", "world")
     assert len(handler.records) == 1
     formatted = handler.format(handler.records[0])

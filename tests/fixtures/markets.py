@@ -1,4 +1,5 @@
 """Shared market fixtures for Kaggriculture tests."""
+
 from __future__ import annotations
 
 from agent.domain.market import Market

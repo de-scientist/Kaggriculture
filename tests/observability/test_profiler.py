@@ -1,4 +1,5 @@
 """Tests for the optional profiling layer."""
+
 from __future__ import annotations
 
 import pytest

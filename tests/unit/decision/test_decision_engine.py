@@ -1,4 +1,5 @@
 """Unit tests for the decision engine components (chapter 9)."""
+
 from __future__ import annotations
 
 import pytest
@@ -81,7 +82,9 @@ class TestActionFilter:
             CandidateAction(id="cheap", action_type="pass", estimated_cost=10.0),
             CandidateAction(id="expensive", action_type="buy", estimated_cost=100.0),
         ]
-        result = filter_pre_validation(actions, available_money=50.0, available_workers=1, owned_tiles=set())
+        result = filter_pre_validation(
+            actions, available_money=50.0, available_workers=1, owned_tiles=set()
+        )
         ids = [a.id for a in result]
         assert "cheap" in ids
         assert "expensive" not in ids
@@ -91,7 +94,9 @@ class TestActionFilter:
             CandidateAction(id="pass", action_type="pass"),
             CandidateAction(id="plant", action_type="plant"),
         ]
-        result = filter_pre_validation(actions, available_money=100.0, available_workers=0, owned_tiles=set())
+        result = filter_pre_validation(
+            actions, available_money=100.0, available_workers=0, owned_tiles=set()
+        )
         ids = [a.action_type for a in result]
         assert "pass" in ids
         assert "plant" not in ids
@@ -102,7 +107,9 @@ class TestActionFilter:
             CandidateAction(id="a2", action_type="plant", target_position=(5, 5)),
         ]
         owned = {(0, 0), (0, 1)}
-        result = filter_pre_validation(actions, available_money=100.0, available_workers=1, owned_tiles=owned)
+        result = filter_pre_validation(
+            actions, available_money=100.0, available_workers=1, owned_tiles=owned
+        )
         ids = [a.id for a in result]
         assert "a1" in ids
         assert "a2" not in ids
@@ -112,7 +119,9 @@ class TestActionFilter:
             CandidateAction(id="a1", action_type="sell"),
             CandidateAction(id="a2", action_type="pass"),
         ]
-        result = filter_pre_validation(actions, available_money=100.0, available_workers=1, owned_tiles=set())
+        result = filter_pre_validation(
+            actions, available_money=100.0, available_workers=1, owned_tiles=set()
+        )
         assert len(result) == 2
 
 
@@ -136,9 +145,7 @@ class TestActionValidator:
 
     def test_buy_action_insufficient_funds(self) -> None:
         state = empty_game_state(player=0)
-        action = CandidateAction(
-            id="test", action_type="buy_seed", estimated_cost=99999.0
-        )
+        action = CandidateAction(id="test", action_type="buy_seed", estimated_cost=99999.0)
         result = validate_action(action, state)
         assert result.is_valid is False
         assert any("Insufficient" in r for r in result.failure_reasons)
@@ -152,8 +159,11 @@ class TestActionValidator:
         farm = farm.add_quadrant("NE")
         state = empty_game_state()
         state = type(state)(
-            player=state.player, farm=farm, inventory=state.inventory,
-            market=state.market, step=state.step,
+            player=state.player,
+            farm=farm,
+            inventory=state.inventory,
+            market=state.market,
+            step=state.step,
         )
 
     def test_validate_actions_list(self) -> None:
@@ -169,8 +179,12 @@ class TestActionValidator:
 class TestActionRanker:
     def test_rank_sorts_by_utility(self) -> None:
         actions = [
-            CandidateAction(id="low", action_type="water", estimated_cost=0.0, estimated_reward=1.0),
-            CandidateAction(id="high", action_type="harvest", estimated_cost=0.0, estimated_reward=10.0),
+            CandidateAction(
+                id="low", action_type="water", estimated_cost=0.0, estimated_reward=1.0
+            ),
+            CandidateAction(
+                id="high", action_type="harvest", estimated_cost=0.0, estimated_reward=10.0
+            ),
         ]
         ranked = rank(actions, None)
         assert ranked[0].id == "high"
@@ -178,8 +192,12 @@ class TestActionRanker:
 
     def test_resolve_ties_sorts_by_id(self) -> None:
         actions = [
-            CandidateAction(id="zebra", action_type="pass", estimated_cost=0.0, estimated_reward=0.0),
-            CandidateAction(id="alpha", action_type="pass", estimated_cost=0.0, estimated_reward=0.0),
+            CandidateAction(
+                id="zebra", action_type="pass", estimated_cost=0.0, estimated_reward=0.0
+            ),
+            CandidateAction(
+                id="alpha", action_type="pass", estimated_cost=0.0, estimated_reward=0.0
+            ),
         ]
         resolved = resolve_ties(actions)
         assert resolved[0].id == "alpha"

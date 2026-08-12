@@ -1,4 +1,5 @@
 """Integration tests for the decision engine with full observability wiring."""
+
 from __future__ import annotations
 
 import pytest
@@ -43,8 +44,15 @@ def _context(config=None, game_state=None):
     if game_state is None:
         game_state = ObservationAdapter().parse(SAMPLE_OBS)
     return decision_context.DecisionContext(
-        obs=SAMPLE_OBS, player=0, game_state=game_state, config=settings,
-        step=1, day=0, hour=0, remaining_turns=720, strategy_name=settings.strategy_name,
+        obs=SAMPLE_OBS,
+        player=0,
+        game_state=game_state,
+        config=settings,
+        step=1,
+        day=0,
+        hour=0,
+        remaining_turns=720,
+        strategy_name=settings.strategy_name,
     )
 
 
@@ -72,8 +80,13 @@ def test_decide_records_trace_spans() -> None:
     action = decision_engine.decide(_context())
     rec = get_replay_store().records()[0]
     span_names = [s.get("name") for s in rec.trace.get("spans", [])]
-    for expected in ("generate_candidates", "filter_pre_validation", "validate",
-                     "evaluate_strategy", "select_and_convert"):
+    for expected in (
+        "generate_candidates",
+        "filter_pre_validation",
+        "validate",
+        "evaluate_strategy",
+        "select_and_convert",
+    ):
         assert expected in span_names
 
 

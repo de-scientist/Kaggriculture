@@ -1,4 +1,5 @@
 """Shared farm fixtures for Kaggriculture tests."""
+
 from __future__ import annotations
 
 from agent.domain.crop import Crop

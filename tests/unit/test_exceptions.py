@@ -1,4 +1,5 @@
 """Tests for the exception hierarchy (chapter: exceptions)."""
+
 from __future__ import annotations
 
 import pytest

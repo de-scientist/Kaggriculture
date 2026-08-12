@@ -4,6 +4,7 @@ Runs the agent over a complete simulated episode (or a truncated version)
 to verify initialization, observation processing, decision making, action
 validity, state progression, and absence of fatal exceptions.
 """
+
 from __future__ import annotations
 
 from agent.agent import agent
@@ -39,10 +40,24 @@ class TestFullEpisode:
         assert isinstance(action["farmer"], list)
         assert len(action["farmer"]) > 0
         assert action["farmer"][0] in (
-            "PASS", "NORTH", "SOUTH", "EAST", "WEST",
-            "PLANT", "WATER", "HARVEST", "FERTILIZE", "DIG",
-            "BUILD_COOP", "BUILD_PASTURE", "FEED", "COLLECT_FERTILIZER",
-            "CARE", "PICKUP", "PLACE", "DROP",
+            "PASS",
+            "NORTH",
+            "SOUTH",
+            "EAST",
+            "WEST",
+            "PLANT",
+            "WATER",
+            "HARVEST",
+            "FERTILIZE",
+            "DIG",
+            "BUILD_COOP",
+            "BUILD_PASTURE",
+            "FEED",
+            "COLLECT_FERTILIZER",
+            "CARE",
+            "PICKUP",
+            "PLACE",
+            "DROP",
         )
 
     def test_no_crashes_over_episode(self, reset_singletons) -> None:

@@ -14,6 +14,7 @@ configured by checking:
 Usage:
     python scripts/check_environment.py
 """
+
 from __future__ import annotations
 
 import sys

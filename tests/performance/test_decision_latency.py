@@ -2,6 +2,7 @@
 
 Verifies that decision latency stays within configured budgets.
 """
+
 from __future__ import annotations
 
 import statistics
@@ -65,8 +66,7 @@ class TestDecisionLatency:
 
         growth = after_total - before_total
         assert growth < 50 * 1024 * 1024, (
-            f"Memory grew by {growth / 1024 / 1024:.1f} MB over 500 decisions, "
-            "possible leak"
+            f"Memory grew by {growth / 1024 / 1024:.1f} MB over 500 decisions, " "possible leak"
         )
 
 

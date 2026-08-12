@@ -1,13 +1,11 @@
 """Unit tests for the Economic State Model (Stage 2)."""
-from __future__ import annotations
 
-import pytest
+from __future__ import annotations
 
 from agent.domain.farm import Farm
 from agent.domain.game_state import GameState
 from agent.domain.inventory import Inventory
 from agent.domain.market import Market
-from agent.domain.season import Season
 from agent.economics.economic_state import EconomicEvaluator, EconomicState
 
 

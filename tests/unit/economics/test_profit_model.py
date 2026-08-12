@@ -1,11 +1,11 @@
 """Unit tests for the Profitability Engine (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.economics.profit_model import (
-    CROP_PARAMS,
     ProfitabilityEstimate,
-    estimate_crop_profitability,
     estimate_animal_profitability,
+    estimate_crop_profitability,
 )
 
 

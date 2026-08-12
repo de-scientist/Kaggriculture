@@ -1,7 +1,8 @@
 """Unit tests for Land Optimizer (Stage 2)."""
+
 from __future__ import annotations
 
-from agent.optimization.land_optimizer import LandOptimizer, LandInvestment
+from agent.optimization.land_optimizer import LandInvestment, LandOptimizer
 
 
 class TestLandOptimizer:

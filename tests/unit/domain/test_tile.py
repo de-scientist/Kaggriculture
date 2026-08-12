@@ -1,4 +1,5 @@
 """Unit tests for the Tile domain model (chapter 9)."""
+
 from __future__ import annotations
 
 from agent.domain.crop import Crop

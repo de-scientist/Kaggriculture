@@ -1,4 +1,5 @@
 """Unit tests for the GameState domain model (chapter 9)."""
+
 from __future__ import annotations
 
 from agent.domain.farm import Farm
@@ -66,10 +67,12 @@ class TestGameStateQueries:
         assert state.available_money() == 4500.0
 
     def test_available_workers(self) -> None:
-        farm = Farm(workers=[
-            Worker(worker_id="farmer", position=Position(0, 0)),
-            Worker(worker_id="hand1", position=Position(1, 0)),
-        ])
+        farm = Farm(
+            workers=[
+                Worker(worker_id="farmer", position=Position(0, 0)),
+                Worker(worker_id="hand1", position=Position(1, 0)),
+            ]
+        )
         state = GameState(player=0, farm=farm)
         assert len(state.available_workers()) == 2
 

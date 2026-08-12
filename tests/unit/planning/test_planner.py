@@ -1,10 +1,9 @@
 """Unit tests for Planning/Planner (Stage 2)."""
+
 from __future__ import annotations
 
-import pytest
-
 from agent.domain.game_state import GameState
-from agent.planning.plan import Plan, PlanStep, PlanEvaluation
+from agent.planning.plan import Plan, PlanEvaluation, PlanStep
 from agent.planning.planner import Planner, PlannerConfig
 
 
@@ -59,11 +58,14 @@ class TestPlan:
             required_workers=1,
             completion_turns=1,
         )
-        assert plan.is_feasible(
-            available_cash=500.0,
-            available_workers=2,
-            remaining_turns=720,
-        ) is True
+        assert (
+            plan.is_feasible(
+                available_cash=500.0,
+                available_workers=2,
+                remaining_turns=720,
+            )
+            is True
+        )
 
     def test_is_not_feasible_low_cash(self) -> None:
         plan = Plan(
@@ -72,11 +74,14 @@ class TestPlan:
             required_workers=1,
             completion_turns=5,
         )
-        assert plan.is_feasible(
-            available_cash=1000.0,
-            available_workers=2,
-            remaining_turns=720,
-        ) is False
+        assert (
+            plan.is_feasible(
+                available_cash=1000.0,
+                available_workers=2,
+                remaining_turns=720,
+            )
+            is False
+        )
 
     def test_value_per_turn(self) -> None:
         plan = Plan(
@@ -98,12 +103,14 @@ class TestPlanner:
         assert plan.steps[0].action_type == "pass"
 
     def test_plan_basic(self) -> None:
-        planner = Planner(config=PlannerConfig(
-            horizon_turns=5,
-            max_rollouts=10,
-            max_branching=8,
-            enable_planning=True,
-        ))
+        planner = Planner(
+            config=PlannerConfig(
+                horizon_turns=5,
+                max_rollouts=10,
+                max_branching=8,
+                enable_planning=True,
+            )
+        )
         state = GameState(player=0, step=0)
         plan = planner.plan(state, 0, 720, 3000.0)
         assert isinstance(plan, Plan)

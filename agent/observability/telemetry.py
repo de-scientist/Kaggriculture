@@ -92,9 +92,9 @@ class Telemetry:
         with self._lock:
             return TelemetrySnapshot(
                 decisions=self._decisions,
-                average_latency_ms=round(self._total_latency / self._decisions, 3)
-                if self._decisions
-                else 0.0,
+                average_latency_ms=(
+                    round(self._total_latency / self._decisions, 3) if self._decisions else 0.0
+                ),
                 longest_decision_ms=round(self._longest_latency, 3),
                 failed_validations=self._failed_validations,
                 strategy_usage=dict(self._strategy_usage),

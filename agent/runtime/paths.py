@@ -12,7 +12,9 @@ from collections import deque
 from .game import Position
 
 
-def _neighbors(pos: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> list[Position]:
+def _neighbors(
+    pos: Position, board_size: int, prefer_unlocked: set[Position] | None = None
+) -> list[Position]:
     x, y = pos
     out = []
     for dx, dy in ((0, -1), (0, 1), (1, 0), (-1, 0)):
@@ -24,7 +26,9 @@ def _neighbors(pos: Position, board_size: int, prefer_unlocked: set[Position] | 
     return out
 
 
-def bfs_path(src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> list[Position]:
+def bfs_path(
+    src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None
+) -> list[Position]:
     """Shortest path from src to dst (inclusive). Returns [] if src == dst."""
     if src == dst:
         return []
@@ -82,7 +86,9 @@ def distance(src: Position, dst: Position, board_size: int) -> int:
     return matrix[(src[1] * board_size + src[0]) * n + dst[1] * board_size + dst[0]]
 
 
-def next_step(src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None) -> Position | None:
+def next_step(
+    src: Position, dst: Position, board_size: int, prefer_unlocked: set[Position] | None = None
+) -> Position | None:
     if src == dst:
         return None
     matrix = _dist_matrix(board_size)

@@ -3,6 +3,7 @@
 Each test documents a bug that was found and fixed, ensuring it never
 returns silently.  A bug fixed once must never return.
 """
+
 from __future__ import annotations
 
 from agent.decision.decision_context import DecisionContext
@@ -77,6 +78,7 @@ class TestRegressionDecisionFallbackMetrics:
             raise ValueError("test error")
 
         import agent.decision.decision_engine as de
+
         original = de.action_generator.generate_candidates
         de.action_generator.generate_candidates = boom
         try:

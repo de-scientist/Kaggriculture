@@ -7,11 +7,11 @@ layer, and the learning feature builder.  Nothing here mutates engine state.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any
 
 from .constants import (
-    ANIMALS,
     ANIMAL_PRODUCTS,
     BOARD_SIZE_DEFAULT,
     CROPS,
@@ -64,7 +64,7 @@ class GameSnapshot:
     private: Mapping[str, Any]
 
     @classmethod
-    def from_obs(cls, obs: Mapping[str, Any]) -> "GameSnapshot":
+    def from_obs(cls, obs: Mapping[str, Any]) -> GameSnapshot:
         if isinstance(obs, Mapping):
             farms_raw = obs.get("farms", [])
             step_raw = obs.get("step", 0)
@@ -83,7 +83,9 @@ class GameSnapshot:
             market = _get_mapping(obs, "market")
             town = _get_mapping(obs, "town")
             private = _get_mapping(obs, "private")
-        farms: Sequence[Mapping[str, Any]] = [f for f in farms_raw if isinstance(f, Mapping)] if isinstance(farms_raw, list) else []
+        farms: Sequence[Mapping[str, Any]] = (
+            [f for f in farms_raw if isinstance(f, Mapping)] if isinstance(farms_raw, list) else []
+        )
         player = _as_int(player_raw, 0)
         step = _as_int(step_raw, 0)
         day = _as_int(day_raw, 0)
@@ -165,7 +167,11 @@ class GameSnapshot:
         return 0 <= x < self.board_size and 0 <= y < self.board_size
 
     def is_unlocked(self, x: int, y: int) -> bool:
-        return self.in_bounds(x, y) and self.tile_at(x, y) is not None and self.tile_at(x, y) != "LOCKED"
+        return (
+            self.in_bounds(x, y)
+            and self.tile_at(x, y) is not None
+            and self.tile_at(x, y) != "LOCKED"
+        )
 
     def tile_at(self, x: int, y: int) -> Any:
         if not self.in_bounds(x, y):
@@ -246,7 +252,11 @@ class GameSnapshot:
 
     def shed_value(self) -> float:
         prices = self.prices()
-        return sum(float(v) * float(prices.get(k, 0.0)) for k, v in self.shed().items() if isinstance(v, (int, float)))
+        return sum(
+            float(v) * float(prices.get(k, 0.0))
+            for k, v in self.shed().items()
+            if isinstance(v, (int, float))
+        )
 
     def seeds(self) -> Mapping[str, Any]:
         seeds = self.private.get("seeds", {})
@@ -262,7 +272,11 @@ class GameSnapshot:
     def inventory_value(self, index: int = 0) -> float:
         inv = self.inventories()[index] if index < len(self.inventories()) else {}
         prices = self.prices()
-        return sum(float(v) * float(prices.get(k, 0.0)) for k, v in inv.items() if isinstance(v, (int, float)))
+        return sum(
+            float(v) * float(prices.get(k, 0.0))
+            for k, v in inv.items()
+            if isinstance(v, (int, float))
+        )
 
     def carrying(self, index: int, item: str) -> int:
         inv = self.inventories()[index] if index < len(self.inventories()) else {}
@@ -322,7 +336,9 @@ class GameSnapshot:
         return window_start_day(crop) <= age <= int(CROPS[crop]["max_yield_day"])
 
     def shed_adjacent(self, pos: Position) -> bool:
-        return pos in {tile for tile in SHED_ACCESS if tile[0] < self.board_size and tile[1] < self.board_size}
+        return pos in {
+            tile for tile in SHED_ACCESS if tile[0] < self.board_size and tile[1] < self.board_size
+        }
 
 
 def count_plants_by_crop(farm: Mapping[str, Any], crop: str) -> int:

@@ -1,7 +1,8 @@
 """Unit tests for Price Forecaster (Stage 2)."""
+
 from __future__ import annotations
 
-from agent.market.price_forecaster import PriceForecast, PriceForecaster
+from agent.market.price_forecaster import PriceForecaster
 from agent.market.price_tracker import PriceHistory, PriceSnapshot
 
 
@@ -67,7 +68,9 @@ class TestPriceForecaster:
         history2 = PriceHistory(product="WHEAT")
         # Volatile prices
         for i in range(5):
-            history2.add(PriceSnapshot(turn=i, product="WHEAT", price=float(10 + i * 5), inventory=20))
+            history2.add(
+                PriceSnapshot(turn=i, product="WHEAT", price=float(10 + i * 5), inventory=20)
+            )
         volatile_result = forecaster.forecast(history2)
 
         assert volatile_result is not None

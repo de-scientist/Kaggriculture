@@ -1,4 +1,5 @@
 """Shared episode fixtures for end-to-end and regression tests."""
+
 from __future__ import annotations
 
 from tests.fixtures.observations import minimal_observation

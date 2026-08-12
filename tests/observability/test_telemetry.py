@@ -1,4 +1,5 @@
 """Tests for the telemetry aggregator."""
+
 from __future__ import annotations
 
 from agent.observability import get_metrics, reset_telemetry
@@ -69,9 +70,15 @@ def test_report_shape() -> None:
     telem = reset_telemetry()
     telem.record_decision(1.0)
     report = telem.report()
-    for key in ("decisions", "average_latency_ms", "longest_decision_ms",
-                "failed_validations", "strategy_usage", "exception_counts",
-                "uptime_seconds"):
+    for key in (
+        "decisions",
+        "average_latency_ms",
+        "longest_decision_ms",
+        "failed_validations",
+        "strategy_usage",
+        "exception_counts",
+        "uptime_seconds",
+    ):
         assert key in report
 
 

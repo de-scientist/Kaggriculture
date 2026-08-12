@@ -4,6 +4,7 @@
 Runs the agent on a minimal observation multiple times and reports
 latency statistics. Used to populate reports/stage_1_performance.md.
 """
+
 from __future__ import annotations
 
 import json

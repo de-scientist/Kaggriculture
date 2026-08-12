@@ -1,4 +1,5 @@
 """Unit tests for the Farm domain model (chapter 9)."""
+
 from __future__ import annotations
 
 import pytest
@@ -52,10 +53,12 @@ class TestFarmTiles:
     def test_empty_tiles_mixed(self) -> None:
         occupied = Position(0, 0)
         empty = Position(1, 0)
-        farm = Farm(tiles={
-            occupied: Tile(position=occupied),
-            empty: None,
-        })
+        farm = Farm(
+            tiles={
+                occupied: Tile(position=occupied),
+                empty: None,
+            }
+        )
         result = farm.empty_tiles()
         assert Position(1, 0) in result
 
@@ -65,11 +68,13 @@ class TestFarmTiles:
         assert pos in farm.occupied_tiles()
 
     def test_find_nearest_empty(self) -> None:
-        farm = Farm(tiles={
-            Position(0, 0): Tile(position=Position(0, 0)),
-            Position(2, 0): None,
-            Position(0, 3): None,
-        })
+        farm = Farm(
+            tiles={
+                Position(0, 0): Tile(position=Position(0, 0)),
+                Position(2, 0): None,
+                Position(0, 3): None,
+            }
+        )
         nearest = farm.find_nearest_empty(Position(1, 0))
         assert nearest == Position(2, 0)
 

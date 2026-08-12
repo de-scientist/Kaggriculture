@@ -4,6 +4,7 @@ Each function returns a fresh copy of a canonical observation dict so that
 tests never mutate shared state.  Fixtures mirror the observation schema
 documented in the Kaggle environment README.
 """
+
 from __future__ import annotations
 
 from copy import deepcopy
@@ -106,7 +107,9 @@ def observation_with_animal(animal_type: str = "GOOSE") -> dict:
     return obs
 
 
-def observation_with_market(prices: dict[str, int], inventory: dict[str, int] | None = None) -> dict:
+def observation_with_market(
+    prices: dict[str, int], inventory: dict[str, int] | None = None
+) -> dict:
     obs = minimal_observation()
     obs["market"] = {"inventory": dict(inventory or {}), "prices": dict(prices)}
     return obs

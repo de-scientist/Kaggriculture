@@ -1,4 +1,5 @@
 """Unit tests for Capital Allocation Engine (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.economics.capital_allocation import CapitalAllocation, CapitalAllocator
@@ -48,12 +49,20 @@ class TestCapitalAllocator:
         allocator = CapitalAllocator(min_cash_reserve=100.0)
         opps = [
             CapitalAllocation(
-                category="a", amount=500.0, expected_roi=100.0,
-                payback_turns=5, confidence=0.9, description="A",
+                category="a",
+                amount=500.0,
+                expected_roi=100.0,
+                payback_turns=5,
+                confidence=0.9,
+                description="A",
             ),
             CapitalAllocation(
-                category="b", amount=500.0, expected_roi=200.0,
-                payback_turns=5, confidence=0.9, description="B",
+                category="b",
+                amount=500.0,
+                expected_roi=200.0,
+                payback_turns=5,
+                confidence=0.9,
+                description="B",
             ),
         ]
         selected = allocator.allocate(available_cash=600.0, opportunities=opps)

@@ -1,4 +1,5 @@
 """Unit tests for the Farm module (quadrants) (chapter 9)."""
+
 from __future__ import annotations
 
 from agent.domain.quadrant import Quadrant

@@ -1,4 +1,5 @@
 """Tests for the performance budget enforcement."""
+
 from __future__ import annotations
 
 import pytest
@@ -74,8 +75,9 @@ def test_performance_monitor_counts_warnings_criticals() -> None:
 
 
 def test_budget_result_to_dict_shape() -> None:
-    result = BudgetResult(component="Test", duration_ms=1.0, budget_ms=10.0,
-                          status=BudgetStatus.OK, message="ok")
+    result = BudgetResult(
+        component="Test", duration_ms=1.0, budget_ms=10.0, status=BudgetStatus.OK, message="ok"
+    )
     d = result.to_dict()
     assert d["component"] == "Test"
     assert d["status"] == "ok"

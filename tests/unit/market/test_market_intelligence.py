@@ -1,4 +1,5 @@
 """Unit tests for Market Intelligence Engine (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.market.market_intelligence import MarketIntelligence, MarketIntelligenceEngine

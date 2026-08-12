@@ -8,8 +8,8 @@ not require code edits.  The learning layer may adjust a subset of these knobs
 
 from __future__ import annotations
 
-import os
 import dataclasses
+import os
 from dataclasses import dataclass, fields
 from typing import Any
 
@@ -76,7 +76,7 @@ class RuntimeSettings:
     max_market_buy_seed_units: int = 12
 
     @classmethod
-    def from_env(cls, overrides: dict[str, Any] | None = None) -> "RuntimeSettings":
+    def from_env(cls, overrides: dict[str, Any] | None = None) -> RuntimeSettings:
         merged: dict[str, Any] = {}
         if overrides:
             merged.update(overrides)

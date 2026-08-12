@@ -1,4 +1,5 @@
 """Unit tests for the Crop domain model (chapter 9)."""
+
 from __future__ import annotations
 
 import pytest
@@ -28,15 +29,18 @@ class TestCropConstruction:
 
 
 class TestCropMaturity:
-    @pytest.mark.parametrize("current_day,planted_day,expected", [
-        (0, 0, False),
-        (1, 0, False),
-        (2, 0, True),
-        (3, 0, True),
-        (2, 2, False),
-        (3, 1, True),
-        (1, 5, False),
-    ])
+    @pytest.mark.parametrize(
+        "current_day,planted_day,expected",
+        [
+            (0, 0, False),
+            (1, 0, False),
+            (2, 0, True),
+            (3, 0, True),
+            (2, 2, False),
+            (3, 1, True),
+            (1, 5, False),
+        ],
+    )
     def test_is_mature(self, current_day: int, planted_day: int, expected: bool) -> None:
         crop = Crop(crop_type="WHEAT", planted_day=planted_day)
         assert crop.is_mature(current_day) is expected

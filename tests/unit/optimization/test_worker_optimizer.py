@@ -1,4 +1,5 @@
 """Unit tests for Worker Optimizer (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.optimization.worker_optimizer import WorkerOptimizer, WorkerTask

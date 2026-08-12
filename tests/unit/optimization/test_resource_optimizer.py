@@ -1,7 +1,8 @@
 """Unit tests for Resource Optimizer (Stage 2)."""
+
 from __future__ import annotations
 
-from agent.optimization.resource_optimizer import ResourceOptimizer, Bottleneck
+from agent.optimization.resource_optimizer import ResourceOptimizer
 
 
 class TestResourceOptimizer:

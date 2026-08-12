@@ -2,6 +2,7 @@
 
 Resets operational singletons before each test to ensure isolation.
 """
+
 from __future__ import annotations
 
 import pytest

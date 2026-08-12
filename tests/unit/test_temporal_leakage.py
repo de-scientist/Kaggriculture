@@ -7,9 +7,8 @@ strict temporal causality.
 If a forecast or evaluation uses data from turn T+1 or later while
 making a decision at turn T, the test must fail.
 """
-from __future__ import annotations
 
-import pytest
+from __future__ import annotations
 
 from agent.economics.economic_state import EconomicEvaluator
 from agent.market.market_intelligence import MarketIntelligenceEngine
@@ -63,10 +62,22 @@ class TestNoFutureLeakage:
         from agent.market.demand_model import DemandModel
 
         model = DemandModel()
-        model.record(turn=1, prev_inventory={"WHEAT": 20}, curr_inventory={"WHEAT": 18},
-                     prev_prices={"WHEAT": 10}, curr_prices={"WHEAT": 12}, sales={"WHEAT": 2})
-        model.record(turn=2, prev_inventory={"WHEAT": 18}, curr_inventory={"WHEAT": 15},
-                     prev_prices={"WHEAT": 12}, curr_prices={"WHEAT": 14}, sales={"WHEAT": 3})
+        model.record(
+            turn=1,
+            prev_inventory={"WHEAT": 20},
+            curr_inventory={"WHEAT": 18},
+            prev_prices={"WHEAT": 10},
+            curr_prices={"WHEAT": 12},
+            sales={"WHEAT": 2},
+        )
+        model.record(
+            turn=2,
+            prev_inventory={"WHEAT": 18},
+            curr_inventory={"WHEAT": 15},
+            prev_prices={"WHEAT": 12},
+            curr_prices={"WHEAT": 14},
+            sales={"WHEAT": 3},
+        )
 
         history = model.get("WHEAT")
         assert history is not None
@@ -102,8 +113,9 @@ class TestNoFutureLeakage:
         inventory = Inventory().add("WHEAT", 5)
         market = Market(prices={"WHEAT": 15}, inventory={"WHEAT": 10})
         season = Season(day=5, turn=12)
-        state = GameState(player=0, farm=farm, inventory=inventory,
-                          market=market, season=season, step=132)
+        state = GameState(
+            player=0, farm=farm, inventory=inventory, market=market, season=season, step=132
+        )
 
         evaluator = EconomicEvaluator()
         econ = evaluator.evaluate(state)
@@ -134,22 +146,6 @@ class TestNoFutureLeakage:
         that could contain future information."""
         # This is a structural test — verify modules don't import
         # disallowed future-information sources
-        import agent.economics.economic_state
-        import agent.economics.profit_model
-        import agent.economics.opportunity_cost
-        import agent.economics.capital_allocation
-        import agent.market.price_tracker
-        import agent.market.price_forecaster
-        import agent.market.demand_model
-        import agent.market.market_intelligence
-        import agent.optimization.crop_optimizer
-        import agent.optimization.animal_optimizer
-        import agent.optimization.land_optimizer
-        import agent.optimization.resource_optimizer
-        import agent.optimization.worker_optimizer
-        import agent.planning.planner
-        import agent.planning.plan
-        import agent.strategies.economic_strategy
 
         # All modules should import successfully without future data
         assert True

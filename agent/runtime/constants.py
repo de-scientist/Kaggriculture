@@ -20,11 +20,46 @@ class CropSpec(TypedDict):
 
 
 CROPS: dict[str, CropSpec] = {
-    "WHEAT": {"seed": 10, "first_yield_day": 2, "max_yield_day": 4, "interval": 0, "max_yield": 6, "ongoing": False},
-    "CARROT": {"seed": 20, "first_yield_day": 2, "max_yield_day": 3, "interval": 0, "max_yield": 4, "ongoing": False},
-    "TOMATO": {"seed": 50, "first_yield_day": 8, "max_yield_day": 8, "interval": 1, "max_yield": 4, "ongoing": True},
-    "STRAWBERRY": {"seed": 100, "first_yield_day": 10, "max_yield_day": 10, "interval": 2, "max_yield": 4, "ongoing": True},
-    "MELON": {"seed": 80, "first_yield_day": 10, "max_yield_day": 12, "interval": 0, "max_yield": 6, "ongoing": False},
+    "WHEAT": {
+        "seed": 10,
+        "first_yield_day": 2,
+        "max_yield_day": 4,
+        "interval": 0,
+        "max_yield": 6,
+        "ongoing": False,
+    },
+    "CARROT": {
+        "seed": 20,
+        "first_yield_day": 2,
+        "max_yield_day": 3,
+        "interval": 0,
+        "max_yield": 4,
+        "ongoing": False,
+    },
+    "TOMATO": {
+        "seed": 50,
+        "first_yield_day": 8,
+        "max_yield_day": 8,
+        "interval": 1,
+        "max_yield": 4,
+        "ongoing": True,
+    },
+    "STRAWBERRY": {
+        "seed": 100,
+        "first_yield_day": 10,
+        "max_yield_day": 10,
+        "interval": 2,
+        "max_yield": 4,
+        "ongoing": True,
+    },
+    "MELON": {
+        "seed": 80,
+        "first_yield_day": 10,
+        "max_yield_day": 12,
+        "interval": 0,
+        "max_yield": 6,
+        "ongoing": False,
+    },
 }
 
 
@@ -38,12 +73,43 @@ class AnimalSpec(TypedDict):
 
 
 ANIMALS: dict[str, AnimalSpec] = {
-    "GOOSE": {"cost": 300, "structure": "COOP", "first_yield_day": 4, "interval": 1, "max_held": 4, "product": "EGG"},
-    "COW": {"cost": 400, "structure": "PASTURE", "first_yield_day": 8, "interval": 2, "max_held": 6, "product": "MILK"},
-    "SHEEP": {"cost": 500, "structure": "PASTURE", "first_yield_day": 6, "interval": 3, "max_held": 6, "product": "WOOL"},
+    "GOOSE": {
+        "cost": 300,
+        "structure": "COOP",
+        "first_yield_day": 4,
+        "interval": 1,
+        "max_held": 4,
+        "product": "EGG",
+    },
+    "COW": {
+        "cost": 400,
+        "structure": "PASTURE",
+        "first_yield_day": 8,
+        "interval": 2,
+        "max_held": 6,
+        "product": "MILK",
+    },
+    "SHEEP": {
+        "cost": 500,
+        "structure": "PASTURE",
+        "first_yield_day": 6,
+        "interval": 3,
+        "max_held": 6,
+        "product": "WOOL",
+    },
 }
 
-PRODUCTS: list[str] = ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON", "EGG", "MILK", "WOOL", "FERTILIZER"]
+PRODUCTS: list[str] = [
+    "WHEAT",
+    "CARROT",
+    "TOMATO",
+    "STRAWBERRY",
+    "MELON",
+    "EGG",
+    "MILK",
+    "WOOL",
+    "FERTILIZER",
+]
 
 ANIMAL_PRODUCTS: list[str] = ["EGG", "MILK", "WOOL"]
 
@@ -59,15 +125,87 @@ class MarketSpec(TypedDict):
 
 
 MARKET: dict[str, MarketSpec] = {
-    "WHEAT": {"base": 25, "I0": 10000, "T": 400, "below_func": "sqrt", "below_target": 0.80, "above_func": "log", "above_target": 0.20},
-    "CARROT": {"base": 35, "I0": 10000, "T": 450, "below_func": "log", "below_target": 0.20, "above_func": "sqrt", "above_target": 0.70},
-    "TOMATO": {"base": 60, "I0": 10000, "T": 200, "below_func": "linear", "below_target": 0.40, "above_func": "sqrt", "above_target": 0.60},
-    "STRAWBERRY": {"base": 120, "I0": 10000, "T": 100, "below_func": "sqrt", "below_target": 0.70, "above_func": "linear", "above_target": 1.60},
-    "MELON": {"base": 250, "I0": 10000, "T": 300, "below_func": "log", "below_target": 0.20, "above_func": "sq", "above_target": 3.60},
-    "EGG": {"base": 50, "I0": 10000, "T": 332, "below_func": "linear", "below_target": 0.40, "above_func": "log", "above_target": 0.20},
-    "MILK": {"base": 160, "I0": 10000, "T": 122, "below_func": "sqrt", "below_target": 0.60, "above_func": "linear", "above_target": 1.60},
-    "WOOL": {"base": 200, "I0": 10000, "T": 105, "below_func": "log", "below_target": 0.20, "above_func": "sq", "above_target": 3.20},
-    "FERTILIZER": {"base": 100, "I0": 10000, "T": 200, "below_func": "linear", "below_target": 0.40, "above_func": "linear", "above_target": 0.40},
+    "WHEAT": {
+        "base": 25,
+        "I0": 10000,
+        "T": 400,
+        "below_func": "sqrt",
+        "below_target": 0.80,
+        "above_func": "log",
+        "above_target": 0.20,
+    },
+    "CARROT": {
+        "base": 35,
+        "I0": 10000,
+        "T": 450,
+        "below_func": "log",
+        "below_target": 0.20,
+        "above_func": "sqrt",
+        "above_target": 0.70,
+    },
+    "TOMATO": {
+        "base": 60,
+        "I0": 10000,
+        "T": 200,
+        "below_func": "linear",
+        "below_target": 0.40,
+        "above_func": "sqrt",
+        "above_target": 0.60,
+    },
+    "STRAWBERRY": {
+        "base": 120,
+        "I0": 10000,
+        "T": 100,
+        "below_func": "sqrt",
+        "below_target": 0.70,
+        "above_func": "linear",
+        "above_target": 1.60,
+    },
+    "MELON": {
+        "base": 250,
+        "I0": 10000,
+        "T": 300,
+        "below_func": "log",
+        "below_target": 0.20,
+        "above_func": "sq",
+        "above_target": 3.60,
+    },
+    "EGG": {
+        "base": 50,
+        "I0": 10000,
+        "T": 332,
+        "below_func": "linear",
+        "below_target": 0.40,
+        "above_func": "log",
+        "above_target": 0.20,
+    },
+    "MILK": {
+        "base": 160,
+        "I0": 10000,
+        "T": 122,
+        "below_func": "sqrt",
+        "below_target": 0.60,
+        "above_func": "linear",
+        "above_target": 1.60,
+    },
+    "WOOL": {
+        "base": 200,
+        "I0": 10000,
+        "T": 105,
+        "below_func": "log",
+        "below_target": 0.20,
+        "above_func": "sq",
+        "above_target": 3.20,
+    },
+    "FERTILIZER": {
+        "base": 100,
+        "I0": 10000,
+        "T": 200,
+        "below_func": "linear",
+        "below_target": 0.40,
+        "above_func": "linear",
+        "above_target": 0.40,
+    },
 }
 
 SHOP_DEMAND: dict[str, list[str]] = {

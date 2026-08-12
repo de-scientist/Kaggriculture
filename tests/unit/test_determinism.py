@@ -4,6 +4,7 @@ Verifies that identical observations produce identical decisions when
 the random seed is fixed, and that results are reproducible across
 multiple runs.
 """
+
 from __future__ import annotations
 
 from agent.agent import agent

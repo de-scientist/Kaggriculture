@@ -1,4 +1,5 @@
 """Tests for the configuration layer (schema, loader, settings, validators)."""
+
 from __future__ import annotations
 
 import pytest
@@ -17,8 +18,19 @@ from agent.exceptions.configuration import ConfigurationError
 
 def test_schema_defaults_contains_canonical_sections() -> None:
     defaults = schema_defaults()
-    for key in ("environment", "seed", "game", "market", "town", "strategy",
-                "features", "performance", "logging", "observability", "simulation"):
+    for key in (
+        "environment",
+        "seed",
+        "game",
+        "market",
+        "town",
+        "strategy",
+        "features",
+        "performance",
+        "logging",
+        "observability",
+        "simulation",
+    ):
         assert key in defaults
     assert defaults["game"]["episode_steps"] == 720
     assert defaults["game"]["starting_money"] == 3000
@@ -73,24 +85,18 @@ def test_get_config_reload_forces_refresh() -> None:
 
 
 def test_environment_variable_overrides_strategy_name() -> None:
-    settings = load_config(
-        "development", env={"KAG_STRATEGY__NAME": "utility"}
-    )
+    settings = load_config("development", env={"KAG_STRATEGY__NAME": "utility"})
     assert settings.strategy_name == "utility"
     assert settings.get("strategy", {}).get("name") == "utility"
 
 
 def test_environment_variable_overrides_nested_logging_level() -> None:
-    settings = load_config(
-        "development", env={"KAG_LOGGING__LEVEL": "ERROR"}
-    )
+    settings = load_config("development", env={"KAG_LOGGING__LEVEL": "ERROR"})
     assert settings.log_level == "ERROR"
 
 
 def test_cli_dotted_overrides_win() -> None:
-    settings = load_config(
-        "development", overrides={"strategy.name": "heuristic", "seed": 7}
-    )
+    settings = load_config("development", overrides={"strategy.name": "heuristic", "seed": 7})
     assert settings.strategy_name == "heuristic"
     assert settings.seed == 7
 

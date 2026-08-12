@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Mapping
+from collections.abc import Mapping
 
 from .constants import CROPS, MARKET, window_end_day, window_start_day
 from .game import GameSnapshot, count_plants_by_crop

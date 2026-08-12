@@ -1,8 +1,8 @@
 """Unit tests for the Opportunity Cost Engine (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.economics.opportunity_cost import (
-    OpportunityCost,
     OpportunityCostEngine,
 )
 

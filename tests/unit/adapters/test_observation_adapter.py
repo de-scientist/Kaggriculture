@@ -1,4 +1,5 @@
 """Unit tests for the ObservationAdapter (chapter 9)."""
+
 from __future__ import annotations
 
 import pytest

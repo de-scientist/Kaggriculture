@@ -10,7 +10,8 @@ from __future__ import annotations
 import logging
 import os
 import time
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from .game import GameSnapshot
 from .planner import TurnPlanner

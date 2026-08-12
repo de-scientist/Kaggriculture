@@ -1,4 +1,5 @@
 """Unit tests for Animal Optimizer (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.optimization.animal_optimizer import AnimalOptimizer, AnimalRecommendation

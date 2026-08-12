@@ -18,6 +18,7 @@ Kaggle competition by checking:
 Usage:
     python scripts/validate_submission.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -76,18 +77,21 @@ def check_required_files(result: _Result) -> None:
 def check_imports(result: _Result) -> None:
     try:
         from agent.agent import agent  # noqa: F401
+
         result.ok("Agent importable")
     except Exception as exc:
         result.fail("Agent importable", str(exc))
 
     try:
         from agent.adapters import ActionAdapter, ObservationAdapter  # noqa: F401
+
         result.ok("Adapters importable")
     except Exception as exc:
         result.fail("Adapters importable", str(exc))
 
     try:
         from agent.decision.decision_engine import decide  # noqa: F401
+
         result.ok("Decision engine importable")
     except Exception as exc:
         result.fail("Decision engine importable", str(exc))

@@ -1,4 +1,5 @@
 """Unit tests for Crop Optimizer (Stage 2)."""
+
 from __future__ import annotations
 
 from agent.optimization.crop_optimizer import CropOptimizer, CropRecommendation

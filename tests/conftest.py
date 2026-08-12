@@ -5,6 +5,7 @@ test so that telemetry, metrics, replay, tracing and profiling state never leak
 between tests.  The existing domain / service tests do not touch these singletons,
 so the autouse fixtures here are safe for the whole suite.
 """
+
 from __future__ import annotations
 
 import pytest

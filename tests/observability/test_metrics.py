@@ -1,4 +1,5 @@
 """Tests for the metrics collector."""
+
 from __future__ import annotations
 
 from agent.observability import get_metrics, reset_metrics
@@ -70,9 +71,17 @@ def test_snapshot_shape() -> None:
     metrics = reset_metrics()
     metrics.increment("harvest_count")
     snap = metrics.snapshot()
-    for key in ("counters", "averages", "gauges", "histograms",
-                "average_decision_time_ms", "total_harvests", "total_profit",
-                "idle_turns", "expansion_count"):
+    for key in (
+        "counters",
+        "averages",
+        "gauges",
+        "histograms",
+        "average_decision_time_ms",
+        "total_harvests",
+        "total_profit",
+        "idle_turns",
+        "expansion_count",
+    ):
         assert key in snap
 
 

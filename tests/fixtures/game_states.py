@@ -3,6 +3,7 @@
 These factory functions produce :class:`~agent.domain.game_state.GameState`
 instances for use across unit and integration tests.
 """
+
 from __future__ import annotations
 
 from agent.domain.animal import Animal
@@ -106,7 +107,9 @@ def game_state_with_inventory(items: dict[str, int]) -> GameState:
     )
 
 
-def game_state_with_market(prices: dict[str, int], inventory: dict[str, int] | None = None) -> GameState:
+def game_state_with_market(
+    prices: dict[str, int], inventory: dict[str, int] | None = None
+) -> GameState:
     state = empty_game_state()
     market = Market(
         inventory=dict(inventory or {}),

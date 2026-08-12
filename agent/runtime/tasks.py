@@ -8,13 +8,20 @@ either the tile/shed operation or the next move step.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any
 
-from .constants import ANIMALS, CROPS, MARKET, SHED_CAPACITY, crop_base_price, is_ongoing, product_of
-from .crops import best_crop, crop_daily_value, cycle_days, expected_yield, melon_tiles_allowed
-from .game import GameSnapshot, Position, count_plants_by_crop
-from .paths import distance, nearest_shed_tile, next_step, move_op_for_next_step
+from .constants import (
+    ANIMALS,
+    CROPS,
+    crop_base_price,
+    is_ongoing,
+    product_of,
+)
+from .crops import best_crop, crop_daily_value, cycle_days
+from .game import GameSnapshot, Position
+from .paths import distance, move_op_for_next_step, nearest_shed_tile, next_step
 from .settings import RuntimeSettings
 
 STEP_COST = 3.0
@@ -133,23 +140,41 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
             pos = (x, y)
             if tile is None:
                 if plant_budget > 0:
-                    tasks.append(Task(pos, "PLANT", crop, plot_value(snapshot, settings), "plant", "empty"))
+                    tasks.append(
+                        Task(pos, "PLANT", crop, plot_value(snapshot, settings), "plant", "empty")
+                    )
                     plant_budget -= 1
                 elif settings.enable_animals:
                     if cow_pending > 0 and _count_structures(snapshot, "PASTURE") < cow_pending:
                         tasks.append(
-                            Task(pos, "BUILD_PASTURE", None, animal_value("COW", prices) * 0.6, "build_pasture", "animal")
+                            Task(
+                                pos,
+                                "BUILD_PASTURE",
+                                None,
+                                animal_value("COW", prices) * 0.6,
+                                "build_pasture",
+                                "animal",
+                            )
                         )
                     elif goose_pending > 0 and _count_structures(snapshot, "COOP") < goose_pending:
                         tasks.append(
-                            Task(pos, "BUILD_COOP", None, animal_value("GOOSE", prices) * 0.6, "build_coop", "animal")
+                            Task(
+                                pos,
+                                "BUILD_COOP",
+                                None,
+                                animal_value("GOOSE", prices) * 0.6,
+                                "build_coop",
+                                "animal",
+                            )
                         )
                 continue
             if not isinstance(tile, dict):
                 continue
             kind = tile.get("kind")
             if kind == "WEED":
-                tasks.append(Task(pos, "DIG", None, plot_value(snapshot, settings) * 0.8, "dig", "weed"))
+                tasks.append(
+                    Task(pos, "DIG", None, plot_value(snapshot, settings) * 0.8, "dig", "weed")
+                )
             elif kind == "PLANT":
                 tasks.append(_plant_task(snapshot, settings, pos, tile))
             elif "animal" in tile:
@@ -158,11 +183,25 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
                 if settings.enable_animals:
                     if kind == "COOP" and goose_pending > 0:
                         tasks.append(
-                            Task(pos, "PLACE", "GOOSE", animal_value("GOOSE", prices) * 0.8, "place", "goose_place")
+                            Task(
+                                pos,
+                                "PLACE",
+                                "GOOSE",
+                                animal_value("GOOSE", prices) * 0.8,
+                                "place",
+                                "goose_place",
+                            )
                         )
                     elif kind == "PASTURE" and cow_pending > 0:
                         tasks.append(
-                            Task(pos, "PLACE", "COW", animal_value("COW", prices) * 0.8, "place", "cow_place")
+                            Task(
+                                pos,
+                                "PLACE",
+                                "COW",
+                                animal_value("COW", prices) * 0.8,
+                                "place",
+                                "cow_place",
+                            )
                         )
     tasks.sort(key=lambda t: -t.value)
     return tasks
@@ -204,7 +243,9 @@ def _geese_pending(snapshot: GameSnapshot, settings: RuntimeSettings) -> int:
     return max(0, min(settings.goose_max - placed, owned))
 
 
-def _plant_task(snapshot: GameSnapshot, settings: RuntimeSettings, pos: Position, tile: Mapping[str, Any]) -> Task:
+def _plant_task(
+    snapshot: GameSnapshot, settings: RuntimeSettings, pos: Position, tile: Mapping[str, Any]
+) -> Task:
     crop = str(tile.get("crop", ""))
     age = snapshot.plant_age(tile, snapshot.day)
     price = snapshot.price(crop)
@@ -224,7 +265,14 @@ def _animal_task(snapshot: GameSnapshot, pos: Position, tile: Mapping[str, Any])
     product = product_of(animal)
     yield_units = _int(tile.get("yield_units"), 0)
     if yield_units > 0:
-        return Task(pos, "HARVEST", None, yield_units * _num(prices.get(product), 50.0), "harvest", "animal_product")
+        return Task(
+            pos,
+            "HARVEST",
+            None,
+            yield_units * _num(prices.get(product), 50.0),
+            "harvest",
+            "animal_product",
+        )
     if not _int(tile.get("fed_today"), 0):
         return Task(pos, "FEED", None, animal_value(animal, prices) * 0.9, "feed", "animal_hungry")
     if not _int(tile.get("cared_today"), 0) and _int(tile.get("fed_today"), 0):
