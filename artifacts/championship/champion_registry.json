@@ -1,0 +1,13 @@
+[
+  {
+    "commit": "e23086183efa9078ef0c256dd3e10b9004972eec",
+    "config": {
+      "endgame_day": 26,
+      "policy": "EndgamePolicy",
+      "wind_down_day": 22
+    },
+    "frozen_at": "stage4b",
+    "notes": "Stage 4 champion: EndgamePolicy + FailSafeAgent.",
+    "version": "champion-v1.0"
+  }
+]
