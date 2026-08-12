@@ -57,6 +57,11 @@ class RuntimeSettings:
     carrot_switch_day: int = 18
     wheat_switch_day: int = 21
 
+    # Endgame: when True the planner keeps planting; the EndgamePolicy flips
+    # this off near the horizon so the farm liquidates instead of sowing crops
+    # that cannot mature before the season ends.
+    plant_enabled: bool = True
+
     # Land expansion: buy quadrant when money >= cost * ratio and day < latest.
     land_budget_ratio: float = 3.0
     land_latest_day: tuple[int, int, int] = (22, 16, 10)

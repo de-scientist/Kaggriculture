@@ -139,7 +139,7 @@ def build_tasks(snapshot: GameSnapshot, settings: RuntimeSettings) -> list[Task]
                 continue
             pos = (x, y)
             if tile is None:
-                if plant_budget > 0:
+                if plant_budget > 0 and settings.plant_enabled:
                     tasks.append(
                         Task(pos, "PLANT", crop, plot_value(snapshot, settings), "plant", "empty")
                     )
