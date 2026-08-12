@@ -23,7 +23,7 @@ from agent.evaluation.metrics import (
     percentile,
     winner_from_rewards,
 )
-from agent.submission.failsafe import EMERGENCY_ACTION
+from agent.submission.failsafe import EMERGENCY_ACTION, FailSafeAgent
 
 Agent = Any
 
