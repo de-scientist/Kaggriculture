@@ -2,7 +2,7 @@
   {
     "candidate_id": "C01",
     "changed_params": [],
-    "commit": "1f9356f8ef917c90996e59fef6906c166b7f4695",
+    "commit": "018492be61e1773e1739caba10140ee930ccca0e",
     "configuration": {},
     "decision": "RETIRE",
     "expected_outcome": "",
@@ -22,7 +22,7 @@
   {
     "candidate_id": "C02",
     "changed_params": [],
-    "commit": "1f9356f8ef917c90996e59fef6906c166b7f4695",
+    "commit": "018492be61e1773e1739caba10140ee930ccca0e",
     "configuration": {},
     "decision": "RETIRE",
     "expected_outcome": "",
@@ -42,7 +42,7 @@
   {
     "candidate_id": "C08",
     "changed_params": [],
-    "commit": "1f9356f8ef917c90996e59fef6906c166b7f4695",
+    "commit": "018492be61e1773e1739caba10140ee930ccca0e",
     "configuration": {},
     "decision": "RETIRE",
     "expected_outcome": "",

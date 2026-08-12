@@ -16,9 +16,9 @@ used an evidence-based ablation to replace EndgamePolicy with the pure champion.
 random, starter, conservative, aggressive, expansion, production, market (all our planner presets or built-ins).
 
 ## Number of Games
-- champion-v1.0: 27  |  champion-v1.1: 42  |  challengers: 24
+- champion-v1.0: 27  |  champion-v1.1: 21  |  challengers: 24
 
-## Win Rate (champion-v1.1): 100.0% (42/42)
+## Win Rate (champion-v1.1): 100.0% (21/21)
 ## Average Final Coins: 22184.1
 ## Median Final Coins: 22745.0
 ## Best Result: 24297.0

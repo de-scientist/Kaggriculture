@@ -1,7 +1,7 @@
 # Final Champion Scorecard
 
 **Submission champion:** `champion-v1.1` — `ChampionPolicy` (no EndgamePolicy), wrapped in `FailSafeAgent`.
-**Commit:** 1f9356f8ef917c90996e59fef6906c166b7f4695
+**Commit:** 018492be61e1773e1739caba10140ee930ccca0e
 
 ## Champion profile
 | Attribute | Value |
@@ -13,7 +13,7 @@
 | Determinism | Deterministic; model-free |
 
 ## Performance scorecard (Stage 4B, 3 seeds/opponent, 720 turns)
-- Win rate: 100.0% (42/42)
+- Win rate: 100.0% (21/21)
 - Average final coins: 22184.1
 - Median final coins: 22745.0
 - Best: 24297.0  Worst: 17509.0

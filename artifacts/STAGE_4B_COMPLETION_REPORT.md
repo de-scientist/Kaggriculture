@@ -2,14 +2,14 @@
 
 ## 1. Starting Champion
 - Version: champion-v1.0
-- Commit: 1f9356f8ef917c90996e59fef6906c166b7f4695
+- Commit: 018492be61e1773e1739caba10140ee930ccca0e
 - Baseline Result: 17755.0 avg coins, 20W/4L/3T vs diverse.
 
 ## 2. Evaluation
-- Total Games: 93
+- Total Games: 72
 - Opponents: random, starter, conservative, aggressive, expansion, production, market, no_endgame (ablation), self-play
 - Seeds: 0,1,2 (3 per matchup)
-- Wins/Losses/Ties (champion-v1.1): 42/0/0
+- Wins/Losses/Ties (champion-v1.1): 21/0/0
 - Win Rate: 100.0%
 
 ## 3. Optimization
@@ -24,7 +24,7 @@
 ## 5. Final Champion
 - Name: champion-v1.1
 - Version: v1.1
-- Commit: 1f9356f8ef917c90996e59fef6906c166b7f4695
+- Commit: 018492be61e1773e1739caba10140ee930ccca0e
 
 ## 6. Final Metrics
 - Win Rate: 100.0%

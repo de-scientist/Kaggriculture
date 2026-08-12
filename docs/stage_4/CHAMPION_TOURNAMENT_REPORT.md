@@ -4,9 +4,9 @@
 # champion-v1.1 vs diverse opponents
 
 - Candidate: **no_endgame**
-- Matches: 42
+- Matches: 21
 - Overall win rate: 100.0%
-- Total W/L/T: 42/0/0
+- Total W/L/T: 21/0/0
 - Avg final coins: 22184.10
 - Median final coins: 22745.00
 - Best / worst: 24297.00 / 17509.00
@@ -18,13 +18,13 @@
 
 | Opponent | Games | Wins | Losses | Ties | Win Rate | Avg Coins | Avg Margin |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| aggressive | 6 | 6 | 0 | 0 | 100.0% (100-100) | 22484.33 | 18337.00 |
-| conservative | 6 | 6 | 0 | 0 | 100.0% (100-100) | 22594.33 | 19758.33 |
-| expansion | 6 | 6 | 0 | 0 | 100.0% (100-100) | 23218.00 | 19183.67 |
-| market | 6 | 6 | 0 | 0 | 100.0% (100-100) | 18148.67 | 10152.00 |
-| production | 6 | 6 | 0 | 0 | 100.0% (100-100) | 23185.67 | 19604.00 |
-| random | 6 | 6 | 0 | 0 | 100.0% (100-100) | 23165.00 | 23165.00 |
-| starter | 6 | 6 | 0 | 0 | 100.0% (100-100) | 22492.67 | 19095.33 |
+| aggressive | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22484.33 | 18337.00 |
+| conservative | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22594.33 | 19758.33 |
+| expansion | 3 | 3 | 0 | 0 | 100.0% (100-100) | 23218.00 | 19183.67 |
+| market | 3 | 3 | 0 | 0 | 100.0% (100-100) | 18148.67 | 10152.00 |
+| production | 3 | 3 | 0 | 0 | 100.0% (100-100) | 23185.67 | 19604.00 |
+| random | 3 | 3 | 0 | 0 | 100.0% (100-100) | 23165.00 | 23165.00 |
+| starter | 3 | 3 | 0 | 0 | 100.0% (100-100) | 22492.67 | 19095.33 |
 
 ## Previous champion: champion-v1.0 (EndgamePolicy)
 # champion-v1.0 vs diverse opponents
