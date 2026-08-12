@@ -244,11 +244,11 @@ def hire_cost(n_already_hired: int, mult: float = FARM_HAND_COST_MULT) -> int:
     if n_already_hired < 0:
         n_already_hired = 0
     if n_already_hired < len(FARM_HAND_FIB):
-        return int(round(mult * FARM_HAND_FIB[n_already_hired]))
+        return round(mult * FARM_HAND_FIB[n_already_hired])
     a, b = 1, 1
     for _ in range(n_already_hired):
         a, b = b, a + b
-    return int(round(mult * a))
+    return round(mult * a)
 
 
 def window_start_day(crop: str) -> int:

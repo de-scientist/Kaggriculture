@@ -106,7 +106,7 @@ def plan_market_orders(snapshot: GameSnapshot, settings: RuntimeSettings) -> lis
 
     # 5) Land expansion last.
     unlocked = snapshot.unlocked()
-    for idx, (quadrant, price) in enumerate(zip(LAND_ORDER, LAND_PRICES)):
+    for idx, (quadrant, price) in enumerate(zip(LAND_ORDER, LAND_PRICES, strict=True)):
         if quadrant in unlocked:
             continue
         if snapshot.day >= settings.land_latest_day[idx]:
