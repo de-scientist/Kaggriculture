@@ -3,7 +3,7 @@ from agent.domain.worker import Worker
 from agent.services import worker_service
 
 
-def test_assign_task():
+def test_assign_task() -> None:
     pos = Position(0, 0)
     worker = Worker(worker_id="farmer", position=pos)
     result = worker_service.assign(worker, task="plant")
@@ -11,7 +11,7 @@ def test_assign_task():
     assert result.available is False
 
 
-def test_release():
+def test_release() -> None:
     pos = Position(0, 0)
     worker = Worker(worker_id="farmer", position=pos)
     assigned = worker_service.assign(worker, task="plant")
@@ -20,7 +20,7 @@ def test_release():
     assert result.available is True
 
 
-def test_available_workers():
+def test_available_workers() -> None:
     pos = Position(0, 0)
     w1 = Worker(worker_id="farmer", position=pos)
     w2 = Worker(worker_id="hand1", position=pos)
@@ -30,7 +30,7 @@ def test_available_workers():
     assert result[0].id == "farmer"
 
 
-def test_busy_workers():
+def test_busy_workers() -> None:
     pos = Position(0, 0)
     w1 = Worker(worker_id="farmer", position=pos)
     w2 = Worker(worker_id="hand1", position=pos)
@@ -40,7 +40,7 @@ def test_busy_workers():
     assert result[0].id == "hand1"
 
 
-def test_idle_workers():
+def test_idle_workers() -> None:
     pos = Position(0, 0)
     w1 = Worker(worker_id="farmer", position=pos)
     w2 = Worker(worker_id="hand1", position=pos)
@@ -50,7 +50,7 @@ def test_idle_workers():
     assert result[0].id == "farmer"
 
 
-def test_current_tasks():
+def test_current_tasks() -> None:
     pos = Position(0, 0)
     w1 = Worker(worker_id="farmer", position=pos)
     w2 = Worker(worker_id="hand1", position=pos)

@@ -4,7 +4,7 @@ from agent.domain.tile import Tile
 from agent.services import crop_service
 
 
-def test_plant_crop():
+def test_plant_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     result = crop_service.plant(tile, "WHEAT", day=0)
@@ -12,7 +12,7 @@ def test_plant_crop():
     assert result.crop.crop_type == "WHEAT"
 
 
-def test_plant_on_occupied_tile_raises():
+def test_plant_on_occupied_tile_raises() -> None:
     pos = Position(0, 0)
     existing_crop = crop_domain.Crop(crop_type="WHEAT", planted_day=0)
     tile = Tile(position=pos).with_crop(existing_crop)
@@ -23,7 +23,7 @@ def test_plant_on_occupied_tile_raises():
         pass
 
 
-def test_water_crop():
+def test_water_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -31,7 +31,7 @@ def test_water_crop():
     assert result.crop.watered_today is True
 
 
-def test_water_harvested_crop_raises():
+def test_water_harvested_crop_raises() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -43,7 +43,7 @@ def test_water_harvested_crop_raises():
         pass
 
 
-def test_fertilize_crop():
+def test_fertilize_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -51,7 +51,7 @@ def test_fertilize_crop():
     assert result.crop.fertilized_until_day == 3
 
 
-def test_harvest_crop():
+def test_harvest_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -60,7 +60,7 @@ def test_harvest_crop():
     assert result.crop.is_harvested is True
 
 
-def test_harvest_immature_crop_raises():
+def test_harvest_immature_crop_raises() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -71,39 +71,39 @@ def test_harvest_immature_crop_raises():
         pass
 
 
-def test_can_plant_empty_tile():
+def test_can_plant_empty_tile() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     assert crop_service.can_plant(tile) is True
 
 
-def test_can_plant_occupied_tile():
+def test_can_plant_occupied_tile() -> None:
     pos = Position(0, 0)
     existing_crop = crop_domain.Crop(crop_type="WHEAT", planted_day=0)
     tile = Tile(position=pos).with_crop(existing_crop)
     assert crop_service.can_plant(tile) is False
 
 
-def test_can_harvest_mature_crop():
+def test_can_harvest_mature_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
     assert crop_service.can_harvest(planted, day=2) is True
 
 
-def test_can_harvest_immature_crop():
+def test_can_harvest_immature_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
     assert crop_service.can_harvest(planted, day=1) is False
 
 
-def test_expected_profit():
+def test_expected_profit() -> None:
     result = crop_service.expected_profit("WHEAT", day=2, sell_price=15.0, seed_cost=10.0)
     assert result == 5.0
 
 
-def test_growth_progress():
+def test_growth_progress() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -111,7 +111,7 @@ def test_growth_progress():
     assert crop_service.growth_progress(planted, day=5) == 1.0
 
 
-def test_needs_water():
+def test_needs_water() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -120,7 +120,7 @@ def test_needs_water():
     assert crop_service.needs_water(watered) is False
 
 
-def test_needs_fertilizer():
+def test_needs_fertilizer() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -129,7 +129,7 @@ def test_needs_fertilizer():
     assert crop_service.needs_fertilizer(fertilized, day=2) is False
 
 
-def test_empty_tiles():
+def test_empty_tiles() -> None:
     pos = Position(0, 0)
     empty_tile = Tile(position=pos)
     crop = crop_domain.Crop(crop_type="WHEAT", planted_day=0)
@@ -139,7 +139,7 @@ def test_empty_tiles():
     assert result[0].position == pos
 
 
-def test_highest_roi_crop():
+def test_highest_roi_crop() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     planted = crop_service.plant(tile, "WHEAT", day=0)
@@ -152,7 +152,7 @@ def test_highest_roi_crop():
     assert result == "WHEAT"
 
 
-def test_highest_roi_crop_no_crops():
+def test_highest_roi_crop_no_crops() -> None:
     pos = Position(0, 0)
     tile = Tile(position=pos)
     result = crop_service.highest_roi_crop(

@@ -1,29 +1,29 @@
 from agent.services import land_service
 
 
-def test_purchase_cost_ne():
+def test_purchase_cost_ne() -> None:
     assert land_service.purchase_cost("NE") == 1000
 
 
-def test_purchase_cost_sw():
+def test_purchase_cost_sw() -> None:
     assert land_service.purchase_cost("SW") == 2000
 
 
-def test_purchase_cost_se():
+def test_purchase_cost_se() -> None:
     assert land_service.purchase_cost("SE") == 4000
 
 
-def test_purchase_cost_unknown():
+def test_purchase_cost_unknown() -> None:
     assert land_service.purchase_cost("NW") == 0
 
 
-def test_neighboring_quadrants():
+def test_neighboring_quadrants() -> None:
     result = land_service.neighboring_quadrants("NW")
     assert "NE" in result
     assert "SW" in result
 
 
-def test_available_land():
+def test_available_land() -> None:
     class FakeFarm:
         def __init__(self, quadrants):
             self.quadrants = quadrants
@@ -36,7 +36,7 @@ def test_available_land():
     assert "NW" not in result
 
 
-def test_expandable():
+def test_expandable() -> None:
     class FakeFarm:
         def __init__(self, quadrants):
             self.quadrants = quadrants
@@ -48,7 +48,7 @@ def test_expandable():
     assert "SE" in result
 
 
-def test_expandable_limited_funds():
+def test_expandable_limited_funds() -> None:
     class FakeFarm:
         def __init__(self, quadrants):
             self.quadrants = quadrants
@@ -58,11 +58,11 @@ def test_expandable_limited_funds():
     assert "NE" not in result
 
 
-def test_expected_land_value():
+def test_expected_land_value() -> None:
     assert land_service.expected_land_value("NE") == 1500.0
     assert land_service.expected_land_value("SW") == 3000.0
     assert land_service.expected_land_value("SE") == 6000.0
 
 
-def test_expected_land_value_unknown():
+def test_expected_land_value_unknown() -> None:
     assert land_service.expected_land_value("NW") == 0.0

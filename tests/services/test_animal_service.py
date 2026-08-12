@@ -2,31 +2,31 @@ from agent.domain.animal import Animal
 from agent.services import animal_service
 
 
-def test_feed_animal():
+def test_feed_animal() -> None:
     animal = Animal(animal_type="GOOSE")
     result = animal_service.feed(animal)
     assert result.fed_today is True
 
 
-def test_feed_unfed_animal():
+def test_feed_unfed_animal() -> None:
     animal = Animal(animal_type="GOOSE")
     assert animal_service.can_feed(animal) is True
 
 
-def test_feed_already_fed_animal():
+def test_feed_already_fed_animal() -> None:
     animal = Animal(animal_type="GOOSE")
     fed = animal_service.feed(animal)
     assert animal_service.can_feed(fed) is False
 
 
-def test_collect_from_fed_animal():
+def test_collect_from_fed_animal() -> None:
     animal = Animal(animal_type="GOOSE")
     fed = animal_service.feed(animal)
     result_animal, _ = animal_service.collect(fed)
     assert isinstance(result_animal, Animal)
 
 
-def test_collect_from_unfed_animal_raises():
+def test_collect_from_unfed_animal_raises() -> None:
     animal = Animal(animal_type="GOOSE")
     try:
         animal_service.collect(animal)
@@ -35,29 +35,29 @@ def test_collect_from_unfed_animal_raises():
         pass
 
 
-def test_can_feed():
+def test_can_feed() -> None:
     animal = Animal(animal_type="GOOSE")
     assert animal_service.can_feed(animal) is True
 
 
-def test_can_feed_after_feeding():
+def test_can_feed_after_feeding() -> None:
     animal = Animal(animal_type="GOOSE")
     fed = animal_service.feed(animal)
     assert animal_service.can_feed(fed) is False
 
 
-def test_can_collect():
+def test_can_collect() -> None:
     animal = Animal(animal_type="GOOSE")
     assert animal_service.can_collect(animal) is False
 
 
-def test_can_collect_after_feeding():
+def test_can_collect_after_feeding() -> None:
     animal = Animal(animal_type="GOOSE")
     fed = animal_service.feed(animal)
     assert animal_service.can_collect(fed) is True
 
 
-def test_expected_output():
+def test_expected_output() -> None:
     animal = Animal(animal_type="GOOSE")
     result = animal_service.expected_output(animal)
     assert result["animal_type"] == "GOOSE"
@@ -65,7 +65,7 @@ def test_expected_output():
     assert result["is_alive"] is True
 
 
-def test_production_status():
+def test_production_status() -> None:
     animal = Animal(animal_type="GOOSE")
     result = animal_service.production_status(animal)
     assert result["animal_type"] == "GOOSE"

@@ -2,18 +2,18 @@ from agent.domain.position import Position
 from agent.services import movement_service
 
 
-def test_distance():
+def test_distance() -> None:
     p1 = Position(0, 0)
     p2 = Position(3, 4)
     assert movement_service.distance(p1, p2) == 7
 
 
-def test_distance_same_position():
+def test_distance_same_position() -> None:
     p = Position(2, 3)
     assert movement_service.distance(p, p) == 0
 
 
-def test_reachable():
+def test_reachable() -> None:
     pos = Position(0, 0)
     result = movement_service.reachable(pos, max_distance=1)
     assert Position(0, 0) in result
@@ -23,13 +23,13 @@ def test_reachable():
     assert Position(0, -1) in result
 
 
-def test_move_cost():
+def test_move_cost() -> None:
     p1 = Position(0, 0)
     p2 = Position(3, 4)
     assert movement_service.move_cost(p1, p2) == 7
 
 
-def test_path():
+def test_path() -> None:
     from_pos = Position(0, 0)
     to_pos = Position(2, 0)
     result = movement_service.path(from_pos, to_pos)
@@ -38,13 +38,13 @@ def test_path():
     assert result[-1] == to_pos
 
 
-def test_path_same_position():
+def test_path_same_position() -> None:
     pos = Position(2, 3)
     result = movement_service.path(pos, pos)
     assert result == [pos]
 
 
-def test_adjacent():
+def test_adjacent() -> None:
     pos = Position(0, 0)
     result = movement_service.adjacent(pos)
     assert len(result) == 4

@@ -1,7 +1,7 @@
 from agent.adapters import observation_adapter
 
 
-def test_parse_returns_game_state():
+def test_parse_returns_game_state() -> None:
     obs = {
         "player": 0,
         "step": 0,

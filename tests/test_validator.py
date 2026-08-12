@@ -2,7 +2,7 @@ from agent.decision import action_validator
 from agent.decision.candidate_actions import CandidateAction
 
 
-def test_validate_returns_valid_for_valid_action():
+def test_validate_returns_valid_for_valid_action() -> None:
     action = CandidateAction(
         id="test_0",
         action_type="pass",
@@ -13,7 +13,7 @@ def test_validate_returns_valid_for_valid_action():
     assert result.is_valid is True
 
 
-def test_validate_returns_invalid_for_action_with_no_target():
+def test_validate_returns_invalid_for_action_with_no_target() -> None:
     action = CandidateAction(
         id="test_1",
         action_type="plant",

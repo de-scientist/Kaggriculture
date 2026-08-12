@@ -2,20 +2,20 @@ from agent.domain.inventory import Inventory
 from agent.services import inventory_service
 
 
-def test_add_item():
+def test_add_item() -> None:
     inv = Inventory()
     result = inventory_service.add(inv, "WHEAT", 5)
     assert inventory_service.available(result, "WHEAT") == 5
 
 
-def test_remove_item():
+def test_remove_item() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     result = inventory_service.remove(with_inv, "WHEAT", 3)
     assert inventory_service.available(result, "WHEAT") == 2
 
 
-def test_remove_item_insufficient_raises():
+def test_remove_item_insufficient_raises() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 2)
     try:
@@ -25,14 +25,14 @@ def test_remove_item_insufficient_raises():
         pass
 
 
-def test_reserve_item():
+def test_reserve_item() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     result = inventory_service.reserve(with_inv, "WHEAT", 2)
     assert inventory_service.available(result, "WHEAT") == 3
 
 
-def test_release_item():
+def test_release_item() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     reserved = inventory_service.reserve(with_inv, "WHEAT", 2)
@@ -40,20 +40,20 @@ def test_release_item():
     assert inventory_service.available(result, "WHEAT") == 5
 
 
-def test_available():
+def test_available() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     assert inventory_service.available(with_inv, "WHEAT") == 5
     assert inventory_service.available(with_inv, "CARROT") == 0
 
 
-def test_capacity_remaining():
+def test_capacity_remaining() -> None:
     inv = Inventory(capacity=10)
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     assert inventory_service.capacity_remaining(with_inv) == 5
 
 
-def test_contains():
+def test_contains() -> None:
     inv = Inventory()
     with_inv = inventory_service.add(inv, "WHEAT", 5)
     assert inventory_service.contains(with_inv, "WHEAT", 3) is True
