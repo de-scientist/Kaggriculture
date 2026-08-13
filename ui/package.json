@@ -5,10 +5,10 @@
   "type": "module",
   "description": "Browser-based AI Farm Command Center for the Kaggriculture autonomous agent.",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "node node_modules/vite/bin/vite.js",
+    "build": "node node_modules/vite/bin/vite.js build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview --host"
+    "preview": "node node_modules/vite/bin/vite.js preview --host"
   },
   "dependencies": {
     "lucide-react": "^0.439.0",
