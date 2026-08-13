@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(0, 212, 255, 0.07), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(46, 125, 50, 0.08), transparent 55%),
+    #06110d;
+  color: #e6f0ea;
+  font-family: Inter, Manrope, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbars */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@layer components {
+  .glass {
+    @apply bg-surface border border-border rounded-2xl backdrop-blur-md;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .glass-2 {
+    @apply bg-surface-2 border border-border rounded-xl backdrop-blur-sm;
+  }
+  .card-title {
+    @apply text-[11px] font-semibold tracking-[0.14em] uppercase text-white/45;
+  }
+  .metric {
+    @apply font-bold tabular-nums;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium
+      transition-colors duration-150 border border-border bg-surface-2 hover:bg-white/10
+      text-white/85 disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply border-cyan/40 bg-cyan/15 text-cyan hover:bg-cyan/25;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium;
+  }
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/55
+      transition-all duration-150 hover:text-white hover:bg-white/5;
+  }
+  .nav-link-active {
+    @apply text-white bg-white/[0.07] border border-border;
+    box-shadow: inset 2px 0 0 0 #00d4ff;
+  }
+}
