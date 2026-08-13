@@ -109,14 +109,16 @@ export function Badge({
   children,
   color = "#00D4FF",
   solid = false,
+  className = "",
 }: {
   children: React.ReactNode;
   color?: string;
   solid?: boolean;
+  className?: string;
 }) {
   return (
     <span
-      className="chip border"
+      className={`chip border ${className}`}
       style={{
         color: solid ? "#06110D" : color,
         borderColor: `${color}40`,

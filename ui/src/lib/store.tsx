@@ -36,6 +36,7 @@ export interface Store {
 }
 
 import { createContext, useContext, useEffect, useMemo, useReducer, useRef } from "react";
+import type { ReactNode } from "react";
 
 const Ctx = createContext<Store | null>(null);
 

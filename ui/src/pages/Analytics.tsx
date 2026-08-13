@@ -49,7 +49,7 @@ export function Analytics() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card title="Economic Performance" subtitle="Net profit over time" icon>
+        <Card title="Economic Performance" subtitle="Net profit over time">
           <LineChart height={220} series={[{ name: "Net Profit", color: "#22C55E", data: netProfit }]} xLabels={game.turns.slice(0, cursor + 1).map((t) => `D${t.day + 1}`)} />
         </Card>
         <Card title="Cash Flow" subtitle="Coins vs opponent">
