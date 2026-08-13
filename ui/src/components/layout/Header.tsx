@@ -10,7 +10,7 @@ export function Header() {
   const turn = getTurn(game, cursor);
   const { state, label } = aiStateFromTurn(turn);
 
-  const offline = !dataset?.championship?.data;
+  const offline = !!dataset;
   const sourceBadge = turn ? (game?.real ? "REPLAY" : "DEMO") : "—";
 
   return (
