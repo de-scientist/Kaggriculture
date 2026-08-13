@@ -1,0 +1,116 @@
+{
+  "benchmark": "Champion (auto/ChampionPolicy) vs market opponent",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "games": 12,
+  "wins": 6,
+  "losses": 6,
+  "ties": 0,
+  "win_rate": 0.5,
+  "avg_champ_coins": 13391.083333333334,
+  "median_champ_coins": 12101.0,
+  "avg_market_coins": 13404.25,
+  "median_market_coins": 13587.5,
+  "avg_margin": -13.166666666666666,
+  "median_margin": -1663.5,
+  "best_game": 3,
+  "worst_game": 0,
+  "games_detail": [
+    {
+      "seed": 0,
+      "winner": 1,
+      "champ_coins": 10350.0,
+      "market_coins": 16050.0,
+      "margin": -5700.0
+    },
+    {
+      "seed": 1,
+      "winner": 1,
+      "champ_coins": 11277.0,
+      "market_coins": 16986.0,
+      "margin": -5709.0
+    },
+    {
+      "seed": 2,
+      "winner": 1,
+      "champ_coins": 10923.0,
+      "market_coins": 14507.0,
+      "margin": -3584.0
+    },
+    {
+      "seed": 3,
+      "winner": 0,
+      "champ_coins": 18593.0,
+      "market_coins": 10526.0,
+      "margin": 8067.0
+    },
+    {
+      "seed": 4,
+      "winner": 0,
+      "champ_coins": 17209.0,
+      "market_coins": 10980.0,
+      "margin": 6229.0
+    },
+    {
+      "seed": 5,
+      "winner": 1,
+      "champ_coins": 11153.0,
+      "market_coins": 16809.0,
+      "margin": -5656.0
+    },
+    {
+      "seed": 6,
+      "winner": 0,
+      "champ_coins": 16522.0,
+      "market_coins": 8298.0,
+      "margin": 8224.0
+    },
+    {
+      "seed": 7,
+      "winner": 1,
+      "champ_coins": 11043.0,
+      "market_coins": 14713.0,
+      "margin": -3670.0
+    },
+    {
+      "seed": 8,
+      "winner": 0,
+      "champ_coins": 17017.0,
+      "market_coins": 11013.0,
+      "margin": 6004.0
+    },
+    {
+      "seed": 9,
+      "winner": 0,
+      "champ_coins": 12942.0,
+      "market_coins": 12613.0,
+      "margin": 329.0
+    },
+    {
+      "seed": 10,
+      "winner": 1,
+      "champ_coins": 10739.0,
+      "market_coins": 15688.0,
+      "margin": -4949.0
+    },
+    {
+      "seed": 11,
+      "winner": 0,
+      "champ_coins": 12925.0,
+      "market_coins": 12668.0,
+      "margin": 257.0
+    }
+  ]
+}
