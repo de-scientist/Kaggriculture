@@ -48,7 +48,7 @@ export function Farm() {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card title="Farm Board" subtitle="Click a tile for details" className="lg:col-span-2">
-          <FarmMap turn={turn} selected={sel} onSelect={setSel} />
+          <FarmMap turn={turn} selected={sel} onSelect={(x, y) => setSel({ x, y })} />
           <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-white/50">
             <Legend color="#00D4FF" label="Farmer" dot />
             <Legend color="#F5A623" label="Hired hand" dot />
