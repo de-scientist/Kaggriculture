@@ -123,15 +123,15 @@ class FarmingStrategy(Strategy):
         if wheat_in_shed > 0:
             return self._cand("sell", {"sell_count": wheat_in_shed})
 
-        # 6. Buy seeds when the store is empty and we can afford them.
-        if wheat_seeds == 0 and money >= WHEAT_SEED_COST:
-            empty = sum(
-                1
-                for y in range(height)
-                for x in range(width)
-                if is_unlocked(x, y) and kind(tiles[y][x]) == "empty"
-            )
-            buy = max(1, min(empty, int(money // WHEAT_SEED_COST)))
+        # 6. Buy seeds when we have fewer than the plantable tiles and can afford them.
+        empty = sum(
+            1
+            for y in range(height)
+            for x in range(width)
+            if is_unlocked(x, y) and kind(tiles[y][x]) == "EMPTY"
+        )
+        if wheat_seeds < empty and money >= WHEAT_SEED_COST:
+            buy = max(1, min(empty - wheat_seeds, int(money // WHEAT_SEED_COST)))
             return self._cand("buy_seed", {"buy_count": buy})
 
         # 7. Walk toward the nearest tile that needs work.
