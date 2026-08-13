@@ -42,9 +42,18 @@ class ObservationAdapter:
             except ValueError:
                 pass
 
+        worker_positions: list[Position] = []
+        farmer_pos = farm_data.get("farmer")
+        if isinstance(farmer_pos, (list, tuple)) and len(farmer_pos) >= 2:
+            worker_positions.append(Position(int(farmer_pos[0]), int(farmer_pos[1])))
+        for hand in farm_data.get("hands", []) or []:
+            if isinstance(hand, (list, tuple)) and len(hand) >= 2:
+                worker_positions.append(Position(int(hand[0]), int(hand[1])))
+
         farm = Farm(
             money=farm_data.get("money", 3000.0),
             quadrants=farm_data.get("unlocked_quadrants", ["NW"]),
+            workers=worker_positions,
         )
         for y, row in enumerate(farm_data.get("tiles", [])):
             for x, tile_data in enumerate(row):
