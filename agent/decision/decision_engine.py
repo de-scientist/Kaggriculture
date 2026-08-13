@@ -350,18 +350,31 @@ def _action_to_dict(action: object) -> dict[str, Any]:
         return action
     if isinstance(action, CandidateAction):
         atype = action.action_type.lower()
+        metadata = action.metadata or {}
         if atype in ("pass",):
             return {"farmer": ["PASS"], "hands": [], "market": []}
         if atype in ("harvest",):
             return {"farmer": ["HARVEST"], "hands": [], "market": []}
         if atype in ("water",):
             return {"farmer": ["WATER"], "hands": [], "market": []}
+        if atype in ("dig",):
+            return {"farmer": ["DIG"], "hands": [], "market": []}
+        if atype in ("north",):
+            return {"farmer": ["NORTH"], "hands": [], "market": []}
+        if atype in ("south",):
+            return {"farmer": ["SOUTH"], "hands": [], "market": []}
+        if atype in ("east",):
+            return {"farmer": ["EAST"], "hands": [], "market": []}
+        if atype in ("west",):
+            return {"farmer": ["WEST"], "hands": [], "market": []}
         if atype in ("plant",):
             return {"farmer": ["PLANT", "WHEAT"], "hands": [], "market": []}
         if atype in ("sell",):
-            return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", 1]]}
+            count = int(metadata.get("sell_count", 1))
+            return {"farmer": ["PASS"], "hands": [], "market": [["SELL", "WHEAT", count]]}
         if atype in ("buy_seed", "buy_product", "buy_animal"):
-            return {"farmer": ["PASS"], "hands": [], "market": [["BUY_SEED", "WHEAT", 1]]}
+            count = int(metadata.get("buy_count", 1))
+            return {"farmer": ["PASS"], "hands": [], "market": [["BUY_SEED", "WHEAT", count]]}
         if atype in ("hire",):
             return {"farmer": ["PASS"], "hands": [], "market": [["HIRE"]]}
         if atype in ("feed",):

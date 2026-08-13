@@ -5,6 +5,7 @@ from typing import Any
 from agent.strategies.baseline_strategy import BaselineStrategy
 from agent.strategies.competitive_strategy import CompetitiveStrategy
 from agent.strategies.economic_strategy import EconomicStrategy
+from agent.strategies.farming_strategy import FarmingStrategy
 from agent.strategies.hybrid_strategy import HybridStrategy
 from agent.strategies.market_strategy import MarketAwareStrategy
 from agent.strategies.planning_strategy import PlanningStrategy
@@ -13,6 +14,7 @@ from agent.strategies.strategy_registry import register
 
 _STRATEGIES: dict[str, type[Strategy]] = {
     "baseline": BaselineStrategy,
+    "farming": FarmingStrategy,
     "economic": EconomicStrategy,
     "market_aware": MarketAwareStrategy,
     "planning": PlanningStrategy,

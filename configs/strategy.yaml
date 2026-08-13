@@ -1,5 +1,5 @@
 strategy:
-  name: baseline
+  name: farming
   version: "1.0.0"
   max_candidates: 50
   evaluation_timeout_ms: 50

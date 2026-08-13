@@ -150,7 +150,7 @@ DEFAULTS: dict[str, Any] = {
 }
 
 VALID_ENVS = {"development", "staging", "production"}
-VALID_STRATEGIES = {"baseline", "heuristic", "economic", "utility"}
+VALID_STRATEGIES = {"baseline", "heuristic", "economic", "utility", "farming"}
 VALID_PRICE_SHAPES = {"linear", "sq", "sqrt", "log"}
 VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
