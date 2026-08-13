@@ -56,9 +56,10 @@ def synth_decision(turn_action, obs):
         "alternatives": [],
     }
 
-def run(opponent, seed, steps, version):
+def run(opponent, seed, steps, version, agent_name="ours"):
+    players = [agent, opponent] if agent_name == "ours" else [agent_name, opponent]
     env = make("kaggriculture", configuration={"episodeSteps": steps, "seed": seed})
-    env.run([agent, opponent])
+    env.run(players)
     data = env.toJSON()
     steps_list = data["steps"]
     rewards = data.get("rewards", [None, None])
@@ -120,6 +121,7 @@ def run(opponent, seed, steps, version):
 def main():
     ap = argparse.ArgumentParser(description="Run the Kaggriculture agent and export a replay for the UI.")
     ap.add_argument("--opponent", default="random")
+    ap.add_argument("--agent", default="ours", help="ours | starter | random | pass")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--steps", type=int, default=720)
     ap.add_argument("--version", default="v1.2")
@@ -134,7 +136,8 @@ def main():
         except Exception:
             existing = None
 
-    game = run(args.opponent, args.seed, args.steps, args.version)
+    version = args.version if args.agent == "ours" else args.agent
+    game = run(args.opponent, args.seed, args.steps, version, args.agent)
 
     dataset = {
         "generated_at": "",
