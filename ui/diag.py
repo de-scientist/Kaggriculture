@@ -37,7 +37,7 @@ print("after filter (owned_tiles=EMPTY):", len(filt_empty), Counter(c.action_typ
 grid = obs["farms"][0]["tiles"]
 size = len(grid)
 half = size // 2
-quads = set(gs.farm().quadrants())
+quads = set(gs.farm.quadrants())
 owned = set()
 for y in range(size):
     for x in range(size):
