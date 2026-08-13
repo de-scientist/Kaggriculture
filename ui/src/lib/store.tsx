@@ -75,7 +75,7 @@ interface S {
 
 const BASE_TICK = 110;
 
-export function StoreProvider({ children }: { children: React.ReactNode }) {
+export function StoreProvider({ children }: { children: ReactNode }) {
   const [s, dispatch] = useReducer(reducer, {
     dataset: null,
     loading: true,
