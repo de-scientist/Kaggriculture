@@ -22,6 +22,7 @@ from contextlib import contextmanager
 from typing import Any
 
 from agent.config.settings import Settings
+from agent.domain.position import Position
 from agent.decision import (
     action_filter,
     action_generator,
@@ -61,6 +62,37 @@ def _settings_fields() -> tuple[Any, ...]:
     from dataclasses import fields
 
     return fields(Settings())
+
+
+def _owned_tiles(obs: dict[str, Any], player: int) -> set[Position]:
+    """Tile positions the agent may legally act on (unlocked quadrants)."""
+    try:
+        farms = obs.get("farms")
+        if not isinstance(farms, list) or player >= len(farms):
+            return set()
+        farm = farms[player] or {}
+        grid = farm.get("tiles")
+        if not isinstance(grid, list) or not grid:
+            return set()
+        size = len(grid)
+        half = size // 2
+        unlocked = set(farm.get("unlocked_quadrants", []))
+        owned: set[Position] = set()
+        for y in range(size):
+            for x in range(size):
+                if x < half and y < half:
+                    q = "NW"
+                elif x >= half and y < half:
+                    q = "NE"
+                elif x < half and y >= half:
+                    q = "SW"
+                else:
+                    q = "SE"
+                if q in unlocked:
+                    owned.add(Position(x, y))
+        return owned
+    except Exception:
+        return set()
 
 
 def _strategy_name(config: Any) -> str:
