@@ -305,7 +305,7 @@ class HMarket1Policy(ChampionPolicy):
         info["melon_profile"] = self.melon_profile
         info["fertilizer_mode"] = self.fertilizer_mode
 
-        overrides = dict(
+        overrides: dict[str, Any] = dict(
             melon_max_tiles=p.melon_max_tiles,
             melon_start_day=p.melon_start_day,
             melon_opp_gate=p.melon_opp_gate,
