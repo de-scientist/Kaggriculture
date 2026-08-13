@@ -138,8 +138,9 @@ that defined the Champion's losses is **eliminated**.
 2. Early/mid-game economics preserved: H-MARKET-1 still leads through day 20–26 and
    its min coins (26741) far exceeds the Champion's (10350). ✔
 3. Stronger during Day 26–29 (Day-28 margin 24033 vs -99). ✔
-4. Reduces opponent's final margin (opponent avg  — opponent coins dropped from
-   Champion's losses to ~4–5k under H-MARKET-1). ✔
+4. Reduces opponent's final margin: under H-MARKET-1 the `market` opponent scores
+   only ~4.7k coins (vs ~16k in the Champion's losses), because the challenger
+   captures the high-value harvest the opponent previously relied on. ✔
 5. Improves win rate 0.50 → 1.00. ✔
 6. Consistent across all 12 deterministic seeds (12/12, no seed hidden). ✔
 
