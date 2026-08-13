@@ -36,7 +36,7 @@ class _CapturePlanner:
         self.planner = TurnPlanner()
         self.records: list[dict[str, Any]] = []
 
-    def act(self, obs: dict[str, Any]) -> dict[str, Any]:
+    def act(self, obs: dict[str, Any], configuration: Any = None) -> dict[str, Any]:
         snap = GameSnapshot.from_obs(obs)
         plan = self.planner.plan(snap)
         # Candidate summary (observable, no internal reasoning exposed).
