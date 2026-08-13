@@ -195,7 +195,7 @@ def decide(context: decision_context.DecisionContext) -> dict[str, Any]:
                 candidates,
                 available_money=available_money,
                 available_workers=available_workers,
-                owned_tiles=set(),
+                owned_tiles=_owned_tiles(context.obs, player),
             )
 
         with _timed_span(tracer, trace, "validate"):
