@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Any
 
 from .constants import ANIMALS, LAND_ORDER, LAND_PRICES, MARKET, SHED_CAPACITY, hire_cost
-from .game import GameSnapshot
+from .game import GameSnapshot, count_plants_by_crop
 from .settings import RuntimeSettings
 from .tasks import target_hands
 
@@ -103,6 +103,20 @@ def plan_market_orders(snapshot: GameSnapshot, settings: RuntimeSettings) -> lis
     # 4) Animal procurement (opt-in).
     if settings.enable_animals:
         _plan_animal_buys(snapshot, settings, orders, money, reserve, cap)
+
+    # 4b) Fertilizer procurement (opt-in, H-MARKET-1 experiment only).
+    if settings.enable_fertilizer:
+        fert_cost = _int(MARKET["FERTILIZER"]["base"], 100)
+        have_fert = _int(snapshot.shed().get("FERTILIZER"), 0)
+        melon_tiles = count_plants_by_crop(snapshot.me(), settings.fertilizer_target_crop)
+        if (
+            melon_tiles > 0
+            and have_fert < settings.fertilizer_buy_threshold
+            and money - reserve >= fert_cost
+            and len(orders) < cap
+        ):
+            orders.append(["BUY_PRODUCT", "FERTILIZER", 1])
+            money -= fert_cost
 
     # 5) Land expansion last.
     unlocked = snapshot.unlocked()

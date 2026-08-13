@@ -239,4 +239,101 @@ def make_policy(name: str | None, settings: RuntimeSettings) -> Policy:
         return LearnedPolicy()
     if name == "hybrid":
         return HybridPolicy()
+    if name == "hmarket1":
+        return HMarket1Policy()
     return ChampionPolicy()
+
+
+@dataclass
+class _MelonProfile:
+    """Concrete settings for one H-MARKET-1 melon allocation level."""
+
+    melon_max_tiles: int
+    melon_start_day: int
+    melon_opp_gate: int
+    melon_sell_cap: int
+    sell_min_ratio: float
+    endgame_sell_day: int
+
+
+_MELON_PROFILES: dict[str, _MelonProfile] = {
+    # Champion v1.1 defaults — used so the "baseline" profile reproduces the
+    # frozen champion exactly when wrapped by HMarket1Policy.
+    "baseline": _MelonProfile(8, 6, 3, 3, 0.85, 26),
+    # Modest melon increase; still yields to opponent melon floods.
+    "low": _MelonProfile(12, 5, 8, 4, 0.80, 26),
+    # Substantial melon increase; contests the opponent instead of surrendering.
+    "medium": _MelonProfile(16, 4, 99, 5, 0.75, 25),
+    # Aggressive melon allocation; still keeps wheat/carrot as the staple floor.
+    "high": _MelonProfile(20, 3, 99, 6, 0.70, 24),
+}
+
+
+class HMarket1Policy(ChampionPolicy):
+    """H-MARKET-1 controlled challenger.
+
+    Tests the hypothesis that contesting the high-value melon crop (instead of
+    surrendering it when the opponent floods the market) and aligning melon
+    maturity with the Day 26–29 liquidation window improves the win rate against
+    the deterministic ``market`` opponent, without destroying the staple economy
+    that already builds the mid-game lead.
+
+    This policy reuses the entire champion planner and only overrides
+    :class:`RuntimeSettings` via :meth:`adjust` — it does not duplicate the
+    production system, and with ``melon_profile="baseline"`` / ``fertilizer_mode=
+    "off"`` it is behaviourally identical to :class:`ChampionPolicy`.
+    """
+
+    name = "hmarket1"
+
+    def __init__(
+        self,
+        melon_profile: str = "medium",
+        fertilizer_mode: str = "off",
+    ) -> None:
+        self.melon_profile = melon_profile
+        self.fertilizer_mode = fertilizer_mode
+        self._profile = _MELON_PROFILES[melon_profile]
+
+    def adjust(
+        self, snapshot: GameSnapshot, settings: RuntimeSettings
+    ) -> tuple[RuntimeSettings, dict[str, Any]]:
+        base_settings, info = super().adjust(snapshot, settings)
+        p = self._profile
+        day = snapshot.day
+        info["mode"] = "hmarket1_prod"
+        info["melon_profile"] = self.melon_profile
+        info["fertilizer_mode"] = self.fertilizer_mode
+
+        overrides = dict(
+            melon_max_tiles=p.melon_max_tiles,
+            melon_start_day=p.melon_start_day,
+            melon_opp_gate=p.melon_opp_gate,
+            melon_sell_cap=p.melon_sell_cap,
+            sell_min_ratio=p.sell_min_ratio,
+            endgame_sell_day=p.endgame_sell_day,
+        )
+        if self.fertilizer_mode == "melon":
+            overrides["enable_fertilizer"] = True
+            overrides["fertilizer_target_crop"] = "MELON"
+            overrides["fertilizer_buy_threshold"] = 2
+        elif self.fertilizer_mode == "aggressive":
+            overrides["enable_fertilizer"] = True
+            overrides["fertilizer_target_crop"] = "MELON"
+            overrides["fertilizer_buy_threshold"] = 4
+
+        # Endgame liquidation: from endgame_sell_day onward, sell everything we
+        # can (the planner already sells all melon at endgame; this also lowers
+        # the general sell threshold so high-value stock clears before the clock).
+        if day >= p.endgame_sell_day or snapshot.is_final_day():
+            overrides["sell_min_ratio"] = min(0.6, p.sell_min_ratio)
+            overrides["melon_sell_cap"] = 50
+            overrides["plant_enabled"] = False
+            info["mode"] = "hmarket1_liquidate"
+        elif day >= p.endgame_sell_day - 3:
+            # Pre-liquidation wind-down: stop expanding, keep short staples only.
+            overrides["land_latest_day"] = (0, 0, 0)
+            overrides["target_hands"] = (2, 2, 2, 2)
+            info["mode"] = "hmarket1_wind_down"
+
+        return replace(base_settings, **overrides), info

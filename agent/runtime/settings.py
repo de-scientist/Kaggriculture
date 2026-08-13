@@ -80,6 +80,13 @@ class RuntimeSettings:
     experience_dir: str = "replays"
     max_market_buy_seed_units: int = 12
 
+    # H-MARKET-1 experiment knobs (defaults keep Champion v1.1 behaviour identical).
+    # When enable_fertilizer is False the planner never buys or applies fertilizer,
+    # so the frozen Champion is unaffected by these fields.
+    enable_fertilizer: bool = False
+    fertilizer_target_crop: str = "MELON"
+    fertilizer_buy_threshold: int = 2
+
     @classmethod
     def from_env(cls, overrides: dict[str, Any] | None = None) -> RuntimeSettings:
         merged: dict[str, Any] = {}

@@ -252,6 +252,17 @@ def _plant_task(
     yield_units = _int(tile.get("yield_units"), 0)
     if yield_units > 0 and age >= _int(CROPS[crop]["first_yield_day"]):
         return Task(pos, "HARVEST", None, yield_units * price, "harvest", "crop_ready")
+    if (
+        settings.enable_fertilizer
+        and crop == settings.fertilizer_target_crop
+        and snapshot.in_window(tile)
+        and not _int(tile.get("fertilized_until_day", -1), -1) >= snapshot.day
+        and age <= int(CROPS[crop]["max_yield_day"]) - 1
+    ):
+        # Apply fertilizer early in the watering window: it doubles the per-day
+        # bonus for 3 days, so front-loading it lets watering finish the window.
+        remaining = max(0, int(CROPS[crop]["max_yield_day"]) - age)
+        return Task(pos, "FERTILIZE", None, remaining * price * 0.5, "fertilize", "crop_fertilize")
     if not _int(tile.get("watered_today"), 0):
         value = _water_value(snapshot, tile)
         action_type = "water_bonus" if snapshot.in_window(tile) else "water"
@@ -289,6 +300,12 @@ def item_required(task: Task, unit: Unit, snapshot: GameSnapshot) -> str | None:
         if _int(snapshot.shed().get("WHEAT"), 0) <= 0:
             return None
         return "WHEAT"
+    if task.op == "FERTILIZE":
+        if unit.inventory.get("FERTILIZER", 0) > 0:
+            return None
+        if _int(snapshot.shed().get("FERTILIZER"), 0) <= 0:
+            return None
+        return "FERTILIZER"
     if task.op == "PLACE":
         animal = str(task.arg or "")
         if unit.inventory.get(animal, 0) > 0:
