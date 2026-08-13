@@ -1,11 +1,11 @@
-import json, sys, traceback
-sys.path.insert(0, "kaggriculture_ai")
+import sys, traceback
+sys.path.insert(0, ".")
 try:
-    import main as A
-    print("agent callable:", callable(getattr(A, "agent", None)))
+    from agent.agent import agent
+    print("agent callable:", callable(agent))
     from kaggle_environments import make
-    env = make("kaggriculture", configuration={"episodeSteps": 30})
-    env.run([A.agent, "random"])
+    env = make("kaggriculture", configuration={"episodeSteps": 40})
+    env.run([agent, "random"])
     steps = env.toJSON()["steps"]
     print("num steps:", len(steps))
     obs = steps[1][0]["observation"]
@@ -15,5 +15,6 @@ try:
     print("market keys:", list(obs["market"].keys()))
     print("tile sample:", obs["farms"][0]["tiles"][0][0])
     print("action p0 step5:", steps[5][0]["action"])
+    print("rewards:", env.toJSON()["rewards"])
 except Exception:
     traceback.print_exc()
