@@ -94,9 +94,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   async function load() {
     try {
-      const res = await fetch("/data/games.json", { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const dataset = (await res.json()) as GameDataset;
+      let dataset: GameDataset | null = null;
+      try {
+        const res = await fetch("/data/played.json", { cache: "no-store" });
+        if (res.ok) {
+          const d = (await res.json()) as GameDataset;
+          if (d.games?.length) dataset = d;
+        }
+      } catch {
+        /* fall through to demo dataset */
+      }
+      if (!dataset) {
+        const res = await fetch("/data/games.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        dataset = (await res.json()) as GameDataset;
+      }
       const firstId = dataset.games[0]?.id ?? null;
       dispatch({ t: "loaded", dataset });
       if (firstId) dispatch({ t: "game", id: firstId });
